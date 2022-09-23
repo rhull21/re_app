@@ -1,0 +1,151 @@
+http://sqlfiddle.com/#!9/b8c3fa/3
+
+# River Mile Table
+
+CREATE TABLE rivermile (
+   rm DECIMAL (3,1),
+   lat DECIMAL (9, 7),
+   lon DECIMAL (10, 7),
+   PRIMARY KEY (rm)
+) ENGINE=INNODB;
+
+INSERT INTO rivermile
+  (rm, lat, lon)
+VALUES
+  (10.0, 32.2612297, -110.9180537),
+  (10.1, 32.2642297, -111.1180537),
+  (10.2, 32.2672297, -111.3180537),
+  (10.3, 32.2702297, -111.5180537),
+  (10.4, 32.2732297, -111.7180537),
+  (10.5, 32.2762297, -111.9180537),
+  (10.6, 32.2792297, -112.1180537),
+  (10.7, 32.2822297, -112.3180537),
+  (10.8, 32.2852297, -112.5180537),
+  (10.9, 32.2882297, -112.7180537),
+  (11.0, 32.2912297, -112.9180537)
+;
+
+# Observation Table
+
+CREATE TABLE observation (
+   id INT NOT NULL AUTO_INCREMENT,
+   rm DECIMAL (3,1),
+   obstype ENUM('discharge', 'dryness'),
+   datet DATETIME,
+   PRIMARY KEY (id),
+   INDEX par_ind (rm),
+   FOREIGN KEY (rm)
+     REFERENCES rivermile(rm)
+     ON UPDATE CASCADE
+     ON DELETE CASCADE
+) ENGINE=INNODB;
+
+INSERT INTO observation
+  (rm, obstype, datet)
+VALUES
+(10.0, 'dryness', '2022-08-10 10:00:00'),
+(10.6, 'dryness', '2012-06-05 16:00:00'),
+(10.3, 'dryness', '2014-08-15 12:00:00'),
+(10.3, 'discharge', '2016-08-16 08:00:00')
+;
+
+# Dryness Table
+CREATE TABLE dryness (
+   id INT,
+   rmdown DECIMAL (3,1),
+   PRIMARY KEY (id),
+   FOREIGN KEY (id)
+     REFERENCES observation(id)
+     ON UPDATE CASCADE
+     ON DELETE CASCADE
+) ENGINE=INNODB;
+
+INSERT INTO dryness
+  (id, rmdown)
+VALUES
+(1, 10.4),
+(2, 10.7),
+(3, 10.4)
+;
+
+# Q Table
+CREATE TABLE discharge (
+   id INT,
+   qtype ENUM('usgs', 'estimate'),
+   q DECIMAL (4,2),
+   PRIMARY KEY (id),
+   FOREIGN KEY (id)
+     REFERENCES observation(id)
+     ON UPDATE CASCADE
+     ON DELETE CASCADE
+) ENGINE=INNODB;
+
+INSERT INTO discharge
+  (id, qtype, q)
+VALUES
+(4, 'usgs', 95.3)
+;
+
+# return the dates of observations at specific river miles
+SELECT 
+  a.rm, b.datet
+FROM rivermile a
+INNER JOIN 
+  observation b
+ON 
+  a.rm = b.rm
+ORDER BY
+  a.rm
+;
+
+# count the number and types of dry samples per return
+SELECT 
+  a.rm, b.obstype, COUNT(b.datet) as countd
+FROM rivermile a
+LEFT JOIN 
+  observation b
+ON 
+  a.rm = b.rm
+GROUP BY
+  a.rm, b.obstype
+ORDER BY
+  a.rm
+;
+
+# add the third table, calculate length downstream
+SELECT 
+  a.rm, (c.rmdown-a.rm) AS dry_length, b.datet 
+FROM (rivermile a
+    INNER JOIN 
+    observation b ON a.rm = b.rm) 
+    INNER JOIN dryness c 
+      ON b.id = c.id
+ORDER BY
+  a.rm
+;
+
+# add the third table, calculate length downstream
+SELECT 
+  a.rm, (c.rmdown-a.rm) AS dry_length,b.datet 
+FROM (rivermile a
+    INNER JOIN 
+    observation b ON a.rm = b.rm) 
+    INNER JOIN dryness c 
+      ON b.id = c.id
+ORDER BY
+  a.rm
+;
+
+# add the fourth table, calculate discharge
+SELECT 
+  a.rm, (c.rmdown-a.rm) AS dry_length, d.q as q_meas, b.datet 
+FROM (rivermile a
+    INNER JOIN 
+    observation b ON a.rm = b.rm) 
+    LEFT JOIN 
+      dryness c ON b.id = c.id
+    LEFT JOIN
+      discharge d ON b.id = d.id
+ORDER BY
+  a.rm
+;
