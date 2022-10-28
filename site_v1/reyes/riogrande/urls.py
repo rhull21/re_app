@@ -3,10 +3,21 @@ from . import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    #/riogrande/
     path('', views.index, name='index'),
-    path('<int:yr>/usgs', views.usgs, name='usgs_data'),
-    path('<int:yr>/drylen', views.alldrylen, name='dryness_summary'),
-    path('<int:yr>/drysegs', views.drysegments, name='dryness_detail')
+
+    # deliverables  
+    path('geospatial', views.geospatial, name='geospatial'),
+
+    path('dry/deltadry', views.deltadry, name='change in dryness'),
+    path('dry/drysegs', views.drysegments, name='dry segments'),
+    path('dry/drylen', views.FilteredDryLen.as_view(), name='dry length comparison'),
+    path('dry/comp', views.drycomp, name='time interval comparison'),
+    path('dry/days', views.drydays, name='number of days'),
+
+    path('flow/summary', views.usgs, name='average flow'),
+    path('flow/series', views.usgs_series, name='time-series')
+
 ]
 
 # urlpatterns += staticfiles_urlpatterns()

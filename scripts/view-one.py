@@ -59,6 +59,8 @@ for col in cols:
     for i in range(len(df_temp)):
         df_all.loc[(df_all['rm-rounded'] <= df_temp['rm_up_rd'].iloc[i]) & (df_all['rm-rounded'] >= df_temp['rm_down_rd'].iloc[i]),col] = 1
 
+# %%
+df_all.to_csv("../../data/shapefile_2021rm/rivereyes2021.csv")
 
 #%% create the image
 fig, ax = plt.subplots(figsize=(20,10))
