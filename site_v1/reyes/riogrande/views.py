@@ -10,11 +10,10 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django_filters.views import FilterView
+from django.db import connection
 
-from django_tables2 import MultiTableMixin, RequestConfig, SingleTableMixin, SingleTableView
+from django_tables2 import  SingleTableMixin
 from django_tables2.export.views import ExportMixin
-from django_tables2.paginators import LazyPaginator
-import django_tables2 as tables2
 
 sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande.models import * 
@@ -29,23 +28,23 @@ to do:
 def index(request):
     return HttpResponse("Hello, world. You're at the riogrande index.")
 
-def usgs(request, yr=2021):
-    return HttpResponse("You're looking at usgs station for year %s." % yr)
-
-def usgs_series(request, yr=2021, station='09110000'):
-    return HttpResponse("You're looking at time sereis for station %s for year %s." % (station, yr))
-
 def geospatial(request):
     return HttpResponse("You're looking at a map")
 
-def deltadry(request, yr=2021):
-    response = "You're looking at •	Rates of change of dried extent grouped by {days, months, years} grouped by {river mile, reach, subreach} (SQL only) for year %s."
+def dry(request):
+    return HttpResponse("You're looking at the landing page for dryness")
+
+def deltadry(request, grp_type = 'NULL', mindat='', maxdat=''):
+    with connection.cursor() as cursor:
+        cursor.execute("CALL proc_delta_dry(%s)", params=[grp_type])
+        row = cursor.fetchall()
+        response = "You're looking at •	Rates of change of dried extent grouped by {days, months, years} grouped by {river mile, reach, subreach} (SQL only) for year %s."
     return HttpResponse(response % yr)
 
 def drysegments(request, yr=2021):
     '''
     to do - 
-    20220922 - create subfunctoins
+    20220922 - create subfunctions
     20220922 - make flexible for more complex queries w. mindat, maxdat, minrm, maxrm
     20220922 - html template
     20221010 - ingest year
@@ -105,22 +104,15 @@ def drysegments(request, yr=2021):
     
     return HttpResponse(response)
 
-# class DryLenTable(tables2.Table):
-#     class Meta:
-#         model = AllLen
-
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
     table_class = DryLenTable
     model = AllLen
     template_name = "riogrande/drylen.html"
-
     filterset_class = DryLenFilter
-
     export_formats = ("csv", "xls")
 
     def get_queryset(self):
         return super().get_queryset()
-
 
 def drycomp(request, yr=2021):
     response = "You're looking at •	First Day Drying, Last Day Drying, Maximum One-Day Extent, Date of Maximum One-Day Extent Grouped By {reach, subreach} (SQL only) for year %s."
@@ -129,3 +121,32 @@ def drycomp(request, yr=2021):
 def drydays(request, yr=2021):
     response = "You're looking at •	Total Number of Intermittent Days, Maximum Length, Mean Length grouped by {month, year} for each Reach for year %s."
     return HttpResponse(response % yr)
+
+def dryevents(request, yr=2021):
+    response = '''You're looking at •	For each day of drying it would be helpful to know the total number of days dry within the reach, which dried “event” it is for the year, and the day within the dried “event”. For context, during most years the Rio dries, but reconnects after storm events, then redries, and so on. So we have multiple drying events within a single year. For example, lets say the Rio initially dried on June 1, remained dry for three days (June 1-3), reconnected by June 4, but then redried on June 10. It would be ideal to design queries around: \n
+                   \t  o	June 1 was the first day of the first drying event of the year
+                    \t o	June 3 was the third day of the first drying event of the year
+                    \t o	June 10 was the first day of the second drying event of the year and also the fourth total day of drying for the year
+                    \t for year %s.'''
+    return HttpResponse(response % yr)
+
+def flow(request, yr=2021):
+    response =  "you're looking at the landing page for flow stuff for year %s"
+    return HttpResponse(response % yr) 
+
+def usgs(request, yr=2021):
+    return HttpResponse("You're looking at average flow at usgs station for year %s." % yr)
+
+def usgs_series(request, yr=2021, station='09110000'):
+    return HttpResponse("You're looking at time series for station %s for year %s." % (station, yr))
+
+def dashboards(request):
+    return HttpResponse("You're looking at the landing page for dashboards")
+
+def dashdryevents(request):
+    response =  "query dryevents (number of days dry within each reach) by flow conditions (flow summary) and dates (months too) when individual drying events initially started."
+    return HttpResponse(response)
+
+def dashdrysegments(request):
+    response =  "query drysegments (rm-discretized dry and non-dry segments) by flow conditions and dates (months too)"
+    return HttpResponse(response)

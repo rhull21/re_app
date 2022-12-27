@@ -57,6 +57,7 @@ CREATE TABLE `observer` (
 -- changeset liquibase:7
 ALTER TABLE `observation` 
 	ADD COLUMN `oid` INT AFTER `rm`;
+  
 -- changeset liquibase:8
 ALTER TABLE `remnant`
 	ADD COLUMN `approximate_length_ft` INT AFTER `id`, 
@@ -79,3 +80,77 @@ CREATE TABLE `observation_observer`  (
 -- changeset liquibase:11
 ALTER TABLE `observation_observer` 
 	ADD CONSTRAINT `oid_ibfk_1` FOREIGN KEY (`oid`) REFERENCES `observer` (`oid`);
+
+ -- changeset liquibase:12
+ ALTER TABLE `feature` 
+	DROP COLUMN featype; 
+
+-- changeset liquibase:13
+CREATE TABLE `usgs_gages` (
+  `usgs_id` int NOT NULL AUTO_INCREMENT,
+  `fid` int NOT NULL,
+  `usgs_station_name` varchar(8) NOT NULL,
+  `usgs_feature_short_name` varchar(150), 
+  PRIMARY KEY (`usgs_id`) USING BTREE,
+  CONSTRAINT `feature_id_ibfk_1` FOREIGN KEY (`fid`) REFERENCES `feature` (`fid`));
+
+-- changeset liquibase:14
+INSERT INTO `usgs_gages`
+  (`fid`, `usgs_station_name`, `usgs_feature_short_name`)
+    VALUES
+(89, '08358400', 'FLOODWAY AT SAN MARCIAL'),
+(83, '08331160', 'NEAR BOSQUE FARMS'),
+(84, '08331510', 'AT STATE HWY 346 NEAR BOSQUE'),
+(85, '08332010', 'FLOODWAY NEAR BERNARDO'),
+(86, '08354900', 'FLOODWAY AT SAN ACACIA'),
+(87, '08355050', 'AT BRIDGE NEAR ESCONDIDA'),
+(88, '08355490', 'ABOVE US HWY 380 NR SAN ANTONIO');
+
+
+-- changeset liquibase:15 
+ALTER TABLE `usgs`
+  ADD COLUMN `uoid` int NOT NULL AUTO_INCREMENT FIRST,
+  DROP CONSTRAINT  `rm`,
+  DROP COLUMN `rm`,
+  DROP PRIMARY KEY,
+  ADD PRIMARY KEY (`uoid`) USING BTREE, 
+  ADD CONSTRAINT `usgs_id_ibfk_1` FOREIGN KEY (`usgs_id`) REFERENCES `usgs_gages` (`usgs_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- changeset liquibase:16
+ALTER TABLE `usgs` 
+	RENAME TO `usgs_data`;
+
+-- changeset liquibase:18
+CREATE VIEW `flat_table` AS 
+SELECT
+	*
+FROM
+	observation
+	LEFT JOIN 
+	(Select id, IF(COUNT(b.observer_name)>1, CONCAT(MAX(b.observer_name), " | ", MIN(b.observer_name)), b.observer_name) AS observer_name_joined, IF(COUNT(a.oid)>1, 		CONCAT(MAX(a.oid), " | ", MIN(a.oid)), a.oid) AS oid_joined FROM observation_observer a LEFT JOIN observer b using(oid) GROUP BY a.id) c
+		using(id)
+	LEFT JOIN
+	remnant
+		using(id)
+	LEFT JOIN
+	discharge_gsa
+		using(id)
+	LEFT JOIN
+	discharge_visual
+		using(qid)
+	LEFT JOIN
+	discharge_ball_tape
+		using(qid)
+	LEFT JOIN
+	photos
+		using(id)
+	LEFT JOIN
+	dryness
+		using(id)
+	LEFT JOIN
+	rivermile
+		using(rm)
+	GROUP BY 
+		observation.id  
+
+-- above changes migrated into Django Applciation Model.py 11022022
