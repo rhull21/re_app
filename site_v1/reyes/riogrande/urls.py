@@ -23,8 +23,12 @@ urlpatterns = [
 
     path('dashboard/', views.dashboards, name='landing page for dashboards'),
     path('dashboard/dryevents', views.dashdryevents, name='dashboard dry events with flow'),
-    path('dashboard/drysegs', views.dashdrysegments, name='dashboard dry segments with flow')
-    
+    path('dashboard/drysegs', views.dashdrysegments, name='dashboard dry segments with flow'),
+
+    path('feature/', views.FeatureListView.as_view(), name='Feature List Test'),
+    path('name/', views.name_table, name='test of name table'),
+    path('your-name/', views.your_name, name='testing out name loading form'),
+    path('contact_us/',views.contact_us, name='testing out contact us page')
     ]
 
 # urlpatterns += staticfiles_urlpatterns()

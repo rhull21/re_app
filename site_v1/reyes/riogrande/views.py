@@ -6,19 +6,22 @@ import matplotlib.pyplot as plt
 import sys
 from datetime import datetime, timedelta 
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 from django_filters.views import FilterView
 from django.db import connection
+from django.core.mail import send_mail
 
-from django_tables2 import  SingleTableMixin
+import django_tables2 as tables2
+from django_tables2 import SingleTableMixin, SingleTableView, RequestConfig
 from django_tables2.export.views import ExportMixin
 
 sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
-from riogrande.models import * 
-from riogrande.tables import *
-from riogrande.filters import *
+from riogrande import models, tables, filters, forms
+from riogrande.helpers import dictfetchall
+
 
 '''
 to do: 
@@ -34,19 +37,46 @@ def geospatial(request):
 def dry(request):
     return HttpResponse("You're looking at the landing page for dryness")
 
-def deltadry(request, grp_type = 'NULL', mindat='', maxdat=''):
+def deltadry(request, grp_type='NULL'):
+    '''
+    to do - 
+    20221228 : Can we apply a filterset to a dictionary of values
+    '''
+
+    if request.method == 'POST' :
+        form = forms.DeltaDryForm(request.POST)
+        if form.is_valid():
+            grp_type = form.cleaned_data['group_by']
+            print(grp_type)
+            # return HttpResponseRedirect('/../../riogrande/dry/deltadry')
+    else:
+        form = forms.DeltaDryForm()
+
     with connection.cursor() as cursor:
         cursor.execute("CALL proc_delta_dry(%s)", params=[grp_type])
-        row = cursor.fetchall()
-        response = "You're looking at •	Rates of change of dried extent grouped by {days, months, years} grouped by {river mile, reach, subreach} (SQL only) for year %s."
-    return HttpResponse(response % yr)
+        data = dictfetchall(cursor)
+
+    table = tables.DeltaDryTable(data=data,grp_type=grp_type)
+    RequestConfig(request).configure(table)
+
+    # filterset = filters.DeltaDryFilter(request.GET, data)
+
+    return render(  request, 
+                    "riogrande/deltadry.html", 
+                    {"form" : form,
+                    "table": table}
+                     # "filter" : filterset}
+                    ) 
+
+    # df_deltadry = pd.DataFrame(data)
+    # return HttpResponse(df_deltadry.to_html())
 
 def drysegments(request, yr=2021):
     '''
     to do - 
     20220922 - create subfunctions
     20220922 - make flexible for more complex queries w. mindat, maxdat, minrm, maxrm
-    20220922 - html template
+    20220922 - html templatels
     20221010 - ingest year
     '''
     # locals
@@ -54,8 +84,8 @@ def drysegments(request, yr=2021):
     minrm, maxrm = 53.5, 164
 
     # read in data
-    qry_rm_feat = FeatureRm.objects.all()
-    qry_dry = DryLengthAgg.objects.filter(dat__year= yr)
+    qry_rm_feat = models.FeatureRm.objects.all()
+    qry_dry = models.DryLengthAgg.objects.filter(dat__year= yr)
     df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
 
@@ -105,10 +135,10 @@ def drysegments(request, yr=2021):
     return HttpResponse(response)
 
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
-    table_class = DryLenTable
-    model = AllLen
+    table_class = tables.DryLenTable
+    model = models.AllLen
     template_name = "riogrande/drylen.html"
-    filterset_class = DryLenFilter
+    filterset_class = filters.DryLenFilter
     export_formats = ("csv", "xls")
 
     def get_queryset(self):
@@ -150,3 +180,54 @@ def dashdryevents(request):
 def dashdrysegments(request):
     response =  "query drysegments (rm-discretized dry and non-dry segments) by flow conditions and dates (months too)"
     return HttpResponse(response)
+
+class FeatureListView(SingleTableView):
+    model = models.Feature
+    table_class = tables.FeatureTable
+    template_name = 'riogrande/feature.html'
+
+def name_table(request):
+    data = [
+    {"name": "Bradley"},
+    {"name": "Stevie"},
+    ]
+    nt = tables.NameTable(data)
+    RequestConfig(request).configure(nt)
+
+
+
+    return(render(request, "riogrande/name.html", 
+            {"table": nt}))
+
+def your_name(request):
+    if request.method == 'POST' :
+        form = forms.NameForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/../../riogrande')
+
+    else:
+        form = forms.NameForm()
+
+    return render(request, "riogrande/your-name.html", {'form' : form})
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = forms.ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            sender = form.cleaned_data['sender']
+            cc_myself = form.cleaned_data['cc_myself']
+
+            recipients = ['info@example.com']
+            if cc_myself:
+                recipients.append(sender)
+
+            # send_mail(subject, message, sender, recipients)
+            return HttpResponseRedirect('/../../riogrande')
+    
+    else:
+        form = forms.ContactForm()
+
+    return render(request, "riogrande/contact_us.html", {'form' : form})
+
