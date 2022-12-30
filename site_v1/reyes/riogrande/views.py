@@ -10,16 +10,20 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView
-from django_filters.views import FilterView
 from django.db import connection
 from django.core.mail import send_mail
+from django.contrib import messages
+from django.urls import reverse
+
+from django_filters.views import FilterView
 
 import django_tables2 as tables2
 from django_tables2 import SingleTableMixin, SingleTableView, RequestConfig
 from django_tables2.export.views import ExportMixin
+from django_tables2.export.export import TableExport
 
 sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
-from riogrande import models, tables, filters, forms
+from riogrande import models, tables, filters, forms, plotly_app
 from riogrande.helpers import dictfetchall
 
 
@@ -41,14 +45,13 @@ def deltadry(request, grp_type='NULL'):
     '''
     to do - 
     20221228 : Can we apply a filterset to a dictionary of values
+    20221229 : Download data from the filtered queryset
     '''
 
     if request.method == 'POST' :
         form = forms.DeltaDryForm(request.POST)
         if form.is_valid():
             grp_type = form.cleaned_data['group_by']
-            print(grp_type)
-            # return HttpResponseRedirect('/../../riogrande/dry/deltadry')
     else:
         form = forms.DeltaDryForm()
 
@@ -59,15 +62,18 @@ def deltadry(request, grp_type='NULL'):
     table = tables.DeltaDryTable(data=data,grp_type=grp_type)
     RequestConfig(request).configure(table)
 
-    # filterset = filters.DeltaDryFilter(request.GET, data)
+    export_format = request.GET.get("_export", None)
+    if TableExport.is_valid_format(export_format):
+        exporter = TableExport(export_format, table)
+        return exporter.response("table.{}".format(export_format))
 
+    # filterset = filters.DeltaDryFilter(request.GET, data)
     return render(  request, 
                     "riogrande/deltadry.html", 
                     {"form" : form,
                     "table": table}
                      # "filter" : filterset}
                     ) 
-
     # df_deltadry = pd.DataFrame(data)
     # return HttpResponse(df_deltadry.to_html())
 
@@ -139,7 +145,7 @@ class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
     model = models.AllLen
     template_name = "riogrande/drylen.html"
     filterset_class = filters.DryLenFilter
-    export_formats = ("csv", "xls")
+    export_formats = ("xls", "csv")
 
     def get_queryset(self):
         return super().get_queryset()
@@ -194,8 +200,6 @@ def name_table(request):
     nt = tables.NameTable(data)
     RequestConfig(request).configure(nt)
 
-
-
     return(render(request, "riogrande/name.html", 
             {"table": nt}))
 
@@ -230,4 +234,30 @@ def contact_us(request):
         form = forms.ContactForm()
 
     return render(request, "riogrande/contact_us.html", {'form' : form})
+
+def plotly_test_plot(request):
+    data = pd.DataFrame(
+        {"Column1": [1,2,3,4],
+         "Column2": [8,7,6,5]})
+
+    target_plot = plotly_app.plotly_plot(data)
+    
+    return render(request, 
+                "riogrande/plotly_test_plot.html",
+                {'target_plot' : target_plot}
+                )
+
+def plotly_imshow(request):
+    img_rgb = np.array([[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+                        [[0, 255, 0], [0, 0, 255], [255, 0, 0]]
+                    ], dtype=np.uint8)
+
+    # img_rgb = np.array([[1,2],[4,3],[5,6],[9,8]])
+
+    target_plot = plotly_app.plotly_imshow(img_rgb)
+ 
+    return render(request, 
+                "riogrande/plotly_imshow.html",
+                {'target_plot' : target_plot}
+                )
 

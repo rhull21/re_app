@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django_tables2',
     "django_filters",
     "bootstrap3",
-    "bootstrap4"
+    "bootstrap4",
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
 ]
 
 MIDDLEWARE = [
@@ -134,4 +135,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Settings Module https://books.google.com/books?id=Gpr7J7-FFmwC&lpg=PA42&ots=_vTIfpKGYF&pg=PA42#v=onepage&q&f=fals
 
-STATIC_URL = '/static/'
+# For django-plotly-dash - https://github.com/GibbsConsulting/django-plotly-dash
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+

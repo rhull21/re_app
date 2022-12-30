@@ -1,15 +1,18 @@
 {% load django_tables2 %}
+{% load querystring from django_tables2 %}
 {% load bootstrap3 %}
 
 <!doctype html>
 <html>
 <head>
     <title> Delta Dryness </title>
+    {% bootstrap_css %}
 </head>
 
 <body>
     <div>
-        <h3> Change in Dryness Along the Riogrande by Day  </h3>
+        {% block body %}
+        <h3> {% block title %} Change in Dryness Along the Riogrande by Day {% endblock %}</h3>
         <!-- <div class="row">
             <div class="col-sm-10">
                 <div class="pull-right">
@@ -36,10 +39,15 @@
             </table>
             <input type="submit" value="Submit">
         </form>
-
+        <div>
+            {% load querystring from django_tables2 %}
+            <a href="{% querystring '_export'='csv' %}">Download CSV</a>
+            <a href="{% querystring '_export'='xlsx' %}">Download XLSX</a>
+        </div>
         <div>
             {% render_table table %}
         </div>
+        {% endblock %}
     </div>
 </body>
 

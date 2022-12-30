@@ -28,7 +28,7 @@ urlpatterns = [
     path('feature/', views.FeatureListView.as_view(), name='Feature List Test'),
     path('name/', views.name_table, name='test of name table'),
     path('your-name/', views.your_name, name='testing out name loading form'),
-    path('contact_us/',views.contact_us, name='testing out contact us page')
+    path('contact_us/',views.contact_us, name='testing out contact us page'),
+    path('plotly_test_plot/',views.plotly_test_plot, name='testing out plotly plot'),   
+    path('plotly_imshow/',views.plotly_imshow, name='testing out plotly image plot'),    
     ]
-
-# urlpatterns += staticfiles_urlpatterns()
