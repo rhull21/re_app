@@ -1,4 +1,5 @@
 from django.db import models
+# from django.contrib.gis.db.models import PointField
 
 # Tables: 
 class DischargeGsa(models.Model):
@@ -143,9 +144,9 @@ class Subreach(models.Model):
 class UsgsData(models.Model):
     uoid = models.AutoField(primary_key=True)
     usgs = models.ForeignKey('UsgsGages', models.DO_NOTHING)
-    date = models.DateTimeField()
+    date = models.DateField()
     flow_cfs = models.FloatField(blank=True, null=True)
-    prov_flag = models.IntegerField(blank=True, null=True)
+    prov_flag = models.CharField(blank=True, null=True, max_length=8)
 
     class Meta:
         managed = False
@@ -199,19 +200,22 @@ class DryLength(models.Model):
 class DryLengthAgg(models.Model):
     rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True)
     rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    dat = models.DateField(blank=True, null=True)
-    rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True)
-    rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True)
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length')
+    dat = models.DateField(blank=True, null=True, verbose_name='Date')
+    rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Downstream River Mile')
+    rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Upstream River Mile')
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'dry_length_agg'
 
 class FeatureRm(models.Model):
-    rm_rounded = models.DecimalField(primary_key=True, db_column='rm-rounded', max_digits=22, decimal_places=1, blank=True, null=False)  # Field renamed to remove unsuitable characters.
-    feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
-
+    rm_rounded = models.DecimalField(primary_key=True, max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. River Mile")  # Field renamed to remove unsuitable characters.
+    feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Feature")
+    latitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Latitude, Decimal Degrees")
+    longitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Longitude, Decimal Degrees")
+    latlong = models.TextField(blank=True, null=True) #lat_long = PointField()#
+    
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'feature_rm'
@@ -265,4 +269,16 @@ class IsletaLen(models.Model):
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'isleta_len'
+
+
+class UsgsFeatureData(models.Model):
+    uoid = models.AutoField(primary_key=True, blank=True, null=False)
+    rm = models.DecimalField(max_digits=22, decimal_places=2, blank=True, null=False, verbose_name="River Mile")
+    usgs_station_name = models.CharField(max_length=8, verbose_name='USGS Station Name')
+    usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Feature Name')
+    date = models.DateField(verbose_name='Date')
+    flow_cfs = models.FloatField(blank=True, null=True, verbose_name='Discharge, Cubic Feet per Second')
+    class Meta:
+        managed = False
+        db_table = 'usgs_feature_data'
 

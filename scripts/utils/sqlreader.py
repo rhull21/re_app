@@ -1,8 +1,6 @@
 import mysql.connector as cnctr
 from utils.helpers import executeSQL
 
-
-
 def _takeSQLfromfile(filename):
     '''
     Take any hardcoded SQL statement in file

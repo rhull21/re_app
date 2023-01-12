@@ -1,13 +1,88 @@
 import pandas as pd
 from os import name
+from datetime import date
 
 from plotly.offline import plot
 import plotly.express as px
 import plotly.graph_objs as go
+
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 from django_plotly_dash import DjangoDash
+
+def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
+
+    fig = px.imshow(data, animation_frame=2, 
+                    # color=['red', 'blue'],
+                    aspect='equal', 
+                    labels={'animation_frame' : 'Years',
+                            'x' : 'Dates',
+                            'y' : 'River Miles', 
+                            'color' : 'Dryness (1=True)'},
+                    x=plot_dict['Dates'], 
+                    y=plot_dict['River Miles'],
+                    title=f'Rio Grande Dry Segments, by Year : {plot_dict[list(plot_dict.keys())[2]]}',
+                    color_continuous_scale='Bluered')
+
+    # Create and add slider
+    steps = []
+    for yr in plot_dict['Years']:
+        step = dict(label=yr)
+        steps.append(step)
+
+    # update color (red, blue), color name (dry, wet), features
+    fig.update_layout(xaxis=dict(tickformat='%m-%d'),
+                      sliders=[dict(steps=steps)])
+    fig.update_coloraxes(showscale=False) # reversescale=True,
+
+    # add the features as a scatterplot
+    df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
+    [
+    fig.add_trace(
+        go.Scatter(
+            name=df_rm_feat['feature'].loc[i],
+            x=[plot_dict['Dates'][0], plot_dict['Dates'][-1]],
+            y=[df_rm_feat['rm_rounded'].loc[i],df_rm_feat['rm_rounded'].loc[i]],
+            hovertemplate="(%{y})",
+            # mode="lines",
+            line=go.scatter.Line(color="black"),
+            opacity=0.25,
+            showlegend=False)
+        )
+   for i in df_rm_feat.index
+    ]
+
+    #Turn graph object into local plotly graph
+    plotly_plot_obj = plot({'data': fig }, output_type='div')
+
+    return plotly_plot_obj
+
+def plotly_seriesusgs(data):
+
+    yrs = pd.unique(data['year'])
+    labels = pd.unique(data['usgs_station_name'])
+
+    fig = px.scatter(data, color='usgs_station_name', #animation_frame='year',
+                    labels={ 'year' : 'Years',
+                            'date' : 'Dates',
+                            'flow_cfs' : 'Discharge, in Cubic Feet per Second (cfs)', 
+                            'usgs_feature_short_name' : 'USGS Feature Name',
+                            'usgs_station_name' : 'USGS Station Name'
+                            },
+                    hover_name='usgs_feature_short_name',
+                    x='date', 
+                    y='flow_cfs',
+                    title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
+
+    # update color (red, blue), color name (dry, wet), features
+    # fig.update_layout(xaxis=dict(tickformat='%m-%d')) 
+
+    #Turn graph object into local plotly graph
+    plotly_plot_obj = plot({'data': fig }, output_type='div')
+
+    return plotly_plot_obj
+
 
 def plotly_plot(result_table):
     """
@@ -44,6 +119,7 @@ def plotly_plot_interactive(dash_plot_table, city):
     return plotly_plot_obj
 
 def plotly_imshow(img_rgb):
+
 
     fig = px.imshow(img_rgb)
     # df = px.data.gapminder()

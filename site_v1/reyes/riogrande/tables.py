@@ -1,7 +1,7 @@
 import django_tables2 as tables2
 import sys
 
-sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
+# sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
 
 class DryLenTable(tables2.Table):
@@ -27,6 +27,25 @@ class DeltaDryTable(tables2.Table):
         super(DeltaDryTable, self).__init__(data, *args, **kwargs)
         self.sequence  = ['...'] 
         self.template_name = "django_tables2/semantic.html" 
+
+class DrySegsTable(tables2.Table):
+    class Meta:
+        model = models.DryLengthAgg
+        template_name = "django_tables2/semantic.html"
+        fields = ("dat", "dry_length", "rm_up", "rm_down")
+
+class FeatureRmTable(tables2.Table):
+    class Meta:
+        model = models.FeatureRm
+        template_name = "django_tables2/semantic.html"
+        fields = ("feature", "rm_rounded", "latitude_rounded", "longitude_rounded")
+
+class SummaryUsgsTable(tables2.Table):
+    class Meta:
+        model = models.UsgsFeatureData
+        template_name = "django_tables2/semantic.html"
+        fields = ("usgs_station_name", "usgs_feature_short_name", "date", "flow_cfs")
+
 
 class FeatureTable(tables2.Table):
     class Meta:

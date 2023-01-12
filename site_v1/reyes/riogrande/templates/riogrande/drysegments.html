@@ -1,1 +1,36 @@
-{% load static %} <img src="{% static "riogrande/media/dryseg_v1.png" %}" alt="dryseg" />
+{% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+
+<!doctype html>
+<html>
+    <head>
+        <title>Segments of Dryness</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        {% bootstrap_css %}
+    </head>
+    {% block body %}
+    <body>
+        <h3> {% block title %} Segments of Dryness Along the Riogrande {% endblock %}</h3>
+        <div>
+            {{target_plot|safe}}
+        </div>
+        <h4> Dry Data Along the Riogrande </h2>
+        <ul>
+            <a href="{% url 'filtered_dry_segments' %}">Link to Drying Data Download and Filtering</a>
+        </ul>
+        <div>
+            {% render_table table1 %}
+        </div>
+        <h4> Geographic Features Along the Riogrande </h2>
+        <ul>
+            <a href="{% url 'filtered_features' %}">Link to Features Data Download and Filtering</a>
+        </ul>
+        <div>
+            {% render_table table2 %}
+        </div>
+        
+    </body>
+    {% endblock %}
+</html>

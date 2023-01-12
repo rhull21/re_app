@@ -7,21 +7,23 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # deliverables  
-    path('geospatial', views.geospatial, name='landing page for geospatial'),
+    path('map', views.MapView.as_view(), name='map'),
 
-    path('dry', views.dry, name='landing page for dryness'),
-    path('dry/deltadry', views.deltadry, name='change in dryness'),
-    path('dry/drysegs', views.drysegments, name='dry segments'),
+    path('dry', views.dry, name='dryness'),
+    path('dry/deltadry', views.deltadry, name='delta_dryness'),
+    path('dry/drysegs', views.drysegments, name='dry_segments'),
+    path('dry/drysegs/filtereddrysegs', views.FilteredDrySegs.as_view(), name='filtered_dry_segments'),
+    path('dry/drysegs/filteredfeatures', views.FilteredFeatures.as_view(), name='filtered_features'),
     path('dry/drylen', views.FilteredDryLen.as_view(), name='dry length comparison'),
     path('dry/comp', views.drycomp, name='time interval comparison'),
     path('dry/days', views.drydays, name='number of days'),
     path('dry/events', views.dryevents, name='day of dry event'),
 
-    path('flow', views.flow, name='landing page for flow'),
-    path('flow/summary', views.usgs, name='average flow'),
-    path('flow/series', views.usgs_series, name='time-series'),
+    path('flow', views.usgs, name='usgs'),
+    path('flow/summary', views.FilteredSummaryUsgs.as_view(), name='summary_usgs'), 
+    path('flow/series', views.usgs_series, name='usgs_series'),
 
-    path('dashboard/', views.dashboards, name='landing page for dashboards'),
+    path('dashboard/', views.dashboards, name='dashboards'),
     path('dashboard/dryevents', views.dashdryevents, name='dashboard dry events with flow'),
     path('dashboard/drysegs', views.dashdrysegments, name='dashboard dry segments with flow'),
 

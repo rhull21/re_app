@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,13 +32,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'riogrande.apps.RiograndeConfig',
+    # 'riogrande.apps.RiograndeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # "django.contrib.gis",
+    'riogrande',
     'django_tables2',
     "django_filters",
     "bootstrap3",
@@ -81,7 +84,7 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
         'NAME': 'rivereyes',
         'USER': 'root',
         'PASSWORD': '300667',
@@ -138,3 +141,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # For django-plotly-dash - https://github.com/GibbsConsulting/django-plotly-dash
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+# GDAL_LIBRARY_PATH = r'C:/OSGeo4W/bin/gdal306.dll'
+# try:
+#     import gdal
+#     gdal_path = Path(gdal.__file__)
+#     OSGEO4W = os.path.join(gdal_path.parent, 'osgeo')
+#     os.environ["OSGEO4W_ROOT"] = OSGEO4W
+#     os.environ["GDAL_DATA"] = os.path.join(OSGEO4W, "data", "gdal")
+#     os.environ["PROJ_LIB"] = os.path.join(OSGEO4W, "data", "proj")
+#     os.environ["PATH"] = OSGEO4W + ";" + os.environ["PATH"]
+#     GEOS_LIBRARY_PATH = str(os.path.join(OSGEO4W, "geos_c.dll"))
+#     GDAL_LIBRARY_PATH = str(os.path.join(OSGEO4W, "gdal306.dll"))
+# except ImportError:
+#     GEOS_LIBRARY_PATH = None
+#     GDAL_LIBRARY_PATH = None
