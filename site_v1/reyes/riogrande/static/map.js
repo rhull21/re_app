@@ -10,4 +10,4 @@ let feature = L.geoJSON(markers)
         return layer.feature.properties.name;
     })
     .addTo(map);
-map.fitBounds(feature.getBounds(), { padding: [100, 100] });
+map.fitBounds(feature.getBounds(), { padding: [100, 100] }); 

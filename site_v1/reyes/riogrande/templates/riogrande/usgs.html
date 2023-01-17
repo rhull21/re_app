@@ -1,0 +1,29 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+
+    <nav class="navbar navbar-inverse">
+
+        <ul class="nav nav-nav">
+            <li role="presentation" ><a href="{% url 'usgs' %}"> Flow home </a></li>
+            <li role="presentation" ><a href="{% url 'usgs_series' %}"> Visualization of USGS time series data </a></li>
+            <li role="presentation" ><a href="{% url 'summary_usgs' %}"> Summary table of USGS river discharge measurements </a></li>
+        </ul>
+
+    </nav>
+
+</div>
+
+
+<div class="container"> 
+    <h3> Flow Data </h3>
+    <p class="font-weight-bold"> This is a nav page for river discharge in the Middle Rio Grande </p>
+</div>
+{% endblock %}

@@ -1,43 +1,16 @@
+{% extends 'riogrande/header.html' %}
 {% load static %}
 {% load django_tables2 %}
 {% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
 
-<!doctype html>
-<html>
-<head>
-    <title>Geographic Features, a filter utility</title>
-    {% bootstrap_css %}
-
-</head>
-<body>
-    <div>
-        {% block body %}
-
-        <h3>{% block title %} Significant Geographic Features Along the Riogrande {% endblock %}</h3>
-
-        <div class="row">
-            <div class="col-sm-10">
-                <div class="pull-right">
-                    {% if view.export_formats %}
-                        {% for format in view.export_formats %}
-                        <a href="{% export_url format %}" class="btn btn-xs btn-default">
-                            download  <code>.{{ format }}</code>
-                        </a>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                {% if filter %}
-                    <form action="" method="get" class="form form-inline">
-                        {% bootstrap_form filter.form layout='inline' %}
-                        {% bootstrap_button 'filter' %}
-                    </form>
-                {% endif %}
-            </div>
-            <div class="col-sm-10">
-                {% render_table table %}
-            </div>
-        </div>
-        {% endblock %}
-    </div>
-</body>
-</html>
+{% block content %}
+<div class="container"> 
+    {% include 'riogrande/includes/table.html' %}
+</div>
+<div class="container"> 
+    <h3> Details of Features  </h3>
+    <p class="font-weight-bold"> This is a detail page containing important features along the Middle Rio Grande </p>
+</div>
+{% endblock %}

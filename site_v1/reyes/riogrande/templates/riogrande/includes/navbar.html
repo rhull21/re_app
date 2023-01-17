@@ -1,0 +1,31 @@
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'contact_us' %}">
+                <img alt="Brand" src="{% static 'geosystems.jfif' %}" > 
+                </a>
+            </div>
+        
+            <ul class="nav nav-pills">
+                <li role="presentation" ><a href="{% url 'index' %}"> Home</a></li>
+                <li role="presentation" ><a href="{% url 'dry' %}"> Dryness Data</a></li>
+                <li role="presentation" ><a href="{% url 'usgs' %}"> Flow Data</a></li>
+                <li role="presentation" ><a href="{% url 'map' %}"> Interactive Map</a></li>
+                <li role="presentation" class="disabled"><a href="{% url 'dashboards' %}"> Dashboards</a></li>
+            </ul>
+    
+         </div>
+    </nav>
+</header>
+
+<div class="container"> 
+    <h3> '' </h3>
+</div>

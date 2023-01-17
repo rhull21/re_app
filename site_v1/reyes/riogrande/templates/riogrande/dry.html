@@ -1,0 +1,33 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+
+    <nav class="navbar navbar-inverse">
+
+        <ul class="nav nav-nav">
+            <li role="presentation" ><a href="{% url 'dry' %}"> Dryness home </a></li>
+            <li role="presentation" ><a href="{% url 'delta_dryness' %}"> Detailed table of changes dryness </a></li>
+            <li role="presentation" ><a href="{% url 'dry_segments' %}"> Visualization of segments </a></li>
+            <li role="presentation" ><a href="{% url 'dry_length_comparison' %}"> Detailed table of miles affected </a></li>
+            <li role="presentation" ><a href="{% url 'dry_comp' %}"> Summary table of miles affected </a></li>
+            <li role="presentation" ><a href="{% url 'dry_days' %}"> Summary table of intermitent days </a></li>
+            <li role="presentation" class="disabled"><a href="{% url 'dry_events' %}"> Detailed table of dryness events </a></li>
+        </ul>
+
+    </nav>
+
+</div>
+
+
+<div class="container"> 
+    <h3> Dryness </h3>
+    <p class="font-weight-bold"> This is a nav page for dryness data in the Middle Rio Grande </p>
+</div>
+{% endblock %}

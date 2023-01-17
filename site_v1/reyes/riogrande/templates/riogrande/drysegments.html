@@ -1,36 +1,39 @@
-{% load render_table from django_tables2 %}
-{% load querystring from django_tables2 %}
+{% extends 'riogrande/header.html' %}
+{% load static %}
 {% load django_tables2 %}
 {% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
 
-<!doctype html>
-<html>
-    <head>
-        <title>Segments of Dryness</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-        {% bootstrap_css %}
-    </head>
-    {% block body %}
-    <body>
-        <h3> {% block title %} Segments of Dryness Along the Riogrande {% endblock %}</h3>
-        <div>
-            {{target_plot|safe}}
-        </div>
-        <h4> Dry Data Along the Riogrande </h2>
+{% block content %}
+<body>
+    <div class="container-fluid">
+        {{target_plot|safe}}
+    </div>
+
+    <div class="container">
         <ul>
-            <a href="{% url 'filtered_dry_segments' %}">Link to Drying Data Download and Filtering</a>
+            <a href="{% url 'filtered_dry_segments' %}">Link to Dry Segments Data Download and Filtering</a>
         </ul>
-        <div>
-            {% render_table table1 %}
-        </div>
-        <h4> Geographic Features Along the Riogrande </h2>
+    </div>
+
+    <div>
+        {% render_table table1 %}
+    </div>
+
+    <div class="container">
         <ul>
-            <a href="{% url 'filtered_features' %}">Link to Features Data Download and Filtering</a>
+            <a href="{% url 'filtered_features' %}">Link to Dry Segments Data Download and Filtering</a>
         </ul>
-        <div>
-            {% render_table table2 %}
-        </div>
-        
-    </body>
-    {% endblock %}
-</html>
+    </div>
+
+    <div>
+        {% render_table table2 %}
+    </div>
+
+    <div class="container"> 
+        <h3> Segments of Dryness </h3>
+        <p class="font-weight-bold"> This is a detail page for Dry Segments in the Middle Rio Grande </p>
+    </div>
+</body>
+{% endblock %}

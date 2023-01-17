@@ -14,15 +14,15 @@ from django_plotly_dash import DjangoDash
 def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
 
     fig = px.imshow(data, animation_frame=2, 
-                    # color=['red', 'blue'],
-                    aspect='equal', 
+                    # aspect='equal', 
+                    width=1500, height=1400,
                     labels={'animation_frame' : 'Years',
                             'x' : 'Dates',
                             'y' : 'River Miles', 
                             'color' : 'Dryness (1=True)'},
                     x=plot_dict['Dates'], 
                     y=plot_dict['River Miles'],
-                    title=f'Rio Grande Dry Segments, by Year : {plot_dict[list(plot_dict.keys())[2]]}',
+                    title=f'Rio Grande Dry Segments, by Year ', # : {plot_dict[list(plot_dict.keys())[2]]}',
                     color_continuous_scale='Bluered')
 
     # Create and add slider
@@ -48,10 +48,18 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
             # mode="lines",
             line=go.scatter.Line(color="black"),
             opacity=0.25,
-            showlegend=False)
+            showlegend=True
+        )
         )
    for i in df_rm_feat.index
     ]
+
+    fig.update_layout(legend=dict(
+        yanchor='top',
+        y=-0.5,
+        xanchor='left',
+        x=0.25
+    ))
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, output_type='div')
@@ -64,19 +72,20 @@ def plotly_seriesusgs(data):
     labels = pd.unique(data['usgs_station_name'])
 
     fig = px.scatter(data, color='usgs_station_name', #animation_frame='year',
-                    labels={ 'year' : 'Years',
+                    labels={'year' : 'Years',
                             'date' : 'Dates',
                             'flow_cfs' : 'Discharge, in Cubic Feet per Second (cfs)', 
                             'usgs_feature_short_name' : 'USGS Feature Name',
                             'usgs_station_name' : 'USGS Station Name'
                             },
+                    color_discrete_sequence=[px.colors.qualitative.Bold[i] for i in range(len(labels))],
                     hover_name='usgs_feature_short_name',
                     x='date', 
                     y='flow_cfs',
                     title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
-    # update color (red, blue), color name (dry, wet), features
-    # fig.update_layout(xaxis=dict(tickformat='%m-%d')) 
+    fig.update_layout(xaxis=dict(tickformat='%m-%d-%y')) 
+
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, output_type='div')

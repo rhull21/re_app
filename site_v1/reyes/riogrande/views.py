@@ -26,12 +26,13 @@ from django_tables2.export.export import TableExport
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models, tables, filters, forms, plotly_app
-from riogrande.helpers import dictfetchall
+from riogrande.helpers import dictfetchall, GeoJsonContext
 
 
 '''
 to do: 
 09222022 - figure out how to get models to import successfully w/o path.append
+01172023 - Refactor and pull out functions
 '''
 
 def index(request):
@@ -47,47 +48,17 @@ class MapView(TemplateView):
     def get_context_data(self, **kwargs):
         '''return the view context data'''
         context = super().get_context_data(**kwargs)
-        
-        feat_list = []
-        feat_dict = {
-                        "type": "Feature",
-                        "properties": {
-                            "name": None,
-                            "pk": None,
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": None # [14.08591836494682, 42.08632592463349]
-                        }
-                    }
-        pk = 1
-        for row in models.FeatureRm.objects.all():
-            if row.feature is not None:
-                feat_dict['name'] = row.feature
-                feat_dict['pk'] = pk
-                feat_dict['geometry']['coordinates'] = [row.longitude_rounded,row.latitude_rounded]
-                feat_list.append(feat_dict)
-                pk = pk + 1
+        d = GeoJsonContext()
+        qs = models.FeatureRm.objects.all()
+        context["markers"]  = d.to_GeoJsonDict(qs)
+        print(context["markers"])
+        return context  
 
+class DryView(TemplateView):
+    """river eyes map view."""
+    
+    template_name = "riogrande/dry.html"
 
-        data = {
-                        "type": "FeatureCollection",
-                        "crs": {
-                            "type": "name",
-                            "properties": {
-                                "name": "EPSG:4326"
-                            }
-                        },
-                        "features": feat_list
-                    }
-
-        print(data)
-
-        context["markers"] = data
-        return context 
-
-def dry(request):
-    return HttpResponse("You're looking at the landing page for dryness")
 
 def deltadry(request, grp_type='NULL'):
     '''
@@ -183,9 +154,11 @@ def drysegments(request):
 
     # create figure
     arr_all = np.zeros((len(plot_dict['River Miles']), len(plot_dict['Dates']), len(plot_dict['Years']))) # , dtype=bool)
-    i,j = 0,0
+    i,j,k = 0,0,0 # k = RM, j= day, i = year
     for yr in plot_dict['Years']:
+        # print(yr)
         for d in plot_dict['Dates']: 
+            # print(d)
             df_dry_date = df_dry[['rm_down_rd', 'rm_up_rd']][df_dry['dat']==date(yr,d.month,d.day)]
             if df_dry_date.empty == False: 
                 for k in range(len(df_dry_date)):
@@ -196,9 +169,12 @@ def drysegments(request):
                     arr_all[k_down:k_up+1,j,i] = 1
                     # print(arr_all[i,j,k_down:k_up+1])
                     del dry_date, k_down, k_up 
+                k = 0
             del df_dry_date
             j = j + 1
-        i =i + 1
+        i = i + 1
+        j = 0
+
 
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
     
@@ -236,8 +212,10 @@ def dryevents(request, yr=2021):
                     \t for year %s.'''
     return HttpResponse(response % yr)
 
-def usgs(request, yr=2021):
-    return HttpResponse("You're looking at the landing page for flow in year %s." % yr)
+class UsgsView(TemplateView):
+    """river eyes Flow Landing Page"""
+    
+    template_name = "riogrande/usgs.html"
 
 class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     '''
@@ -267,9 +245,8 @@ def usgs_series(request):
     return render(request, 
                 "riogrande/seriesusgs.html",
                 {'target_plot' : target_plot,
-                 'table' : table}
+                 'table' : table} #table}
                 )
-    # return HttpResponse("You're looking at time series for station %s for year %s." % (station, yr))
 
 def dashboards(request):
     return HttpResponse("You're looking at the landing page for dashboards")
@@ -287,29 +264,10 @@ class FeatureListView(SingleTableView):
     table_class = tables.FeatureTable
     template_name = 'riogrande/feature.html'
 
-def name_table(request):
-    data = [
-    {"name": "Bradley"},
-    {"name": "Stevie"},
-    ]
-    nt = tables.NameTable(data)
-    RequestConfig(request).configure(nt)
-
-    return(render(request, "riogrande/name.html", 
-            {"table": nt}))
-
-def your_name(request):
-    if request.method == 'POST' :
-        form = forms.NameForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('/../../riogrande')
-
-    else:
-        form = forms.NameForm()
-
-    return render(request, "riogrande/your-name.html", {'form' : form})
-
 def contact_us(request):
+    '''
+    Update and create a bonified contact us page
+    '''
     if request.method == 'POST':
         form = forms.ContactForm(request.POST)
         if form.is_valid():
@@ -330,31 +288,3 @@ def contact_us(request):
 
     return render(request, "riogrande/contact_us.html", {'form' : form})
 
-def plotly_test_plot(request):
-    data = pd.DataFrame(
-        {"Column1": [1,2,3,4],
-         "Column2": [8,7,6,5]})
-
-    target_plot = plotly_app.plotly_plot(data)
-    
-    return render(request, 
-                "riogrande/plotly_test_plot.html",
-                {'target_plot' : target_plot}
-                )
-
-def plotly_imshow(request):
-    img_rgb = np.array([[[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-                        [[0, 255, 0], [0, 0, 255], [255, 0, 0]]
-                    ], dtype=np.uint8)
-
-    # img_rgb = np.array([[1,2],[4,3],[5,6],[9,8]])
-
-    target_plot = plotly_app.plotly_imshow(img_rgb)
- 
-    return render(request, 
-                "riogrande/plotly_imshow.html",
-                {'target_plot' : target_plot}
-                )
-
-
-# %%

@@ -1,19 +1,26 @@
+{% extends 'riogrande/header.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
 <head>
-    <title>Geospatial Map of Riogrande</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'map.css' %}">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
-<body>
-    <h2> Map Along the Riogrande </h2>
-</body>
+
 <body>
     {{ markers|json_script:"markers-data" }}
-    <div id="map"></div>
+    <div class="container" id="map" height="100"></div>
     <script src="{% static 'map.js' %}"></script>
 </body>
-</html>
+
+<div class="row"> 
+    <h3> Map of River Eyes Field Data </h3>
+    <p class="font-weight-bold"> This is a nav page for accessing field data in the Middle Rio Grande </p>
+</div>
+{% endblock %} 
