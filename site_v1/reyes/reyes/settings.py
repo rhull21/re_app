@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-l84#89#^l6cnz^tkfpc9y5l!9j6*t72f+)4wab&wp+k)4qeal)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# This value ['*'] is not safe for production usage. Refer to the Django documentation for more information.
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -83,13 +84,26 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+''' local '''
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
+#         'NAME': 'rivereyes',
+#         'USER': 'root',
+#         'PASSWORD': '300667',
+#         'HOST': '127.0.0.1'
+#     }
+# }
+
+''' docker '''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
+		'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rivereyes',
         'USER': 'root',
-        'PASSWORD': '300667',
-        'HOST': '127.0.0.1'
+        'PASSWORD': 'root',
+		'HOST': 'db',
+		'PORT': '3306'
     }
 }
 
@@ -142,17 +156,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # For django-plotly-dash - https://github.com/GibbsConsulting/django-plotly-dash
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# GDAL_LIBRARY_PATH = r'C:/OSGeo4W/bin/gdal306.dll'
-# try:
-#     import gdal
-#     gdal_path = Path(gdal.__file__)
-#     OSGEO4W = os.path.join(gdal_path.parent, 'osgeo')
-#     os.environ["OSGEO4W_ROOT"] = OSGEO4W
-#     os.environ["GDAL_DATA"] = os.path.join(OSGEO4W, "data", "gdal")
-#     os.environ["PROJ_LIB"] = os.path.join(OSGEO4W, "data", "proj")
-#     os.environ["PATH"] = OSGEO4W + ";" + os.environ["PATH"]
-#     GEOS_LIBRARY_PATH = str(os.path.join(OSGEO4W, "geos_c.dll"))
-#     GDAL_LIBRARY_PATH = str(os.path.join(OSGEO4W, "gdal306.dll"))
-# except ImportError:
-#     GEOS_LIBRARY_PATH = None
-#     GDAL_LIBRARY_PATH = None
+# Chron Jobs https://gutsytechster.wordpress.com/2019/06/24/how-to-setup-a-cron-job-in-django/
+CRONJOBS = [
+    ('* * * * *', 'riogrande.cron.make_heatmap')
+]

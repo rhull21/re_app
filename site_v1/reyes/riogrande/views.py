@@ -3,7 +3,6 @@ import json
 
 import pandas as pd 
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 from datetime import datetime, date, timedelta 
 
@@ -26,7 +25,7 @@ from django_tables2.export.export import TableExport
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models, tables, filters, forms, plotly_app
-from riogrande.helpers import dictfetchall, GeoJsonContext
+from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap
 
 
 '''
@@ -93,8 +92,6 @@ def deltadry(request, grp_type='NULL'):
                     "table": table}
                      # "filter" : filterset}
                     ) 
-    # df_deltadry = pd.DataFrame(data)
-    # return HttpResponse(df_deltadry.to_html())
 
 class FilteredDrySegs(ExportMixin, SingleTableMixin, FilterView):
     table_class = tables.DrySegsTable
@@ -119,8 +116,8 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
 def drysegments(request):
     '''
     to do - 
-    20220922 - create subfunctions
     20230103 - Move the tables into separate views, and call them into this view 
+    20230117 - cashe this file locally and set it up for ingestion and occasional update 
     '''
 
     # read in data
@@ -152,29 +149,7 @@ def drysegments(request):
             }
     del full_date, strf_date, yrs, rms, minyr, maxyr, mindat, maxdat
 
-    # create figure
-    arr_all = np.zeros((len(plot_dict['River Miles']), len(plot_dict['Dates']), len(plot_dict['Years']))) # , dtype=bool)
-    i,j,k = 0,0,0 # k = RM, j= day, i = year
-    for yr in plot_dict['Years']:
-        # print(yr)
-        for d in plot_dict['Dates']: 
-            # print(d)
-            df_dry_date = df_dry[['rm_down_rd', 'rm_up_rd']][df_dry['dat']==date(yr,d.month,d.day)]
-            if df_dry_date.empty == False: 
-                for k in range(len(df_dry_date)):
-                    dry_date = df_dry_date.iloc[k]
-                    # print(dry_date)
-                    k_down, k_up = plot_dict['River Miles'].index(dry_date['rm_down_rd']), plot_dict['River Miles'].index(dry_date['rm_up_rd'])
-                    # print(j, k_down, k_up)
-                    arr_all[k_down:k_up+1,j,i] = 1
-                    # print(arr_all[i,j,k_down:k_up+1])
-                    del dry_date, k_down, k_up 
-                k = 0
-            del df_dry_date
-            j = j + 1
-        i = i + 1
-        j = 0
-
+    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, write=True)
 
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
     
