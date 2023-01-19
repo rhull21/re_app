@@ -21,7 +21,6 @@ class FeatureFilter(django_filters.FilterSet):
         model = models.FeatureRm
         fields = ("feature", "rm_rounded" , "latitude_rounded", "longitude_rounded")
 
-
 class DryLenFilter(django_filters.FilterSet):
     isleta_sum_len = django_filters.RangeFilter()
     isleta_frac_len = django_filters.RangeFilter()

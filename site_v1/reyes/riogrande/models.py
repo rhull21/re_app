@@ -214,7 +214,7 @@ class FeatureRm(models.Model):
     feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Feature")
     latitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Latitude, Decimal Degrees")
     longitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Longitude, Decimal Degrees")
-    latlong = models.TextField(blank=True, null=True) #lat_long = PointField()#
+    # latlong = models.TextField(blank=True, null=True) #lat_long = PointField()#
     
     class Meta:
         managed = False  # Created from a view. Don't remove.
