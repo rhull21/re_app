@@ -35,7 +35,7 @@ with pd.ExcelWriter(os.path.join(dir,nm+'.xlsx'), engine="openpyxl") as writer:
 
 # %%
 
-# arr_all = arr_all.reshape((arr_all.shape[0],arr_all.shape[1]*arr_all.shape[2]))
+arr_all = arr_all.reshape((arr_all.shape[0],arr_all.shape[1]*arr_all.shape[2]))
 columns =   [
                 strf_date+'-'+str(yr) for strf_date in plot_dict['strf_dates'] for yr in plot_dict['Years'] 
             ]

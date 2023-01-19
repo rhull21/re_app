@@ -1,0 +1,4 @@
+# investigate how this works; no need to include liquibase in pushes to github
+**/liquibase
+**/sql
+*.code-workspace

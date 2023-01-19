@@ -14,7 +14,7 @@ config = {
   }
 
 db_name = "rivereyes" 
-sql_path = '../sql/'
+sql_path = '../sql/statements'
 fname = 'insert2019.sql'
 
 #  Define connection, prepare cursor, create database
