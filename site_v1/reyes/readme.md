@@ -2,11 +2,15 @@
 
 ### Resources for deploying development container of applictaion on docker 
 
-* Docker Playground URL - https://labs.play-with-docker.com/
+#### Docker Playground URL 
 
-* Github Repo - https://github.com/rhull21/re_app
+* https://labs.play-with-docker.com/
 
-* Code for Docker Playgrround
+#### Github Repo 
+
+* https://github.com/rhull21/re_app
+
+#### Code for Docker Playgrround
 
         ```
         $ git clone https://github.com/rhull21/re_app.git
@@ -17,37 +21,41 @@
         ```
 
 
-
 ### some todos before production: 
 
 #### page-by-page feedback CM, JT
 
 ##### riogrande
-*''*
+
+* *''*
 
 ##### geospatial
-*'map'*
+
+* *'map'*
 
 ##### dryness
-*'dry'*
-*'dry/deltadry'*
-*'dry/drysegs'*
-*'dry/drysegs/filtereddrysegs'*
-*'dry/drysegs/filteredfeatures'*
-*'dry/drylen'*
-*'dry/comp'*
-*'dry/days'*
-*'dry/events'*
+
+* *'dry'*
+* *'dry/deltadry'*
+* *'dry/drysegs'*
+* *'dry/drysegs/filtereddrysegs'*
+* *'dry/drysegs/filteredfeatures'*
+* *'dry/drylen'*
+* *'dry/comp'*
+* *'dry/days'*
+* *'dry/events'*
 
 ##### flow / discharge
-*'flow'*
-*'flow/summary'*
-*'flow/series'*
+
+* *'flow'*
+* *'flow/summary'*
+* *'flow/series'*
 
 ##### dashboards
-*'dashboard/'*
-*'dashboard/dryevents'*
-*'dashboard/drysegs'*
+
+* *'dashboard/'*
+* *'dashboard/dryevents'*
+* *'dashboard/drysegs'*
 
 
 #### front-end
