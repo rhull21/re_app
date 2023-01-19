@@ -15,9 +15,9 @@ config = {
 
 db_name = "rivereyes" 
 sql_path = '../sql/'
+fname = 'insert2019.sql'
 
-
-# %% Define connection, prepare cursor, create database
+#  Define connection, prepare cursor, create database
 cnx = cnctr.connect(**config)
 crsr = cnx.cursor()
 # createDB(db_name, crsr)
@@ -26,9 +26,9 @@ cnx.database = db_name
 # # %% 1. Create Tables
 # SQLfromfile(sql_path+'create.sql',crsr)
 
-# # %% 2. Insert Data
-# SQLfromfile(sql_path+'insert2.sql',crsr)
-# cnx.commit()
+# %% 2. Insert Data
+SQLfromfile(sql_path+fname,crsr)
+cnx.commit()
 
 # # %% 3. Create functions
 # SQLfromfile(sql_path+'functions.sql',crsr)

@@ -171,21 +171,22 @@ class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def drycomp(request, yr=2021):
-    response = "You're looking at •	First Day Drying, Last Day Drying, Maximum One-Day Extent, Date of Maximum One-Day Extent Grouped By {reach, subreach} (SQL only) for year %s."
-    return HttpResponse(response % yr)
+class DryCompView(TemplateView):
+    """river dry comp view."""
+    
+    template_name = "riogrande/drycomp.html"
 
-def drydays(request, yr=2021):
-    response = "You're looking at •	Total Number of Intermittent Days, Maximum Length, Mean Length grouped by {month, year} for each Reach for year %s."
-    return HttpResponse(response % yr)
 
-def dryevents(request, yr=2021):
-    response = '''You're looking at •	For each day of drying it would be helpful to know the total number of days dry within the reach, which dried “event” it is for the year, and the day within the dried “event”. For context, during most years the Rio dries, but reconnects after storm events, then redries, and so on. So we have multiple drying events within a single year. For example, lets say the Rio initially dried on June 1, remained dry for three days (June 1-3), reconnected by June 4, but then redried on June 10. It would be ideal to design queries around: \n
-                   \t  o	June 1 was the first day of the first drying event of the year
-                    \t o	June 3 was the third day of the first drying event of the year
-                    \t o	June 10 was the first day of the second drying event of the year and also the fourth total day of drying for the year
-                    \t for year %s.'''
-    return HttpResponse(response % yr)
+class DryDaysView(TemplateView):
+    """river eyes dry day view."""
+    
+    template_name = "riogrande/drydays.html"
+
+class DryEventsView(TemplateView):
+    """river eyes dry events view."""
+    
+    template_name = "riogrande/dryevents.html"
+
 
 class UsgsView(TemplateView):
     """river eyes Flow Landing Page"""
@@ -223,16 +224,17 @@ def usgs_series(request):
                  'table' : table} #table}
                 )
 
-def dashboards(request):
-    return HttpResponse("You're looking at the landing page for dashboards")
+class DashboardView(TemplateView):
+    
+    template_name = "riogrande/dashboard.html"
 
-def dashdryevents(request):
-    response =  "query dryevents (number of days dry within each reach) by flow conditions (flow summary) and dates (months too) when individual drying events initially started."
-    return HttpResponse(response)
+class DashboardDrySegmentsView(TemplateView):
+    
+    template_name = "riogrande/dashboarddrysegments.html"
 
-def dashdrysegments(request):
-    response =  "query drysegments (rm-discretized dry and non-dry segments) by flow conditions and dates (months too)"
-    return HttpResponse(response)
+class DashboardDryEventsView(TemplateView):
+    
+    template_name = "riogrande/dashboarddryevents.html"
 
 class FeatureListView(SingleTableView):
     model = models.Feature

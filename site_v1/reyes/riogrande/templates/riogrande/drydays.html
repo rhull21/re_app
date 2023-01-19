@@ -1,0 +1,19 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+    <img src="{% static 'images/dry_days.PNG' %}" > 
+</div>
+
+
+<div class="container"> 
+    <h3> Dryness Comparison </h3>
+    <p class="font-weight-bold"> You're looking at •	Total Number of Intermittent Days, Maximum Length, Mean Length grouped by {month, year} for each reach for each year </p>
+</div>
+{% endblock %}

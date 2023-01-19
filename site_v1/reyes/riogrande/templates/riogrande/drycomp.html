@@ -1,0 +1,19 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+    <img src="{% static 'images/dry_comp.PNG' %}" > 
+</div>
+
+
+<div class="container"> 
+    <h3> Dryness Comparison </h3>
+    <p class="font-weight-bold"> This is a page for comparing dryness data in the Middle Rio Grande </p>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+    <img src="{% static 'images/dry_events.PNG' %}" > 
+</div>
+
+
+<div class="container"> 
+    <h3> Dryness Events </h3>
+    <p class="font-weight-bold"> You're looking at •	For each day of drying it would be helpful to know the total number of days dry within the reach, which dried “event” it is for the year, and the day within the dried “event”. For context, during most years the Rio dries, but reconnects after storm events, then redries, and so on. So we have multiple drying events within a single year. For example, lets say the Rio initially dried on June 1, remained dry for three days (June 1-3), reconnected by June 4, but then redried on June 10. It would be ideal to design queries around: \n
+        o	June 1 was the first day of the first drying event of the year
+        o	June 3 was the third day of the first drying event of the year
+        o	June 10 was the first day of the second drying event of the year and also the fourth total day of drying for the year
+    </p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<div class="container">
+    <img src="{% static 'images/dashboard_dry_events.PNG' %}" > 
+</div>
+
+
+<div class="container"> 
+    <h3> Dashboard Dry Events  </h3>
+    <p class="font-weight-bold"> query dryevents (number of days dry within each reach) by flow conditions (flow summary) and dates (months too) when individual drying events initially started </p>
+</div>
+{% endblock %}

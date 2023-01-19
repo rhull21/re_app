@@ -16,19 +16,19 @@ urlpatterns = [
     path('dry/drysegs/filtereddrysegs', views.FilteredDrySegs.as_view(), name='filtered_dry_segments'),
     path('dry/drysegs/filteredfeatures', views.FilteredFeatures.as_view(), name='filtered_features'),
     path('dry/drylen', views.FilteredDryLen.as_view(), name='dry_length_comparison'),
-    path('dry/comp', views.drycomp, name='dry_comp'),
-    path('dry/days', views.drydays, name='dry_days'),
-    path('dry/events', views.dryevents, name='dry_events'),
+    path('dry/comp', views.DryCompView.as_view(), name='dry_comp'),
+    path('dry/days', views.DryDaysView.as_view(), name='dry_days'),
+    path('dry/events', views.DryEventsView.as_view(), name='dry_events'),
 
     # flow / discharge
     path('flow', views.UsgsView.as_view(), name='usgs'),
     path('flow/summary', views.FilteredSummaryUsgs.as_view(), name='summary_usgs'), 
     path('flow/series', views.usgs_series, name='usgs_series'),
 
-    # dashboards
-    path('dashboard/', views.dashboards, name='dashboards'),
-    path('dashboard/dryevents', views.dashdryevents, name='dashboard dry events with flow'),
-    path('dashboard/drysegs', views.dashdrysegments, name='dashboard dry segments with flow'),
+    # Dashboards
+    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
+    path('dashboard/dryevents', views.DashboardDryEventsView.as_view(), name='dashboard_dry_events'),
+    path('dashboard/drysegs', views.DashboardDrySegmentsView.as_view(), name='dashboard_dry_segments'),
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
