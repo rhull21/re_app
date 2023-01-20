@@ -22,23 +22,17 @@ print(arr_all.shape)
 print(plot_dict.keys())
 
 # %%
-# wb = Workbook()
-# ws = wb.active
+wb = Workbook()
+ws = wb.active
 
-# with pd.ExcelWriter(os.path.join(dir,nm+'.xlsx'), engine="openpyxl") as writer:
-#     writer.book = wb
-#     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
-#     for i in range(arr_all.shape[2]):
-#         df = pd.DataFrame(arr_all[:,:,i],index=plot_dict['River Miles'],columns=plot_dict['strf_dates'])
-#         df.to_excel(writer, sheet_name=str(plot_dict['Years'][i]))
+with pd.ExcelWriter(os.path.join(dir,nm+'.xlsx'), engine="openpyxl") as writer:
+    writer.book = wb
+    writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+    for i in range(arr_all.shape[2]):
+        df = pd.DataFrame(arr_all[:,:,i],index=plot_dict['River Miles'],columns=plot_dict['strf_dates'])
+        df.to_excel(writer, sheet_name=str(plot_dict['Years'][i]))
         
 
-# %%
-
-# arr_all2 = arr_all.reshape((arr_all.shape[0],arr_all.shape[1]*arr_all.shape[2]))
-# columns =   [
-#                 strf_date+'-'+str(yr) for strf_date in plot_dict['strf_dates'] for yr in plot_dict['Years'] 
-#             ]
 
 # %%
 arr_all2 = np.zeros((arr_all.shape[0],arr_all.shape[1]*arr_all.shape[2]))
@@ -49,6 +43,8 @@ columns2 =   [
                 strf_date+'-'+str(yr) for yr in plot_dict['Years'] for strf_date in plot_dict['strf_dates']  
             ]
 
+print(arr_all2.shape)
+print(columns2)
 
 
 # %%
