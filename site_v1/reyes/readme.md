@@ -27,11 +27,18 @@
 
 ### some todos before production: 
 
+#### global feedback
+
+- page headers and descriptions higher up on the page
+- have title tags for each page (now it says Rio Grande Dryness... for all of them)
+- 
+
 #### page-by-page feedback CM, JT
 
 ##### riogrande
 
 * *''*
+* 
 
 ##### geospatial
 
@@ -41,7 +48,19 @@
 
 * *'dry'*
 * *'dry/deltadry'*
+  * Date column first would make this more intuitive for me
+  * typo in Previous Dry Length column header
+  * can this table be longer? clicking on page numbers gets tedious. maybe not infinitely scrolling but at least a few hundred records
+  * group selection isn't working for me
+  * include option to group by reach?
+  * have "Submit" button to the right of Group Selection options, so it's clear that they're related
 * *'dry/drysegs'*
+  * having the animation running by default was a little intense
+  * have reaches delineated by thicker horizontal lines
+  * took me a minute to realize that having the mouse cursor just to the left or right of the plot would show landmarks + RM
+  * having all the landmark horizontal lines turned on by default feels a little cluttered to me. Maybe just starting with a few significant ones (e.g. reaches, Peralta Wasteway, etc). Or at least 
+  * 
+  * I think some vertical grid lines could help - like thicker lines on the 1st of the month and thinner on the 10th and 20th (or 15th)
 * *'dry/drysegs/filtereddrysegs'*
 * *'dry/drysegs/filteredfeatures'*
 * *'dry/drylen'*
