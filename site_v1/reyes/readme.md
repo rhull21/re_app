@@ -31,6 +31,7 @@
 
 - page headers and descriptions higher up on the page
 - have title tags for each page (now it says Rio Grande Dryness... for all of them)
+- might be too much for right now, but what about having a terminal kind of thing for people to query the database directly?
 - 
 
 #### page-by-page feedback CM, JT
@@ -58,9 +59,13 @@
   * having the animation running by default was a little intense
   * have reaches delineated by thicker horizontal lines
   * took me a minute to realize that having the mouse cursor just to the left or right of the plot would show landmarks + RM
-  * having all the landmark horizontal lines turned on by default feels a little cluttered to me. Maybe just starting with a few significant ones (e.g. reaches, Peralta Wasteway, etc). Or at least 
-  * 
+  * having all the landmark horizontal lines turned on by default feels a little cluttered to me. Maybe just starting with a few significant ones (e.g. reaches, Peralta Wasteway, etc). Or at least have an easier way to turn them off (I was only able to do it by double clicking on one to isolate it, then clicking again to turn it off)
   * I think some vertical grid lines could help - like thicker lines on the 1st of the month and thinner on the 10th and 20th (or 15th)
+  * going to different numbered pages in the tables reloads the whole page - maybe there's a way it could only reload the table?
+  * should we filter the Features table to only include rows that have a feature? Is the purpose of that table for folks to look up the location of various features? 
+  * regarding that same table, do the coordinates refer to the actual location of the feature or to the location of the RM associated with that feature?
+  * the two tables are kind of hidden below the plot, and people might not find them if they don't scroll down
+  * 
 * *'dry/drysegs/filtereddrysegs'*
 * *'dry/drysegs/filteredfeatures'*
 * *'dry/drylen'*
