@@ -32,7 +32,7 @@
 - page headers and descriptions higher up on the page
 - have title tags for each page (now it says Rio Grande Dryness... for all of them)
 - might be too much for right now, but what about having a terminal kind of thing for people to query the database directly?
-- 
+- include some space between the header and the start of the pages
 
 #### page-by-page feedback CM, JT
 
@@ -56,7 +56,7 @@
   * include option to group by reach?
   * have "Submit" button to the right of Group Selection options, so it's clear that they're related
 * *'dry/drysegs'*
-  * having the animation running by default was a little intense
+  * having the animation running by default was a little intense (either have it paused by default, or just slower)
   * have reaches delineated by thicker horizontal lines
   * took me a minute to realize that having the mouse cursor just to the left or right of the plot would show landmarks + RM
   * having all the landmark horizontal lines turned on by default feels a little cluttered to me. Maybe just starting with a few significant ones (e.g. reaches, Peralta Wasteway, etc). Or at least have an easier way to turn them off (I was only able to do it by double clicking on one to isolate it, then clicking again to turn it off)
@@ -65,9 +65,17 @@
   * should we filter the Features table to only include rows that have a feature? Is the purpose of that table for folks to look up the location of various features? 
   * regarding that same table, do the coordinates refer to the actual location of the feature or to the location of the RM associated with that feature?
   * the two tables are kind of hidden below the plot, and people might not find them if they don't scroll down
-  * 
+  * links to Feature filtering and Dry Segments filtering both have the same text 
 * *'dry/drysegs/filtereddrysegs'*
+  * wonder if these tables should be nested under dry/ instead of dry/drysegs - my first impression of the dry/drysegs page is that it was just about the visualization, so I wasn't expecting the tables to be nested inside
+  * for filters, saying "Start Date" and "End Date" and "Min dry length" and "max dry length"
+  * maybe have a column for reach? having multiple dry lengths for the same date might be confusing for folks that are less familiar with drying patterns in the MRG
+  * for me, it's a little more intuitive to have the columns ordered with downstream RM first then upstream. Not sure exactly why. i think that's how we have it on the daily reports, and my impression is that dry segments tends to expand in the upstream direction (but maybe that's an Angostura reach bias)
+  * If possible I think that having some quick way to filter by year and reach would improve functionality. Like a dropdown menu, or buttons. Typing in start and end dates could be tedious if you wanted to be exploring differences
+  * seems like for filtering by RM, the entire dry segment has to be within the bounds. Wonder if there's a way to make that clear to users. I'm thinking of people that might want to search for any dry segments that include a specific RM, for example. 
+  * when typing RMs into the filter boxes, you can no longer see which box is for upstream and which is for downstream. That tripped me up because they're in the opposite order as in the table columns.
 * *'dry/drysegs/filteredfeatures'*
+  *
 * *'dry/drylen'*
 * *'dry/comp'*
 * *'dry/days'*
