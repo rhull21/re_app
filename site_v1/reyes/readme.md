@@ -67,7 +67,7 @@
   * the two tables are kind of hidden below the plot, and people might not find them if they don't scroll down
   * links to Feature filtering and Dry Segments filtering both have the same text 
 * *'dry/drysegs/filtereddrysegs'*
-  * wonder if these tables should be nested under dry/ instead of dry/drysegs - my first impression of the dry/drysegs page is that it was just about the visualization, so I wasn't expecting the tables to be nested inside
+  * wonder if these tables should be nested under dry/ instead of dry/drysegs - my first impression of the dry/drysegs page is that it was just about the visualization, so I wasn't expecting the tables to be nested inside. i didn't notice these pages until after writing comments for /drysegs, so some of those might apply here
   * for filters, saying "Start Date" and "End Date" and "Min dry length" and "max dry length"
   * maybe have a column for reach? having multiple dry lengths for the same date might be confusing for folks that are less familiar with drying patterns in the MRG
   * for me, it's a little more intuitive to have the columns ordered with downstream RM first then upstream. Not sure exactly why. i think that's how we have it on the daily reports, and my impression is that dry segments tends to expand in the upstream direction (but maybe that's an Angostura reach bias)
@@ -75,8 +75,16 @@
   * seems like for filtering by RM, the entire dry segment has to be within the bounds. Wonder if there's a way to make that clear to users. I'm thinking of people that might want to search for any dry segments that include a specific RM, for example. 
   * when typing RMs into the filter boxes, you can no longer see which box is for upstream and which is for downstream. That tripped me up because they're in the opposite order as in the table columns.
 * *'dry/drysegs/filteredfeatures'*
-  *
+  * I wonder about having a short (~ 1 sentence) description of each feature as an additional column
+  * "Feature Contains" might not be obvious for some that it's for filtering by name. Maybe "Feature Name" or "Feature Name Contains"?
+  * have a "clear filter" button - this could apply to any table on the site
+  * think I mentioned this earlier, but I think unless people are going to be looking up the coordinates for specific RMs, there's no need to include RMs that don't have a feature
+  * For filtering by lat/long, it looks like you'd have to enter the exact coordinate down to the same # of digits after the decimal. I think the only way someone would be able to do that is if they already had a copy of the table. Could we make it so that it would filter down to something like hundredths place (not exactly sure which would work best here)? 
+  * Just speculating on how people might use this page, what about having another column for "Feature Type" - like gages, bridges, etc. I can imagine someone wanting to look up the associated RM for all the USGS, for example. 
 * *'dry/drylen'*
+  * should it say "Middle Rio Grande" instead of "Rio Grande"?
+  * are we delineating between Abeytas and Peralta segments in the database? If so, that could be good to include here as additional columns
+  * filtering would be 
 * *'dry/comp'*
 * *'dry/days'*
 * *'dry/events'*
