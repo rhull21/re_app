@@ -84,7 +84,7 @@
 * *'dry/drylen'*
   * should it say "Middle Rio Grande" instead of "Rio Grande"?
   * are we delineating between Abeytas and Peralta segments in the database? If so, that could be good to include here as additional columns
-  * filtering would be 
+  * filtering would be easier to navigate if the filter boxes for each reach were in their own column. so one column would be Isleta sum and Isleta percent dry, the next column would be San Acacia sum and percent dry, then Rio Grande sum and percent dry. 
 * *'dry/comp'*
 * *'dry/days'*
 * *'dry/events'*
