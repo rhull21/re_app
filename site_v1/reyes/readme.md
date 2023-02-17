@@ -76,6 +76,7 @@
 9. Add better mapping functionality, either as a dynamic mapping between query outputs and pages, or as an embedded AGOL presence
 10. For date and rm ranges add sliders to all tables
 12. User Authentication (log in)
+13. Embed web map application
 
 #### back-end
 
@@ -93,6 +94,8 @@
 11. Security 
     - careful of SQL injection
     - secrets
+12. How to deal with floor RMs?
+13. Metadata
 
 
 #### docker / deployment
