@@ -7,8 +7,15 @@
 
 {% block content %}
 <body>
-    <div class="container">
-        <form action="" method="post">
+
+    <div class="container"> 
+        <h2> Dryness Change </h2>
+        <p class="font-weight-bold"> This is a detailed page for change in dryness along the Middle Rio Grande, grouped by different time quantities </p>
+    </div>
+
+    <div class="container" style="margin-top:30px">
+            
+            <form action="" method="post">
             {% csrf_token %}
             <table>
             {{ form.as_table }} 
@@ -17,7 +24,7 @@
         </form>
     </div>
 
-    <div class="container">
+    <div class="container" style="margin-bottom:30px">
         {% load querystring from django_tables2 %}
         <a href="{% querystring '_export'='csv' %}">Download CSV</a>
         <a href="{% querystring '_export'='xlsx' %}">Download XLSX</a>
@@ -27,11 +34,7 @@
         {% render_table table %}
     </div>
 
-    <div class="container"> 
-        <h3> Dryness Change </h3>
-        <p class="font-weight-bold"> This is a detailed page for change in dryness along the Middle Rio Grande, grouped by different time quantities </p>
-    </div>
-
+ 
 
 </body>
 {% endblock %}
