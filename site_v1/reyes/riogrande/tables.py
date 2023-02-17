@@ -14,7 +14,7 @@ class DeltaDryTable(tables2.Table):
     def __init__(self, data, grp_type,*args, **kwargs):
 
         self.base_columns['len'] = tables2.Column(verbose_name='Dry Length (miles)')
-        self.base_columns['diff'] = tables2.Column(verbose_name='Difference Preious Dry Length (miles)')
+        self.base_columns['diff'] = tables2.Column(verbose_name='Difference Previous Dry Length (miles)')
         self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
 
         if (grp_type == "YEAR") or (grp_type == "MONTH"):

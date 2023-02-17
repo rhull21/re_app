@@ -265,3 +265,8 @@ def contact_us(request):
 
     return render(request, "riogrande/contact_us.html", {'form' : form})
 
+def heatmap(request):
+    return render(request, "riogrande/heatmap.html")
+
+def about(request):
+    return render(request, "riogrande/about.html")

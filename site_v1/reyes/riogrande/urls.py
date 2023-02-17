@@ -32,5 +32,7 @@ urlpatterns = [
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
-    path('contact_us/',views.contact_us, name='contact_us'), 
+    path('contact_us/',views.contact_us, name='contact_us'),
+    path('heatmap/',views.heatmap, name='heatmap'),
+    path('about/',views.about, name='about')
     ]

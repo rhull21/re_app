@@ -15,8 +15,30 @@
               height: 100%;
               object-fit: cover;
             }
+
+            .dropdown-menu li {
+                font-size: large;
+            }
+
+            .dropdown-toggle {
+                color: #f2e3d5;
+            }
+
+            .dropdown-about {
+                color: #F2E3D5;
+            }
+
+            .navbar {
+                background-color: #012E40;
+            }
+
+            .navbar-header .navbar-brand {
+                color: #F2E3D5;
+            }
         </style>
-        <title> Rio Grande Dryness Monitoring Effort </title>
+        <title> {% block title %}{% endblock title %}</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
 
     
@@ -26,6 +48,7 @@
         {% block content %}
 
         {% endblock %} 
+    
     </body>
     
 </html>
