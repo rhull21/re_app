@@ -33,6 +33,13 @@
 - have title tags for each page (now it says Rio Grande Dryness... for all of them)
 - might be too much for right now, but what about having a terminal kind of thing for people to query the database directly?
 - include some space between the header and the start of the pages
+- Let’s change “dryness” to “drying”
+- Reach names: san acacia, isleta, angostura
+- Note that the angostura reach includes the city of Albuquerque, which dried during 2022 for the first time in 40 years, so no data until we get 2022 ingested
+- Wanted to confirm that for years 2017 and later, we are no longer relying on Fulcrum data; using the summary tables instead
+- Appears data from 2002 through 2021 have been ingested into the database?
+- We should add some context and instructions for use on most of the pages. I can help with that.
+
 
 #### page-by-page feedback CM, JT
 
@@ -55,6 +62,11 @@
   * group selection isn't working for me
   * include option to group by reach?
   * have "Submit" button to the right of Group Selection options, so it's clear that they're related
+  * Correct column header spelling to “Previous”
+  * Add upstream RM, and downstream RM
+  * Can we add more rows to each page?
+  * Let’s discuss how to best optimize the view without needing to scroll through too many pages
+
 * *'dry/drysegs'*
   * having the animation running by default was a little intense (either have it paused by default, or just slower)
   * have reaches delineated by thicker horizontal lines
@@ -66,6 +78,10 @@
   * regarding that same table, do the coordinates refer to the actual location of the feature or to the location of the RM associated with that feature?
   * the two tables are kind of hidden below the plot, and people might not find them if they don't scroll down
   * links to Feature filtering and Dry Segments filtering both have the same text 
+  * This is going to be a really freaking cool tool.
+  * Please pivot the RM on the Y axis, so they are listed in descending order --- this better aligns to geographic context, RMs start with zero on the south end and then increase moving north
+  * Lets discuss the best way to plot landmarks, wondering if we should group major and minor landmarks, for example
+
 * *'dry/drysegs/filtereddrysegs'*
   * wonder if these tables should be nested under dry/ instead of dry/drysegs - my first impression of the dry/drysegs page is that it was just about the visualization, so I wasn't expecting the tables to be nested inside. i didn't notice these pages until after writing comments for /drysegs, so some of those might apply here
   * for filters, saying "Start Date" and "End Date" and "Min dry length" and "max dry length"
