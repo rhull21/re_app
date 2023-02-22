@@ -27,19 +27,7 @@
 
 ### some todos before production: 
 
-#### global comments
-
-- page headers and descriptions higher up on the page
-- have title tags for each page (now it says Rio Grande Dryness... for all of them)
-- might be too much for right now, but what about having a terminal kind of thing for people to query the database directly?
-- include some space between the header and the start of the pages
-- Let’s change “dryness” to “drying”
-- Reach names: san acacia, isleta, angostura
-- Note that the angostura reach includes the city of Albuquerque, which dried during 2022 for the first time in 40 years, so no data until we get 2022 ingested
-- Wanted to confirm that for years 2017 and later, we are no longer relying on Fulcrum data; using the summary tables instead
-- Appears data from 2002 through 2021 have been ingested into the database?
-- We should add some context and instructions for use on most of the pages. I can help with that.
-
+* moved to project -> issues
 
 #### page-by-page feedback CM, JT
 
