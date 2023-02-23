@@ -29,55 +29,10 @@
 
 * moved to project -> issues
 
-#### page-by-page feedback CM, JT
-
-##### riogrande
-
-* *''*
-* 
-
-##### geospatial
-
-* *'map'*
-
-##### dryness
-
-* *'dry'*
-  * moved to project -> issues
-
-* *'dry/drysegs'*
-  * moved to project -> issues
-
-* *'dry/drysegs/filtereddrysegs'*
-  * moved to project -> issues
-
-* *'dry/drysegs/filteredfeatures'*
-  * moved to project -> issues
-
-* *'dry/drylen'*
-  * moved to project -> issues
-  
-* *'dry/comp'*
-* *'dry/days'*
-* *'dry/events'*
-
 ##### flow / discharge
 
-* *'flow'*
-  * don't really need a link to "Flow Home" on the nav page, but it would be useful to have that link on the nested pages below
-* *'flow/summary'*
-  * can't think of much to change here - everything looks pretty good. maybe just making it easier to filter by station for people who don't know the numerical ID for the gages
-* *'flow/series'*
-  * default view of the plot is a bit confusing to look at. The layer drawn on top kind of covers up everything else. Curious how a line chart would look, with a relatively thin line weight. Or just having either a single year or single gage displayed by default
-  * I know there's a zoom function, but would it be possible to interactively narrow the date range?
-  * Maybe not necessary to have an X-axis title in this case
-  * including the "common names" of the gages would be helpful
+* moved to project -> issues
 
-##### dashboards
-
-* *'dashboard/'*
-* *'dashboard/dryevents'*
-* *'dashboard/drysegs'*
 
 
 #### front-end
