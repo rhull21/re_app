@@ -2,11 +2,11 @@ import pandas as pd
 from os import name
 from datetime import date
 
-from plotly.offline import plot
+from plotly.offline import plot # plotly.offline.plot
 import plotly.express as px
 import plotly.graph_objs as go
 
-from dash import dcc
+from dash import dcc 
 from dash import html
 from dash.dependencies import Input, Output
 from django_plotly_dash import DjangoDash
@@ -15,7 +15,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
 
     fig = px.imshow(data, animation_frame=2, 
                     # aspect='equal', 
-                    width=1500, height=1400,
+                    width=1500, height=1400, # best way to set dimensions for website rendering?
                     labels={'animation_frame' : 'Years',
                             'x' : 'Dates',
                             'y' : 'River Miles', 
@@ -38,6 +38,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
 
     # add the features as a scatterplot
     df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
+
     [
     fig.add_trace(
         go.Scatter(
@@ -62,7 +63,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
     ))
 
     #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div')
+    plotly_plot_obj = plot({'data': fig }, output_type='div') # add command to turn animations off
 
     return plotly_plot_obj
 
