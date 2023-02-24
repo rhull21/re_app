@@ -59,7 +59,7 @@ class DryView(TemplateView):
     template_name = "riogrande/dry.html"
 
 
-def deltadry(request, grp_type='NULL'):
+def deltadry(request, grp_type='DATE', reach_select='ALL'):
     '''
     to do - 
     20221228 : Can we apply a filterset to a dictionary of values
@@ -70,11 +70,12 @@ def deltadry(request, grp_type='NULL'):
         form = forms.DeltaDryForm(request.POST)
         if form.is_valid():
             grp_type = form.cleaned_data['group_by']
+            reach_select = form.cleaned_data['reach_select']
     else:
         form = forms.DeltaDryForm()
 
     with connection.cursor() as cursor:
-        cursor.execute("CALL proc_delta_dry(%s)", params=[grp_type])
+        cursor.execute("CALL proc_delta_dry(%s, %s)", params=[grp_type, reach_select])
         data = dictfetchall(cursor)
 
     table = tables.DeltaDryTable(data=data,grp_type=grp_type)
@@ -149,8 +150,10 @@ def drysegments(request):
             }
     del full_date, strf_date, yrs, rms, minyr, maxyr, mindat, maxdat
 
+    # transform
     arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, write=True)
 
+    # pass data to and return from plotly app
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
     
     return render(request, 

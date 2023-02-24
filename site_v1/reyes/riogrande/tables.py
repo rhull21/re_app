@@ -19,13 +19,17 @@ class DeltaDryTable(tables2.Table):
 
         if (grp_type == "YEAR") or (grp_type == "MONTH"):
             self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
+            seq  = ['YEAR(`dat`)', 'len', 'diff', 'domain']
             if grp_type == "MONTH":
                 self.base_columns['MONTH(`dat`)'] = tables2.Column(verbose_name='Month')
+                seq  = ['MONTH(`dat`)', 'YEAR(`dat`)', 'len', 'diff', 'domain']
         else:
             self.base_columns['dat'] = tables2.DateColumn(verbose_name='Date')
+            seq = ['dat', 'len', 'diff', 'domain']
+
 
         super(DeltaDryTable, self).__init__(data, *args, **kwargs)
-        self.sequence  = ['...'] 
+        self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
 
 class DrySegsTable(tables2.Table):

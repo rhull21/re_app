@@ -15,4 +15,10 @@ class DeltaDryForm(forms.Form):
                         ('MONTH', 'Month'),
                         ('DATE', 'Date')]
 
-    group_by = forms.CharField(label='Group Selection By... ', widget=forms.Select(choices=group_by_choices))
+    reach_choices = [   ('All', 'All'),
+                        ('Angostura', 'Angostura'),
+                        ('San Acacia', 'San Acacia'),
+                        ('Isleta', 'Isleta')]
+
+    group_by = forms.CharField(label='Group Selection By Time... ', widget=forms.Select(choices=group_by_choices))
+    reach_select = forms.CharField(label='Select Reach By... ', widget=forms.Select(choices=reach_choices))

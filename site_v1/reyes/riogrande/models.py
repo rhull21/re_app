@@ -173,6 +173,16 @@ class AcaciaLen(models.Model):
         managed = False  # Created from a view. Don't remove.
         db_table = 'acacia_len'
 
+class AngosturaLen(models.Model):
+    dat = models.DateField(primary_key=True, blank=True, null=False)
+    sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
+    frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'angostura_len'
+
+
 class AllLen(models.Model):
     thedate = models.DateField(primary_key=True, blank=True, null=False, verbose_name='Date')
     isleta_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Sum of Dry Lengths (miles)')
