@@ -38,6 +38,11 @@ class DrySegsTable(tables2.Table):
         template_name = "django_tables2/semantic.html"
         fields = ("dat", "dry_length", "rm_up", "rm_down")
 
+class DryCompTable(tables2.Table):
+    class Meta:
+        model = models.DryCompAgg
+        template_name = "django_tables2/semantic.html"
+
 class FeatureRmTable(tables2.Table):
     class Meta:
         model = models.FeatureRm

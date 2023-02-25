@@ -5,12 +5,11 @@
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
 
+
 {% block content %}
-
-<div class="container">
-    <img src="{% static 'images/dry_comp.PNG' %}" > 
+<div class="container"> 
+    {% include 'riogrande/includes/table.html' %}
 </div>
-
 
 <div class="container"> 
     <h3> Dryness Comparison </h3>

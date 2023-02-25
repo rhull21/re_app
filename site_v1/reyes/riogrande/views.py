@@ -174,10 +174,18 @@ class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-class DryCompView(TemplateView):
+class DryCompView(ExportMixin, SingleTableMixin, FilterView):
     """river dry comp view."""
-    
+    table_class = tables.DryCompTable
+    print(table_class)
+    model = models.DryCompAgg
     template_name = "riogrande/drycomp.html"
+    filterset_class = filters.DryCompFilter
+    export_formats = ("xls", "csv")
+
+    def get_queryset(self):
+        return super().get_queryset()
+    
 
 
 class DryDaysView(TemplateView):
