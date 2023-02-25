@@ -45,6 +45,14 @@ class DeltaDryFilter(django_filters.FilterSet):
     # class Meta:
     #     fields = ['...'] # , 'Diff', 'Domain', 'Date']
 
+class DryCompFilter(django_filters.FilterSet):
+    reach = django_filters.MultipleChoiceFilter(choices=models.Reach.objects.values_list('reach','reach'), )
+    year = django_filters.NumberFilter()
+
+    class Meta: 
+        model = models.DryCompAgg
+        fields = ['reach', 'year']
+
 class SummaryUsgsFilter(django_filters.FilterSet):
 
     usgs_station_name = django_filters.MultipleChoiceFilter(choices=models.UsgsGages.objects.values_list('usgs_station_name','usgs_station_name'),

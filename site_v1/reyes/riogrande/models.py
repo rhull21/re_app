@@ -196,6 +196,83 @@ class AllLen(models.Model):
         managed = False  # Created from a view. Don't remove.
         db_table = 'all_len'
 
+
+class DryCompAcacia(models.Model):
+    reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    dat = models.DateField(blank=True, null=True)
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_acacia'
+
+
+class DryCompAgg(models.Model):
+    reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Reach")
+    year = models.IntegerField(blank=True, null=True, verbose_name="Year")
+    min_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Approximate Lower River Mile Affected")
+    max_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Approximate Upper River Mile Affected")
+    max_dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name="Maximum One-Day Drying Extent")
+    first_dry_date = models.DateField(blank=True, null=True, verbose_name="First Day Drying Occurred")
+    last_dry_date = models.DateField(blank=True, null=True, verbose_name="Last Day Drying Occurred")
+    date_max_dry_length = models.DateField(blank=True, null=True, verbose_name="Date of Maximum One-Day Drying Extent")
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_agg'
+
+
+class DryCompAllReaches(models.Model):
+    reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    dat = models.DateField(blank=True, null=True)
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_all_reaches'
+
+
+class DryCompAngostura(models.Model):
+    reach = models.CharField(primary_key=True, max_length=9, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    dat = models.DateField(blank=True, null=True)
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_angostura'
+
+
+class DryCompGroupBy(models.Model):
+    reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
+    year = models.IntegerField(blank=True, null=True)
+    min_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    max_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    max_dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    first_dry_date = models.DateField(blank=True, null=True)
+    last_dry_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_group_by'
+
+
+class DryCompIsleta(models.Model):
+    reach = models.CharField(primary_key=True, max_length=6, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    dat = models.DateField(blank=True, null=True)
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'dry_comp_isleta'
+
 class DryLength(models.Model):
     rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, null=False)
     rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
