@@ -2,3 +2,5 @@
 **/liquibase
 **/sql
 *.code-workspace
+*tests.py
+**/__pycache__
