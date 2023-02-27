@@ -47,3 +47,17 @@
         ```
         * if this doesn't work, then go into docker terminal (`mysql -u <user> -p`) and enter this
 2. comment on/off between django db in settings.py
+
+
+### Github Flow
+
+1.	Create a branch for some specific part of the website
+    a.	`git checkout -b <name>`
+2.	Do some work locally on the branch 
+    a.	i.e. make changes to `plotpy.html`
+3.	Add, Commit, and Push branch to remote (can also use GUI)
+    a.	`git add plotpy.html` (or whatever)
+    b.	`git commit -m ‘changes to plotpy heatmap that does xyz’`
+    c.	`git push -u origin <name>`
+4.	On github, do a Pull Request, Merge branch and Delete branch when done
+    a. Use Githhub remote; this can also be down using the CLI but maybe more commands than are needed
