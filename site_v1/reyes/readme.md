@@ -58,6 +58,12 @@
 3.	Add, Commit, and Push branch to remote (can also use GUI)
     a.	`git add plotpy.html` (or whatever)
     b.	`git commit -m ‘changes to plotpy heatmap that does xyz’`
-    c.	`git push -u origin <name>`
+    c.	`git push -u origin <name>`, will see text like 
+        ```
+    remote: Create a pull request for 'rmupdate' oo GitHub by visiting:     
+    remote:      https://github.com/rhull21/re_app/pull/new/rmupdate 
+
+        ```
 4.	On github, do a Pull Request, Merge branch and Delete branch when done
     a. Use Githhub remote; this can also be down using the CLI but maybe more commands than are needed
+

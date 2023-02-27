@@ -67,12 +67,12 @@ def deltadry(request, grp_type='DATE', reach_select='ALL'):
     '''
 
     if request.method == 'POST' :
-        form = forms.DeltaDryForm(request.POST)
+        form = forms.DrySelectForm(request.POST)
         if form.is_valid():
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
     else:
-        form = forms.DeltaDryForm()
+        form = forms.DrySelectForm()
 
     with connection.cursor() as cursor:
         cursor.execute("CALL proc_delta_dry(%s, %s)", params=[grp_type, reach_select])
@@ -188,9 +188,37 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
     
 
 
-class DryDaysView(TemplateView):
-    """river eyes dry day view."""
-    
+def drydays(request, grp_type='DATE', reach_select='ALL'):
+    '''
+    '''
+
+    if request.method == 'POST' :
+        form = forms.DrySelectForm(request.POST)
+        if form.is_valid():
+            grp_type = form.cleaned_data['group_by']
+            reach_select = form.cleaned_data['reach_select']
+    else:
+        form = forms.DrySelectForm()
+
+    with connection.cursor() as cursor:
+        cursor.execute("CALL proc_dry_days(%s, %s)", params=[grp_type, reach_select])
+        data = dictfetchall(cursor)
+
+    table = tables.DryDaysTable(data=data,grp_type=grp_type)
+    RequestConfig(request).configure(table)
+
+    export_format = request.GET.get("_export", None)
+    if TableExport.is_valid_format(export_format):
+        exporter = TableExport(export_format, table)
+        return exporter.response("table.{}".format(export_format))
+
+    return render(  request, 
+                    "riogrande/drydays.html", 
+                    {"form" : form,
+                    "table": table}
+                     # "filter" : filterset}
+                    ) 
+
     template_name = "riogrande/drydays.html"
 
 class DryEventsView(TemplateView):
