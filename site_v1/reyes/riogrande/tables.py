@@ -43,6 +43,29 @@ class DryCompTable(tables2.Table):
         model = models.DryCompAgg
         template_name = "django_tables2/semantic.html"
 
+class DryDaysTable(tables2.Table):
+
+    def __init__(self, data, grp_type,*args, **kwargs):
+
+        self.base_columns['dry_days'] = tables2.Column(verbose_name='Total Number of Intermittent Days')
+        self.base_columns['max_len'] = tables2.Column(verbose_name='Maximum Length (RMs)')
+        self.base_columns['ave_len'] = tables2.Column(verbose_name='Average Length (RMs)')
+        self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
+
+        if (grp_type == "YEAR") or (grp_type == "MONTH"):
+            self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
+            seq  = ['YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'domain']
+            if grp_type == "MONTH":
+                self.base_columns['MONTH(`dat`)'] = tables2.Column(verbose_name='Month')
+                seq  = ['MONTH(`dat`)', 'YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'domain']
+        else:
+            self.base_columns['dat'] = tables2.DateColumn(verbose_name='Date')
+            seq = ['dat', 'dry_days', 'max_len', 'ave_len', 'domain']
+
+        super(DryDaysTable, self).__init__(data, *args, **kwargs)
+        self.sequence  = seq 
+        self.template_name = "django_tables2/semantic.html" 
+
 class FeatureRmTable(tables2.Table):
     class Meta:
         model = models.FeatureRm

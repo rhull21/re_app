@@ -10,7 +10,7 @@ class ContactForm(forms.Form):
     sender = forms.CharField(label='Who From?' , widget=forms.Select(choices=sender_choices))
     cc_myself = forms.BooleanField(required=False)
 
-class DeltaDryForm(forms.Form):
+class DrySelectForm(forms.Form):
     group_by_choices = [('YEAR', 'Year'),
                         ('MONTH', 'Month'),
                         ('DATE', 'Date')]

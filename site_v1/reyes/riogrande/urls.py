@@ -17,7 +17,7 @@ urlpatterns = [
     path('dry/filteredfeatures', views.FilteredFeatures.as_view(), name='filtered_features'),
     path('dry/drylen', views.FilteredDryLen.as_view(), name='dry_length_comparison'),
     path('dry/comp', views.DryCompView.as_view(), name='dry_comp'),
-    path('dry/days', views.DryDaysView.as_view(), name='dry_days'),
+    path('dry/days', views.drydays, name='dry_days'),
     path('dry/events', views.DryEventsView.as_view(), name='dry_events'),
 
     # flow / discharge
