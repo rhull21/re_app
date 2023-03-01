@@ -85,6 +85,11 @@ class FeatureTable(tables2.Table):
         template_name = "django_tables2/semantic.html"
         fields = ("fid", "feature", "rm")
 
+class DryLengthAggUsgsDataTable(tables2.Table):
+    class Meta:
+        model = models.DryLengthAggUsgsData
+        template_name = "django_tables2/semantic.html"
+
 class NameTable(tables2.Table):
     name = tables2.Column()
 

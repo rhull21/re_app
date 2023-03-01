@@ -177,7 +177,6 @@ class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
 class DryCompView(ExportMixin, SingleTableMixin, FilterView):
     """river dry comp view."""
     table_class = tables.DryCompTable
-    print(table_class)
     model = models.DryCompAgg
     template_name = "riogrande/drycomp.html"
     filterset_class = filters.DryCompFilter
@@ -263,6 +262,16 @@ def usgs_series(request):
                  'table' : table} #table}
                 )
 
+class DryLengthAggUsgsDataView(ExportMixin, SingleTableMixin, FilterView):
+    table_class = tables.DryLengthAggUsgsDataTable
+    model = models.DryLengthAggUsgsData
+    template_name = "riogrande/DryLengthAggUsgsData.html"
+    filterset_class = filters.DryLengthAggUsgsDataFilter
+    export_formats = ("xls", "csv")
+
+    def get_queryset(self):
+        return super().get_queryset()
+            
 class DashboardView(TemplateView):
     
     template_name = "riogrande/dashboard.html"
