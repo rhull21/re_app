@@ -79,7 +79,7 @@ def deltadry(request, grp_type='DATE', reach_select='ALL'):
         data = dictfetchall(cursor)
 
     table = tables.DeltaDryTable(data=data,grp_type=grp_type)
-    RequestConfig(request).configure(table)
+    RequestConfig(request, paginate={"per_page": 100}).configure(table)
 
     export_format = request.GET.get("_export", None)
     if TableExport.is_valid_format(export_format):
@@ -205,7 +205,7 @@ def drydays(request, grp_type='DATE', reach_select='ALL'):
         data = dictfetchall(cursor)
 
     table = tables.DryDaysTable(data=data,grp_type=grp_type)
-    RequestConfig(request).configure(table)
+    RequestConfig(request, paginate={"per_page": 100}).configure(table)
 
     export_format = request.GET.get("_export", None)
     if TableExport.is_valid_format(export_format):
