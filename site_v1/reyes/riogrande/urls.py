@@ -27,9 +27,10 @@ urlpatterns = [
 
     # Dashboards
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
-    path('dashboard/dryflow', views.DryLengthAggUsgsDataView.as_view(), name='dashboard_dry_length_flow_table'),# DryLengthAggUsgsData
+    path('dashboard/dryflow', views.DryLengthAggUsgsDataView.as_view(), name='dashboard_dry_length_flow_table'),
     path('dashboard/dryevents', views.DashboardDryEventsView.as_view(), name='dashboard_dry_events'),
-    path('dashboard/drysegs', views.DashboardDrySegmentsView.as_view(), name='dashboard_dry_segments'),
+    path('dashboard/drysegs', views.DashboardDryLengthAggUsgsDataView1, name='dash_drylen_aggusgsdata_view1'),
+    path('dashboard/drysegs', views.DashboardDryLengthAggUsgsDataView2.as_view(), name='dash_drylen_aggusgsdata_view2'),
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),

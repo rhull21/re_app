@@ -1,0 +1,15 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block title %} River Eyes Monitoring Program - USGS Discharge and Dryness Obsevations {% endblock %}
+
+{% block content %}
+<body>
+    <div class="container">
+        {{target_plot|safe}}
+    </div>
+{% endblock %}

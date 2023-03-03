@@ -276,9 +276,29 @@ class DashboardView(TemplateView):
     
     template_name = "riogrande/dashboard.html"
 
-class DashboardDrySegmentsView(TemplateView):
+def DashboardDryLengthAggUsgsDataView1(request):
+    '''
+    This view is a dashboard for selecting characteristics of relationship between dryness and usgs data on scatterplot
+    '''
+    # read in data
+    qry = models.DryLengthAggUsgsData.objects.all()
+    data = pd.DataFrame.from_records(qry.values())
+
+    data['year'] = [d.year for d in data['date']]
+    target_plot = plotly_app.plotly_dry_usgs_dash_1(data)
     
-    template_name = "riogrande/dashboarddrysegments.html"
+
+
+    return render(request, 
+                "riogrande/dash_drylen_aggusgsdata_view1.html",
+                {'target_plot' : target_plot}
+                )
+
+
+class DashboardDryLengthAggUsgsDataView2(TemplateView):
+    
+    None
+    # template_name = "riogrande/dashboarddrysegments.html"
 
 class DashboardDryEventsView(TemplateView):
     
