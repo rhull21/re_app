@@ -151,7 +151,7 @@ def drysegments(request):
     del full_date, strf_date, yrs, rms, minyr, maxyr, mindat, maxdat
 
     # transform
-    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, write=True)
+    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, read=True, write=False)
 
     # pass data to and return from plotly app
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)

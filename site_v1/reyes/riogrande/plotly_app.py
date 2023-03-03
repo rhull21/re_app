@@ -49,7 +49,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             size=20,
                             color='#F2E3D5',
                        ))
-    fig.add_hline(y=169)   # Isleta reach US boundary
+    fig.add_hline(y=169)    # Isleta reach US boundary
     fig.add_annotation(y=140,
                        xref='paper',
                        x=0.02,
@@ -89,7 +89,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
     ))
 
     #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div') # add command to turn animations off
+    plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') # add command to turn animations off
 
     return plotly_plot_obj
 
