@@ -17,14 +17,15 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                     # aspect='equal', 
                     #width=1500,  
                     height=2000, # best way to set dimensions for website rendering?
-                    labels={'animation_frame' : 'Years',
+                    labels={'animation_frame' : 'Year',
                      #       'x' : 'Dates',
-                            'y' : 'River Miles', 
+                            'y' : 'River Mile', 
                             'color' : 'Dryness (1=True)'},
                     x=plot_dict['Dates'], 
                     y=plot_dict['River Miles'],
                    # title=f'Rio Grande Dry Segments, by Year ', # : {plot_dict[list(plot_dict.keys())[2]]}',
-                    color_continuous_scale='Bluered')
+                    color_continuous_scale=['#012E40','#F2E3D5'],
+                    origin='lower') # changes imshow default reversal of Y-axis
 
     # Create and add slider
     steps = []
@@ -37,6 +38,29 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                       sliders=[dict(steps=steps)])
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
+    fig.add_hline(y=116)    # San Acacia reach US boundary
+    fig.add_annotation(y=90,
+                       xref='paper',
+                       x=.02,
+                       text="San Acacia Reach",
+                       showarrow=False,
+                       textangle=270,
+                       font=dict(
+                            size=20,
+                            color='#F2E3D5',
+                       ))
+    fig.add_hline(y=169)   # Isleta reach US boundary
+    fig.add_annotation(y=140,
+                       xref='paper',
+                       x=0.02,
+                       text="Isleta Reach",
+                       showarrow=False,
+                       textangle=270,
+                       font=dict(
+                            size=20,
+                            color='#F2E3D5'
+                       ))
+   
     # add the features as a scatterplot
     df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
 
@@ -50,7 +74,8 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
             # mode="lines",
             line=go.scatter.Line(color="black"),
             opacity=0.25,
-            showlegend=True
+            showlegend=True,
+            visible='legendonly'    # features not visible by default, but can be toggled on
         )
         )
    for i in df_rm_feat.index
