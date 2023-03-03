@@ -15,14 +15,15 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
 
     fig = px.imshow(data, animation_frame=2, 
                     # aspect='equal', 
-                    width=1500, height=1400, # best way to set dimensions for website rendering?
+                    #width=1500,  
+                    height=2000, # best way to set dimensions for website rendering?
                     labels={'animation_frame' : 'Years',
-                            'x' : 'Dates',
+                     #       'x' : 'Dates',
                             'y' : 'River Miles', 
                             'color' : 'Dryness (1=True)'},
                     x=plot_dict['Dates'], 
                     y=plot_dict['River Miles'],
-                    title=f'Rio Grande Dry Segments, by Year ', # : {plot_dict[list(plot_dict.keys())[2]]}',
+                   # title=f'Rio Grande Dry Segments, by Year ', # : {plot_dict[list(plot_dict.keys())[2]]}',
                     color_continuous_scale='Bluered')
 
     # Create and add slider
@@ -72,7 +73,7 @@ def plotly_seriesusgs(data):
     yrs = pd.unique(data['year'])
     labels = pd.unique(data['usgs_station_name'])
 
-    fig = px.scatter(data, color='usgs_station_name', #animation_frame='year',
+    fig = px.line(data, color='usgs_station_name', #animation_frame='year',
                     labels={'year' : 'Years',
                             'date' : 'Dates',
                             'flow_cfs' : 'Discharge, in Cubic Feet per Second (cfs)', 
@@ -83,7 +84,8 @@ def plotly_seriesusgs(data):
                     hover_name='usgs_feature_short_name',
                     x='date', 
                     y='flow_cfs',
-                    title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
+                    height=700)
+                    #title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
     fig.update_layout(xaxis=dict(tickformat='%m-%d-%y')) 
 
