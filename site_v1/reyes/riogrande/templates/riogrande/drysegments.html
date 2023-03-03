@@ -7,33 +7,15 @@
 {% block title %} River Eyes Monitoring Program - Dry Segments {% endblock %}
 {% block content %}
 <body>
+    <div class="container"> 
+        <h3> Segments of Drying </h3>
+        <p class="font-weight-bold"> This is a detail page for Dry Segments in the Middle Rio Grande </p>
+    </div>
+   
     <div class="container-fluid">
         {{target_plot|safe}}
     </div>
 
-    <div class="container">
-        <ul>
-            <a href="{% url 'filtered_dry_segments' %}">Link to Dry Segments Data Download and Filtering</a>
-        </ul>
-    </div>
-
-    <div>
-        {% render_table table1 %}
-    </div>
-
-    <div class="container">
-        <ul>
-            <a href="{% url 'filtered_features' %}">Link to Dry Segments Data Download and Filtering</a>
-        </ul>
-    </div>
-
-    <div>
-        {% render_table table2 %}
-    </div>
-
-    <div class="container"> 
-        <h3> Segments of Dryness </h3>
-        <p class="font-weight-bold"> This is a detail page for Dry Segments in the Middle Rio Grande </p>
-    </div>
+  
 </body>
 {% endblock %}

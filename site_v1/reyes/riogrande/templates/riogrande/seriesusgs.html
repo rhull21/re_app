@@ -9,24 +9,16 @@
 
 {% block content %}
 <body>
-    <div class="container">
-        {{target_plot|safe}}
-    </div>
-
-    <div class="container">
-        <ul>
-            <a href="{% url 'summary_usgs' %}">Link to Streamflow Data Download and Filtering</a>
-        </ul>
-    </div>
-
-    <div class="container"> 
-        {% include 'riogrande/includes/table.html' %}
-    </div>
-
     <div class="container"> 
         <h3> Time Series of USGS Streamflow Along the Riogrande  </h3>
         <p class="font-weight-bold"> This is a detail page for USGS river discharge in the Middle Rio Grande </p>
     </div>
+   
+    <div class="container-fluid">
+        {{target_plot|safe}}
+    </div>
+
+  
 </body>
 
 {% endblock %}
