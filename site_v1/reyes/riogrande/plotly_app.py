@@ -38,28 +38,21 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                       sliders=[dict(steps=steps)])
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
-    fig.add_hline(y=116)    # San Acacia reach US boundary
-    fig.add_annotation(y=90,
-                       xref='paper',
-                       x=.02,
-                       text="San Acacia Reach",
-                       showarrow=False,
-                       textangle=270,
-                       font=dict(
+    fig.add_hline(y=116, 
+                  annotation_text="San Acacia Reach",
+                  annotation_position="bottom left", 
+                  annotation_font=dict(
                             size=20,
                             color='#F2E3D5',
-                       ))
-    fig.add_hline(y=169)    # Isleta reach US boundary
-    fig.add_annotation(y=140,
-                       xref='paper',
-                       x=0.02,
-                       text="Isleta Reach",
-                       showarrow=False,
-                       textangle=270,
-                       font=dict(
+                       ))    # San Acacia reach US boundary
+    fig.add_hline(y=116, 
+                  annotation_text="Isleta Reach",
+                  annotation_position="top left", 
+                  annotation_font=dict(
                             size=20,
-                            color='#F2E3D5'
-                       ))
+                            color='#F2E3D5',
+                       ))    # Isleta reach US boundary 
+
    
     # add the features as a scatterplot
     df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
