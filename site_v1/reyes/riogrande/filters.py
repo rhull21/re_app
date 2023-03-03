@@ -73,5 +73,5 @@ class DryLengthAggUsgsDataFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.DryLengthAggUsgsData
-        fields = ('usgs_station_name', 'rm_up', 'dry_length', 'date', 'flow_cfs')
+        fields = ('usgs_station_name', 'rm_up', 'dry_length','date', 'flow_cfs')
 

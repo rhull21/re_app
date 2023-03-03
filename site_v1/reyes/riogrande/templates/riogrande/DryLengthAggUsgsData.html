@@ -1,0 +1,16 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<div class="container"> 
+    {% include 'riogrande/includes/table.html' %}
+</div>
+<div class="container"> 
+    <h3> Details of Dryness and Flow Data  </h3>
+    <p class="font-weight-bold"> This is a detail page containing information about flow and dry lengths in the Middle Rio Grande </p>
+</div>
+{% endblock %}

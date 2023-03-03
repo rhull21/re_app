@@ -4,3 +4,4 @@
 *.code-workspace
 *tests.py
 **/__pycache__
+*/archive
