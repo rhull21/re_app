@@ -34,8 +34,24 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
         steps.append(step)
 
     # update color (red, blue), color name (dry, wet), features
-    fig.update_layout(xaxis=dict(tickformat='%m-%d'),
-                      sliders=[dict(steps=steps)])
+    fig.update_layout(xaxis=dict(tickformat='%b %e',
+                                 ticks="outside",
+                                 tickwidth=1.5,
+                                 ticklen=15,
+                                 tickangle=315,
+                                 tickmode="linear",
+                                 tick0 = "2002-06-01",
+                                 dtick = "M1",
+                                 minor = dict(
+                                    ticklen=7,
+                                    tick0 = "2002-06-15",
+                                    dtick = "M1"
+                                 )
+                                 ),
+                      sliders=[dict(steps=steps)],
+                      font=dict(
+                        size=14
+                      ))
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
     fig.update_traces(
