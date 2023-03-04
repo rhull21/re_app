@@ -65,12 +65,34 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             tickwidth = 0.75
                             )  
                         ),
-                      sliders=[dict(steps=steps)],
+                    sliders=[dict(
+                        steps=steps,
+                        bgcolor = '#012E40',
+                        activebgcolor = '#F2E3D5',
+                        borderwidth = 0,
+                        currentvalue = dict(
+                            font = dict(
+                                size = 20,
+                                color = '#012E40'),
+                            offset = 15,
+                            prefix = 'Selected Year: ',
+                            xanchor = 'center'
+                            ),
+                        # transition = dict(
+                        # #        easing = 'quad',
+                        #         duration = 300),
+                        y = -0.04,
+                        # xanchor = 'left',
+                        x = -0.001,
+                            )],
+                      margin = dict(
+                            l=0, r=0,t=0,b=0
+                      )
                       )
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
     fig.update_traces(
-                hovertemplate="%{x} <extra>RM %{y}</extra>",
+                hovertemplate="%{x} <extra>RM %{y}</extra>",    #displays date in one box, and RM in another
                 hoverlabel = dict(
                     bgcolor = "#012E40",
                     bordercolor = '#F2E3D5',
@@ -94,7 +116,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             color='#F2E3D5',
                        ))    # San Acacia reach US boundary
     fig.add_hline(y=116, 
-                  visible = False,
+                  visible = False,  #only displays text annotation
                   annotation_text="Isleta Reach",
                   annotation_position="top left", 
                   annotation_font=dict(
@@ -123,12 +145,17 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
    for i in df_rm_feat.index
     ]
 
-    fig.update_layout(legend=dict(
-        yanchor='top',
-        y=-0.5,
-        xanchor='left',
-        x=0.25
-    ))
+    fig.update_layout(
+        legend=dict(
+                yanchor='top',
+                y=-0.5,
+                xanchor='left',
+                x=0.25
+    )
+    )
+    # fig.update_xaxes(
+    #     range=['2002-06-1','2002-11-01']
+    # )
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') # add command to turn animations off
