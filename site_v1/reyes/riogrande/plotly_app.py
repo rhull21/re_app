@@ -33,32 +33,60 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
         step = dict(label=yr)
         steps.append(step)
 
-    # update color (red, blue), color name (dry, wet), features
-    fig.update_layout(xaxis=dict(tickformat='%b %e',
-                                 ticks="outside",
-                                 tickwidth=1.5,
-                                 ticklen=15,
-                                 tickangle=315,
-                                 tickmode="linear",
-                                 tick0 = "2002-06-01",
-                                 dtick = "M1",
-                                 minor = dict(
-                                    ticklen=7,
-                                    tick0 = "2002-06-15",
-                                    dtick = "M1"
-                                 )
-                                 ),
+    # update color (red, blue), color name (dry, wet), features, update tick/label formatting
+    fig.update_layout(
+                    xaxis=dict(
+                        tickformat='%b %e',
+                        ticks="outside",
+                        tickwidth=1.5,
+                        ticklen=15,
+                        tickangle=315,
+                        tickmode="linear",
+                        tick0 = "2002-06-01",
+                        dtick = "M1",
+                        minor = dict(
+                            ticklen=7,
+                            tick0 = "2002-06-15",
+                            dtick = "M1"
+                            )
+                        ),
+                    yaxis = dict(
+                        title_font = dict(
+                            size = 20,
+                            color = '#012E40'
+                        ),
+                        ticks="outside",
+                        tickwidth = 2,
+                        ticklen = 10,
+                        minor = dict(
+                            tick0 = 60,
+                            dtick = 5,
+                            ticklen = 5,
+                            tickwidth = 0.75
+                            )  
+                        ),
                       sliders=[dict(steps=steps)],
-                      font=dict(
-                        size=14
-                      ))
+                      )
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
     fig.update_traces(
-                hovertemplate="%{x} <extra>RM %{y}</extra>"
+                hovertemplate="%{x} <extra>RM %{y}</extra>",
+                hoverlabel = dict(
+                    bgcolor = "#012E40",
+                    bordercolor = '#F2E3D5',
+                ),
+                hoverlabel_font = dict(
+                    color = '#F2E3D5',
+                    size = 16,
+                )
     )
 
     fig.add_hline(y=116, 
+                  line = dict(
+                    color = "#F2E3D5",
+                    dash = "dot",
+                  ),
+                  opacity = 0.5,
                   annotation_text="San Acacia Reach",
                   annotation_position="bottom left", 
                   annotation_font=dict(
@@ -66,6 +94,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             color='#F2E3D5',
                        ))    # San Acacia reach US boundary
     fig.add_hline(y=116, 
+                  visible = False,
                   annotation_text="Isleta Reach",
                   annotation_position="top left", 
                   annotation_font=dict(
