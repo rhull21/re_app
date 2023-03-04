@@ -38,6 +38,10 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                       sliders=[dict(steps=steps)])
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
+    fig.update_traces(
+                hovertemplate="%{x} <extra>RM %{y}</extra>"
+    )
+
     fig.add_hline(y=116, 
                   annotation_text="San Acacia Reach",
                   annotation_position="bottom left", 
