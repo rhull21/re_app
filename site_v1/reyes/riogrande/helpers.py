@@ -127,7 +127,7 @@ def make_HeatMap(df_dry, plot_dict, read=True, write=False, dir='riogrande/stati
     if read:
         # try to read it
         try: 
-
+            print('trying to open')
             with open(os.path.join(dir,nm+'.pickle'), 'rb') as f:
                 arr_all = pickle.load(f)
 
