@@ -121,6 +121,35 @@ def plotly_seriesusgs(data):
     return plotly_plot_obj
 
 
+def plotly_dry_usgs_dash_1(data):
+
+    # make plot
+    yrs = pd.unique(data['year'])
+    labels = pd.unique(data['usgs_station_name'])
+
+    fig = px.scatter_matrix(data,
+                            dimensions=["flow_cfs", "dry_length"], 
+                            color='usgs_station_name', symbol='year',
+                            labels={'year' : 'Years',
+                                    'date' : 'Dates',
+                                    'flow_cfs' : 'Discharge, \n (cfs)', 
+                                    'usgs_feature_short_name' : 'USGS Feature Name',
+                                    'usgs_station_name' : 'USGS Station Name',
+                                    'rm_up' : "River Mile",
+                                    'dry_length' : 'Dry Length \n (RMs)',
+                                    },
+                            color_discrete_sequence=[px.colors.qualitative.Bold[i] for i in range(len(labels))],
+                            height=1000
+                            )
+    
+    fig.update_traces(diagonal_visible=False)
+
+
+    #Turn graph object into local plotly graph
+    plotly_plot_obj = plot({'data': fig }, output_type='div')
+
+    return plotly_plot_obj
+
 def plotly_plot(result_table):
     """
     This function plots plotly plot

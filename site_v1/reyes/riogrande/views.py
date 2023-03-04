@@ -155,7 +155,7 @@ def drysegments(request):
 
     # pass data to and return from plotly app
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
-    
+     
     return render(request, 
                 "riogrande/drysegments.html",
                 {'target_plot' : target_plot, 
