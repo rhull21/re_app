@@ -169,7 +169,7 @@ def plotly_seriesusgs(data):
 
     fig = px.line(data, color='usgs_station_name', #animation_frame='year',
                     labels={'year' : 'Years',
-                            'date' : 'Dates',
+                            'date' : '',    #hide X-axis title
                             'flow_cfs' : 'Discharge, in Cubic Feet per Second (cfs)', 
                             'usgs_feature_short_name' : 'USGS Feature Name',
                             'usgs_station_name' : 'USGS Station Name'
@@ -178,14 +178,63 @@ def plotly_seriesusgs(data):
                     hover_name='usgs_feature_short_name',
                     x='date', 
                     y='flow_cfs',
-                    height=700)
+                    height=900,
+                    render_mode = 'webg1')  # necessary for rangeslider to display >500 rows
                     #title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
-    fig.update_layout(xaxis=dict(tickformat='%m-%d-%y')) 
-
+    fig.update_traces(
+                visible="legendonly"
+    )
+    fig.update_layout(xaxis=dict(
+                            tickformat='%m-%d-%y',
+                            #visible = False,
+                            #showticklabels = True,
+                            minor = dict(
+                                showgrid = True
+                            ),
+                            rangeslider = dict(
+                                visible = True,
+                                thickness = 0.07,
+                                bgcolor = 'White',
+                                bordercolor = "#012E40",
+                                borderwidth = 2,
+                                yaxis = dict(
+                                    range = [0,4000]
+                            )),
+                            rangeselector = dict(
+                                buttons = list([
+                                    dict(count=1,
+                                        label = "Year To Date",
+                                        step = 'year',
+                                        stepmode = 'todate'),
+                                    dict(step = 'all',
+                                         label = 'Full Time Series')
+                            ])
+                        )),
+                        yaxis = dict(
+                            #visible = False
+                        ),
+                        margin = dict(
+                        #    b = 50
+                        ),    
+                        legend = dict(
+                            orientation = 'h',
+                            x = 0.1,
+                            borderwidth = 2,
+                            bordercolor = "#012E40",
+                            font = dict(
+                                size = 16
+                            ),
+                            title = dict(
+                                text = None
+                            )
+                            ))
+                        
+                      
+   
 
     #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div')
+    plotly_plot_obj = plot({'data': fig }, output_type='div', auto_play=False)
 
     return plotly_plot_obj
 
