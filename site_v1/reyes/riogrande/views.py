@@ -53,12 +53,6 @@ class MapView(TemplateView):
         print(context["markers"])
         return context  
 
-class DryView(TemplateView):
-    """river eyes map view."""
-    
-    template_name = "riogrande/dry.html"
-
-
 def deltadry(request, grp_type='DATE', reach_select='ALL'):
     '''
     to do - 
@@ -225,12 +219,6 @@ class DryEventsView(TemplateView):
     
     template_name = "riogrande/dryevents.html"
 
-
-class UsgsView(TemplateView):
-    """river eyes Flow Landing Page"""
-    
-    template_name = "riogrande/usgs.html"
-
 class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     '''
     to do - Modify to have this thing actually be able to filter a selction using the appropriate queryset with the choice filter
@@ -272,9 +260,6 @@ class DryLengthAggUsgsDataView(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
             
-class DashboardView(TemplateView):
-    
-    template_name = "riogrande/dashboard.html"
 
 def DashboardDryLengthAggUsgsDataView1(request):
     '''

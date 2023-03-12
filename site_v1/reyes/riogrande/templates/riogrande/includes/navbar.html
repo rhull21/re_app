@@ -20,17 +20,16 @@
     
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav nav-pills navbar-right" style="font-size: 18px">
-                <!--  <li role="presentation" ><a href="{% url 'index' %}"> Home</a></li>   -->
-                <!--  <li role="presentation" ><a href="{% url 'dry' %}"> Dryness Data</a></li>  -->
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Drying Data <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
-                      <li><a href="{% url 'delta_dryness' %}">Dryness Change Table</a></li>
+                      <li><a href="{% url 'delta_dryness' %}">Drying Change Table</a></li>
                       <li><a href="{% url 'dry_length_comparison' %}">Dry Lengths Affected Table</a></li>
                       <li><a href="{% url 'filtered_dry_segments' %}">Dry Segments Table</a></li>
                       <li><a href="{% url 'filtered_features' %}">River Miles and Features Table</a></li> 
-                      <li><a href="{% url 'dry_comp' %}">Annual Dryness Statistics Table</a></li>
+                      <li><a href="{% url 'dry_comp' %}">Annual Drying Statistics Table</a></li>
                       <li><a href="{% url 'dry_days' %}">Dry Days Table</a></li> 
                     </ul>
                     
@@ -42,7 +41,7 @@
                         <li><a href="{% url 'summary_usgs' %}"> Summary table of USGS discharge measurements</a></li>
                     </ul>
                 </li>
-                <!--  <li role="presentation" ><a href="{% url 'usgs' %}"> Flow Data</a></li> -->
+                
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps and Dashboards<span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -55,8 +54,6 @@
                     </ul>
                 </li>
                 <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>
-                <!--     <li role="presentation" ><a href="{% url 'map' %}"> Interactive Map</a></li>    -->
-                <!--     <li role="presentation" class="disabled"><a href="{% url 'dashboard' %}"> Dashboards</a></li>    -->
             </ul>
         </div>
          </div>
