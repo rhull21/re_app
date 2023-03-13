@@ -9,7 +9,7 @@
         {% if view.export_formats %}
             {% for format in view.export_formats %}
             <a href="{% export_url format %}" class="btn btn-xs btn-default">
-                download  <code>.{{ format }}</code>
+                Download  <code>.{{ format }}</code>
             </a>
             {% endfor %}
         {% endif %}
@@ -17,7 +17,7 @@
     {% if filter %}
         <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}
-            {% bootstrap_button 'filter' %}
+            {% bootstrap_button 'Filter' %}
         </form>
     {% endif %}
 </div>

@@ -33,12 +33,82 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
         step = dict(label=yr)
         steps.append(step)
 
-    # update color (red, blue), color name (dry, wet), features
-    fig.update_layout(xaxis=dict(tickformat='%m-%d'),
-                      sliders=[dict(steps=steps)])
+    # update color (red, blue), color name (dry, wet), features, update tick/label formatting
+    fig.update_layout(
+                    xaxis=dict(
+                        tickformat='%b %e',
+                        ticks="outside",
+                        tickwidth=1.5,
+                        ticklen=15,
+                        tickangle=315,
+                        tickmode="linear",
+                        tick0 = "2002-06-01",
+                        dtick = "M1",
+                        minor = dict(
+                            ticklen=7,
+                            tick0 = "2002-06-15",
+                            dtick = "M1"
+                            )
+                        ),
+                    yaxis = dict(
+                        title_font = dict(
+                            size = 20,
+                            color = '#012E40'
+                        ),
+                        ticks="outside",
+                        tickwidth = 2,
+                        ticklen = 10,
+                        minor = dict(
+                            tick0 = 60,
+                            dtick = 5,
+                            ticklen = 5,
+                            tickwidth = 0.75
+                            )  
+                        ),
+                    sliders=[dict(
+                        steps=steps,
+                        bgcolor = '#012E40',
+                        activebgcolor = '#F2E3D5',
+                        borderwidth = 0,
+                        currentvalue = dict(
+                            font = dict(
+                                size = 20,
+                                color = '#012E40'),
+                            offset = 15,
+                            prefix = 'Selected Year: ',
+                            xanchor = 'center'
+                            ),
+                        # transition = dict(
+                        # #        easing = 'quad',
+                        #         duration = 300),
+                        y = -0.04,
+                        # xanchor = 'left',
+                        x = -0.001,
+                            )],
+                      margin = dict(
+                            l=0, r=0,t=0,b=0
+                      )
+                      )
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
+    fig.update_traces(
+                hovertemplate="%{x} <extra>RM %{y}</extra>",    #displays date in one box, and RM in another
+                hoverlabel = dict(
+                    bgcolor = "#012E40",
+                    bordercolor = '#F2E3D5',
+                ),
+                hoverlabel_font = dict(
+                    color = '#F2E3D5',
+                    size = 16,
+                )
+    )
+
     fig.add_hline(y=116, 
+                  line = dict(
+                    color = "#F2E3D5",
+                    dash = "dot",
+                  ),
+                  opacity = 0.5,
                   annotation_text="San Acacia Reach",
                   annotation_position="bottom left", 
                   annotation_font=dict(
@@ -46,6 +116,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             color='#F2E3D5',
                        ))    # San Acacia reach US boundary
     fig.add_hline(y=116, 
+                  visible = False,  #only displays text annotation
                   annotation_text="Isleta Reach",
                   annotation_position="top left", 
                   annotation_font=dict(
@@ -74,12 +145,17 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
    for i in df_rm_feat.index
     ]
 
-    fig.update_layout(legend=dict(
-        yanchor='top',
-        y=-0.5,
-        xanchor='left',
-        x=0.25
-    ))
+    fig.update_layout(
+        legend=dict(
+                yanchor='top',
+                y=-0.5,
+                xanchor='left',
+                x=0.25
+    )
+    )
+    # fig.update_xaxes(
+    #     range=['2002-06-1','2002-11-01']
+    # )
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') # add command to turn animations off
@@ -93,7 +169,7 @@ def plotly_seriesusgs(data):
 
     fig = px.line(data, color='usgs_station_name', #animation_frame='year',
                     labels={'year' : 'Years',
-                            'date' : 'Dates',
+                            'date' : '',    #hide X-axis title
                             'flow_cfs' : 'Discharge, in Cubic Feet per Second (cfs)', 
                             'usgs_feature_short_name' : 'USGS Feature Name',
                             'usgs_station_name' : 'USGS Station Name'
@@ -102,14 +178,63 @@ def plotly_seriesusgs(data):
                     hover_name='usgs_feature_short_name',
                     x='date', 
                     y='flow_cfs',
-                    height=700)
+                    height=900,
+                    render_mode = 'webg1')  # necessary for rangeslider to display >500 rows
                     #title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
-    fig.update_layout(xaxis=dict(tickformat='%m-%d-%y')) 
-
+    fig.update_traces(
+                visible="legendonly"
+    )
+    fig.update_layout(xaxis=dict(
+                            tickformat='%m-%d-%y',
+                            #visible = False,
+                            #showticklabels = True,
+                            minor = dict(
+                                showgrid = True
+                            ),
+                            rangeslider = dict(
+                                visible = True,
+                                thickness = 0.07,
+                                bgcolor = 'White',
+                                bordercolor = "#012E40",
+                                borderwidth = 2,
+                                yaxis = dict(
+                                    range = [0,4000]
+                            )),
+                            rangeselector = dict(
+                                buttons = list([
+                                    dict(count=1,
+                                        label = "Year To Date",
+                                        step = 'year',
+                                        stepmode = 'todate'),
+                                    dict(step = 'all',
+                                         label = 'Full Time Series')
+                            ])
+                        )),
+                        yaxis = dict(
+                            #visible = False
+                        ),
+                        margin = dict(
+                        #    b = 50
+                        ),    
+                        legend = dict(
+                            orientation = 'h',
+                            x = 0.1,
+                            borderwidth = 2,
+                            bordercolor = "#012E40",
+                            font = dict(
+                                size = 16
+                            ),
+                            title = dict(
+                                text = None
+                            )
+                            ))
+                        
+                      
+   
 
     #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div')
+    plotly_plot_obj = plot({'data': fig }, output_type='div', auto_play=False)
 
     return plotly_plot_obj
 

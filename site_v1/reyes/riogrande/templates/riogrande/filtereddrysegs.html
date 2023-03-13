@@ -8,11 +8,17 @@
 {% block title %} River Eyes Monitoring Program - Dry Segments Table {% endblock %}
 
 {% block content %}
+
+<div class="container.col-md-4"></div>
+    <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 30px; padding-left:30%; padding-right:30%"> 
+        <h1 class="text-center" style="color:#012E40"> <strong>Dry Segment Details</strong> </h1>
+        <p class="text-center" style="color:#012E40">  <i>This table displays length in river miles, upstream extent and downstream extent for all recorded dry segments</i></p>
+        <p class="text-center" style="color:#012E40"> <i>Filter by start/end date, downstream/upstream river mile, and min/max dry length</i></p>
+        <!-- <p class="text-center" style="color:#012E40"> <i></i></p> -->
+    </div>
+    <div class="container.col-md-4"></div>
+
 <div class="container"> 
     {% include 'riogrande/includes/table.html' %}
-</div>
-<div class="container"> 
-    <h3> Details of Dry Segments  </h3>
-    <p class="font-weight-bold"> This is a detail page containing information about dry segments in the Middle Rio Grande </p>
 </div>
 {% endblock %}

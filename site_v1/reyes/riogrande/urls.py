@@ -10,7 +10,6 @@ urlpatterns = [
     path('map', views.MapView.as_view(), name='map'),
 
     # dryness
-    path('dry', views.DryView.as_view(), name='dry'),
     path('dry/deltadry', views.deltadry, name='delta_dryness'),
     path('dry/drysegs', views.drysegments, name='dry_segments'),
     path('dry/filtereddrysegs', views.FilteredDrySegs.as_view(), name='filtered_dry_segments'),
@@ -21,12 +20,10 @@ urlpatterns = [
     path('dry/events', views.DryEventsView.as_view(), name='dry_events'),
 
     # flow / discharge
-    path('flow', views.UsgsView.as_view(), name='usgs'),
     path('flow/summary', views.FilteredSummaryUsgs.as_view(), name='summary_usgs'), 
     path('flow/series', views.usgs_series, name='usgs_series'),
 
     # Dashboards
-    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('dashboard/dryflow', views.DryLengthAggUsgsDataView.as_view(), name='dashboard_dry_length_flow_table'),
     path('dashboard/dryevents', views.DashboardDryEventsView.as_view(), name='dashboard_dry_events'),
     path('dashboard/drysegs', views.DashboardDryLengthAggUsgsDataView1, name='dash_drylen_aggusgsdata_view1'),
@@ -34,7 +31,6 @@ urlpatterns = [
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
-    path('contact_us/',views.contact_us, name='contact_us'),
     path('heatmap/',views.heatmap, name='heatmap'),
     path('about/',views.about, name='about')
     ]
