@@ -5,14 +5,21 @@
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
 
-{% block title %} River Eyes Monitoring Program - USGS Dischare Summary Table {% endblock %}
+{% block title %} River Eyes Monitoring Program - USGS Discharge Summary Table {% endblock %}
 
 {% block content %}
+
+<div class="container.col-md-4"></div>
+<div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 30px; padding-left:30%; padding-right:30%"> 
+    <h1 class="text-center" style="color:#012E40"> <strong>USGS Discharge Summary</strong> </h1>
+    <p class="text-center" style="color:#012E40">  <i>This table displays mean discharge by day, for USGS stream gages along the Middle Rio Grande</i></p>
+    <!-- <p class="text-center" style="color:#012E40"> <i></i></p> -->
+    <!-- <p class="text-center" style="color:#012E40"> <i></i></p> -->
+</div>
+<div class="container.col-md-4"></div>
+
 <div class="container"> 
     {% include 'riogrande/includes/table.html' %}
 </div>
-<div class="container"> 
-    <h3> Summary of USGS Disharge  </h3>
-    <p class="font-weight-bold"> This is a summary page for USGS river discharge in the Middle Rio Grande </p>
-</div>
+
 {% endblock %}

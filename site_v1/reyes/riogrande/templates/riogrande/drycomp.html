@@ -7,12 +7,18 @@
 
 {% block title %} River Eyes Monitoring Program - Annual Drying Statistics {% endblock %}
 {% block content %}
+
+<div class="container.col-md-4"></div>
+<div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 30px; padding-left:30%; padding-right:30%"> 
+    <h1 class="text-center" style="color:#012E40"> <strong>Annual Drying Statistics</strong> </h1>
+    <p class="text-center" style="color:#012E40">  <i>This table displays summary statistics for each year, grouped by reach</i></p>
+    <!-- <p class="text-center" style="color:#012E40"> <i></i></p> -->
+    <!-- <p class="text-center" style="color:#012E40"> <i></i></p> -->
+</div>
+<div class="container.col-md-4"></div>
+
 <div class="container"> 
     {% include 'riogrande/includes/table.html' %}
 </div>
 
-<div class="container"> 
-    <h3> Drying Comparison </h3>
-    <p class="font-weight-bold"> This is a page for comparing dryness data in the Middle Rio Grande </p>
-</div>
 {% endblock %}

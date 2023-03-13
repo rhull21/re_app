@@ -20,5 +20,5 @@ class DrySelectForm(forms.Form):
                         ('San Acacia', 'San Acacia'),
                         ('Isleta', 'Isleta')]
 
-    group_by = forms.CharField(label='Group Selection By Time... ', widget=forms.Select(choices=group_by_choices))
-    reach_select = forms.CharField(label='Select Reach By... ', widget=forms.Select(choices=reach_choices))
+    group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))
+    reach_select = forms.CharField(label='Filter by reach', widget=forms.Select(choices=reach_choices))
