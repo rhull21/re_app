@@ -2,8 +2,9 @@
 **/liquibase
 **/sql
 *.code-workspace
-tests
+*tests*
 **/__pycache__
 *.pyc
 */archive
 site_v1/reyes/reyes/settings.py
+**/etc
