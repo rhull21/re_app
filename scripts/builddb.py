@@ -14,8 +14,8 @@ config = {
   }
 
 db_name = "rivereyes" 
-sql_path = '../sql/statements'
-fname = 'insert2019.sql'
+sql_path = '../sql/statements/'
+fname = 'delete2002-2018.sql'
 
 #  Define connection, prepare cursor, create database
 cnx = cnctr.connect(**config)
