@@ -12,28 +12,29 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+etc_dir = '../../etc'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l84#89#^l6cnz^tkfpc9y5l!9j6*t72f+)4wab&wp+k)4qeal)'
+with open(os.path.join(etc_dir,'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+with open(os.path.join(etc_dir,'debug.txt')) as f:
+    DEBUG = f.read().strip() !='False'
 
 # This value ['*'] is not safe for production usage. Refer to the Django documentation for more information.
-ALLOWED_HOSTS = ['*']
-
+with open(os.path.join(etc_dir,'hosts.txt')) as f:
+    ALLOWED_HOSTS = f.read().splitlines()
 
 # Application definition
-
 INSTALLED_APPS = [
-    # 'riogrande.apps.RiograndeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_crontab',
-    # "django.contrib.gis",
     'riogrande',
     'django_tables2',
     "django_filters",
@@ -84,6 +84,12 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+''' production '''
+with open(os.path.join(etc_dir,'db_info.json')) as f:
+    db_info = json.load(f)
+
+DATABASES = db_info
+
 ''' local '''
 # DATABASES = {
 #     'default': {
@@ -96,16 +102,16 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 # }
 
 ''' docker '''
-DATABASES = {
-    'default': {
-		'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rivereyes',
-        'USER': 'root',
-        'PASSWORD': 'root',
-		'HOST': 'db',
-		'PORT': '3306'
-    }
-}
+# DATABASES = {
+#     'default': {
+# 		'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'rivereyes',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+# 		'HOST': 'db',
+# 		'PORT': '3306'
+#     }
+# }
 
 
 # Password validation
