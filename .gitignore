@@ -8,3 +8,4 @@
 */archive
 site_v1/reyes/reyes/settings.py
 **/etc
+**/django_env
