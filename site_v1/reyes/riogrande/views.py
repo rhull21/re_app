@@ -15,6 +15,7 @@ from django.core.mail import send_mail
 from django.core.serializers import serialize
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Q
 
 from django_filters.views import FilterView
 
@@ -25,7 +26,7 @@ from django_tables2.export.export import TableExport
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models, tables, filters, forms, plotly_app
-from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap
+from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata
 
 
 '''
@@ -129,20 +130,8 @@ def drysegments(request):
     
     del qry_rm_feat, qry_dry
 
-    # loop through all dates
-    minyr, maxyr = df_dry['dat'].min().year, df_dry['dat'].max().year+1
-    mindat, maxdat = date(1900,6,1), date(1900,11,1)
-    full_date = list(pd.date_range(mindat,maxdat,freq='d'))
-    strf_date = [date.strftime(d, '%m-%d') for d in full_date]
-    yrs = [yr for yr in range(minyr, maxyr)]
-    rms = list(df_rm_feat['rm_rounded'])
-    plot_dict = {
-            'Dates' : full_date,
-            'strf_dates' : strf_date,
-            'Years' : yrs,
-            'River Miles' : rms
-            }
-    del full_date, strf_date, yrs, rms, minyr, maxyr, mindat, maxdat
+    # metadata
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
 
     # transform
     arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, read=True, write=False)
@@ -178,7 +167,6 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
 
     def get_queryset(self):
         return super().get_queryset()
-    
 
 
 def drydays(request, grp_type='DATE', reach_select='ALL'):
@@ -212,8 +200,6 @@ def drydays(request, grp_type='DATE', reach_select='ALL'):
                      # "filter" : filterset}
                     ) 
 
-    template_name = "riogrande/drydays.html"
-
 class DryEventsView(TemplateView):
     """river eyes dry events view."""
     
@@ -238,16 +224,15 @@ def usgs_series(request):
     qry = models.UsgsFeatureData.objects.all()
     data = pd.DataFrame.from_records(qry.values())
 
-    table = FilteredSummaryUsgs.table_class(qry)
-    RequestConfig(request,paginate={"per_page" : 10}).configure(table)
 
     data['year'] = [d.year for d in data['date']]
     target_plot = plotly_app.plotly_seriesusgs(data)
 
     return render(request, 
                 "riogrande/seriesusgs.html",
-                {'target_plot' : target_plot,
-                 'table' : table} #table}
+                {
+                    'target_plot' : target_plot,
+                } #table}
                 )
 
 class DryLengthAggUsgsDataView(ExportMixin, SingleTableMixin, FilterView):
@@ -261,7 +246,7 @@ class DryLengthAggUsgsDataView(ExportMixin, SingleTableMixin, FilterView):
         return super().get_queryset()
             
 
-def DashboardDryLengthAggUsgsDataView1(request):
+def dashdrylenflow1(request):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and usgs data on scatterplot
     '''
@@ -280,10 +265,63 @@ def DashboardDryLengthAggUsgsDataView1(request):
                 )
 
 
-class DashboardDryLengthAggUsgsDataView2(TemplateView):
-    
-    None
-    # template_name = "riogrande/dashboarddrysegments.html"
+def dashdrylenflow2(request):
+    '''
+    This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
+    '''
+
+    if request.method == 'POST' :
+        form = forms.DryLenFlowForm(request.POST)
+        if form.is_valid():
+            month_select = form.cleaned_data['month_select']
+            subplot_bool = form.cleaned_data['subplot_bool']
+    else:
+        form = forms.DryLenFlowForm()
+
+    # read in data
+    qry_rm_feat = models.FeatureRm.objects.all()
+    qry_dry = models.DryLengthAgg.objects.all()
+    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
+    df_dry = pd.DataFrame.from_records(qry_dry.values())
+    qry_flow = models.UsgsFeatureData.objects.filter(
+                                                        Q(date__month='6') |
+                                                        Q(date__month='7') |
+                                                        Q(date__month='8') |
+                                                        Q(date__month='9') |
+                                                        Q(date__month='10')
+                                            )
+    df_flow = pd.DataFrame.from_records(qry_flow.values())
+
+    del qry_rm_feat, qry_dry, qry_flow
+
+    ### Drynesss Stuff
+    # metadata
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
+    # transform
+    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, read=True, write=False)
+
+    ### Flow Stuff
+    df_flow['year'] = [d.year for d in df_flow['date']]
+
+    # import pickle
+    # with open('df_flow.pickle', 'wb') as f:
+    #     pickle.dump(df_flow, f)
+    # # df_flow.to_csv('df_flow.csv')
+
+    ### Return Flow 
+    # pass data to and return from plotly app
+    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
+    target_plot2 = plotly_app.plotly_seriesusgs(df_flow)
+
+    return render(request, 
+                "riogrande/dash_drylen_aggusgsdata_view2.html",
+                {
+                 'target_plot' : target_plot,
+                 'target_plot2' : target_plot2, 
+                 'form' : form
+                }
+                )
+
 
 class DashboardDryEventsView(TemplateView):
     

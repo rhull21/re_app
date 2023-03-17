@@ -268,6 +268,9 @@ def plotly_dry_usgs_dash_1(data):
 
     return plotly_plot_obj
 
+def plotly_dry_usgs_dash_2(data):
+    None
+
 def plotly_plot(result_table):
     """
     This function plots plotly plot
