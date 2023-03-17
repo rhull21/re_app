@@ -10,6 +10,19 @@ class ContactForm(forms.Form):
     sender = forms.CharField(label='Who From?' , widget=forms.Select(choices=sender_choices))
     cc_myself = forms.BooleanField(required=False)
 
+class DryLenFlowForm(forms.Form):
+    month_choices =     [(6, "Jun"),
+                         (7, "Jul"),
+                         (8, "Aug"),
+                         (9, "Sep"),
+                         (10, "Oct"),
+                         (None, "All" )]
+    
+
+
+    month_select = forms.CharField(label='Months of Interest: ', widget=forms.Select(choices=month_choices))
+    subplot_bool = forms.BooleanField(label='Hide Subplots?')
+
 class DrySelectForm(forms.Form):
     group_by_choices = [('YEAR', 'Year'),
                         ('MONTH', 'Month'),

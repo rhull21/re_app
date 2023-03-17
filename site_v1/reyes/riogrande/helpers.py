@@ -1,6 +1,7 @@
 import django
 import os
 import numpy as np
+import pandas as pd
 from copy import deepcopy
 import pickle
 import numpy as np
@@ -82,6 +83,39 @@ class GeoJsonContext():
         self.data['features'] = self._to_GeoJsonDict()
 
         return self.data
+    
+
+def _make_FlowGrid(df_flow, plot_dict_flow):
+    '''
+    '''
+    # create figure
+    arr_all = np.zeros((len(plot_dict_flow['stations_dict']['usgs_station_name']), 
+                        len(plot_dict_flow['date_full']), 
+                        len(plot_dict_flow['years']))
+                        )*np.nan
+    i,j,k = 0,0,0 # k = station, j= day, i = year
+    for yr in plot_dict_flow['years']:
+        for d in plot_dict_flow['date_full']: 
+            for st in plot_dict_flow['stations_dict']['usgs_station_name']:
+                f = df_flow['flow_cfs'][
+                                    (df_flow['usgs_station_name']==st) &
+                                    (df_flow['date_full']==d) & 
+                                    (df_flow['year']==yr)
+                                 ]
+                if f.empty == False:
+
+                    # if st == plot_dict_flow['stations_dict']['usgs_station_name'][3]:
+                    #     print(st, "is not empty")
+
+                    arr_all[k,j,i] = f 
+                k= k + 1
+                del f
+            j = j + 1
+            k = 0
+        i = i + 1
+        j = 0
+
+    return arr_all
 
 
 def _make_HeatMap(df_dry, plot_dict):
@@ -142,3 +176,22 @@ def make_HeatMap(df_dry, plot_dict, read=True, write=False, dir='riogrande/stati
     # return it
     return arr_all
 
+def createmetadata(df, df_rms, yrs=(None,None), mos=(6,10)):
+    # loop through all dates
+    if yrs == (None,None): 
+        minyr, maxyr = df['dat'].min().year, df['dat'].max().year+1
+    else: 
+        minyr, maxyr = yrs[0], yrs[1]+1
+    
+    mindat, maxdat = date(1900,mos[0],1), date(1900,mos[1]+1,1)
+    full_date = list(pd.date_range(mindat,maxdat,freq='d'))
+    strf_date = [date.strftime(d, '%m-%d') for d in full_date]
+    yrs = [yr for yr in range(minyr, maxyr)]
+    rms = list(df_rms['rm_rounded'])
+    plot_dict = {
+            'Dates' : full_date,
+            'strf_dates' : strf_date,
+            'Years' : yrs,
+            'River Miles' : rms
+            }
+    return plot_dict
