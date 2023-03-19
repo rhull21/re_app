@@ -17,6 +17,8 @@ from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
 
+import pickle
+
 from django_filters.views import FilterView
 
 import django_tables2 as tables2
@@ -26,7 +28,7 @@ from django_tables2.export.export import TableExport
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models, tables, filters, forms, plotly_app
-from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata
+from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata, _make_FlowGrid
 
 
 '''
@@ -134,7 +136,7 @@ def drysegments(request):
     plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
 
     # transform
-    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, read=True, write=False)
+    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
 
     # pass data to and return from plotly app
     target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
@@ -269,14 +271,8 @@ def dashdrylenflow2(request):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
-
-    if request.method == 'POST' :
-        form = forms.DryLenFlowForm(request.POST)
-        if form.is_valid():
-            month_select = form.cleaned_data['month_select']
-            subplot_bool = form.cleaned_data['subplot_bool']
-    else:
-        form = forms.DryLenFlowForm()
+    # data
+    yrs, mos = (2002,2022), (6,11) 
 
     # read in data
     qry_rm_feat = models.FeatureRm.objects.all()
@@ -284,11 +280,11 @@ def dashdrylenflow2(request):
     df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
     qry_flow = models.UsgsFeatureData.objects.filter(
-                                                        Q(date__month='6') |
-                                                        Q(date__month='7') |
-                                                        Q(date__month='8') |
-                                                        Q(date__month='9') |
-                                                        Q(date__month='10')
+                                                        Q(date__month__gte=str(mos[0])) &
+                                                        Q(date__month__lte=str(mos[1])) 
+                                            ).filter(
+                                                        Q(date__year__gte=str(yrs[0])) &
+                                                        Q(date__year__lte=str(yrs[1]))
                                             )
     df_flow = pd.DataFrame.from_records(qry_flow.values())
 
@@ -298,27 +294,51 @@ def dashdrylenflow2(request):
     # metadata
     plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
     # transform
-    arr_all = make_HeatMap(df_dry=df_dry, plot_dict=plot_dict, read=True, write=False)
+    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
+
 
     ### Flow Stuff
-    df_flow['year'] = [d.year for d in df_flow['date']]
+    # metadata
+    stations = pd.DataFrame(
+                                {
+                                    'usgs_station_name' : pd.unique(df_flow['usgs_station_name']),
+                                    'usgs_feature_short_name' : pd.unique(df_flow['usgs_feature_short_name']),
+                                    'rm' : pd.unique(df_flow['rm']).astype(float)
+                                }
+                            )
+    stations = stations.sort_values(by='rm', ascending=False)
+    plot_dict['stations_dict'] = stations
 
-    # import pickle
-    # with open('df_flow.pickle', 'wb') as f:
-    #     pickle.dump(df_flow, f)
-    # # df_flow.to_csv('df_flow.csv')
+    # transform
+    df_flow['Years'] = [d.year for d in df_flow['date']]
+    df_flow['Dates'] = [date(1900,d.month,d.day) for d in df_flow['date']]
+    arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
+                                read=True, write=False,
+                                nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
+
+    # bring it together
+    plot_data = {
+                'arr_all' : arr_all, # this is the heatmap of dryness data
+                'Dates' : plot_dict['Dates'], # this is the full range of dates, from 1900
+                'strf_dates' : plot_dict['strf_dates'], # string formulated dates, for custom labels
+                'River Miles' : plot_dict['River Miles'],
+                'Years' : plot_dict['Years'],
+
+                'arr_flow' : arr_flow, # this is the grid of flows 
+                'usgs_station_name' : plot_dict["stations_dict"]['usgs_station_name'], #stations, order by rm!
+                'Station River Miles' : plot_dict["stations_dict"]['rm'],
+                }
+
 
     ### Return Flow 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
-    target_plot2 = plotly_app.plotly_seriesusgs(df_flow)
+    target_plot = plotly_app.plotly_dry_usgs_dash_2(plot_data)
+
 
     return render(request, 
                 "riogrande/dash_drylen_aggusgsdata_view2.html",
                 {
                  'target_plot' : target_plot,
-                 'target_plot2' : target_plot2, 
-                 'form' : form
                 }
                 )
 

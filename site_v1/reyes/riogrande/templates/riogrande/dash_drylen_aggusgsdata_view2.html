@@ -10,25 +10,12 @@
 {% block content %}
 <body>
 
-    <!-- in case some dynamic behavior is wanted -->
-    <div class="container" style="margin-top:30px">        
-        <form action="" method="post">
-        {% csrf_token %}
-        <table>
-        {{ form.as_table }} 
-        </table>
-        <input type="submit" value="Submit">
-        </form>
-    </div>
-
     <!-- plot  -->
     <div class="container">
         {{target_plot|safe}}
     </div>
 
-    <div class="container">
-        {{target_plot2|safe}}
-    </div>
+
 
 
 {% endblock %} 

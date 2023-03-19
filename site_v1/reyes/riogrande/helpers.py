@@ -85,26 +85,26 @@ class GeoJsonContext():
         return self.data
     
 
-def _make_FlowGrid(df_flow, plot_dict_flow):
+def _make_FlowGrid(df_flow, plot_dict):
     '''
     '''
     # create figure
-    arr_all = np.zeros((len(plot_dict_flow['stations_dict']['usgs_station_name']), 
-                        len(plot_dict_flow['date_full']), 
-                        len(plot_dict_flow['years']))
+    arr_all = np.zeros((len(plot_dict['stations_dict']['usgs_station_name']), 
+                        len(plot_dict['Dates']), 
+                        len(plot_dict['Years']))
                         )*np.nan
     i,j,k = 0,0,0 # k = station, j= day, i = year
-    for yr in plot_dict_flow['years']:
-        for d in plot_dict_flow['date_full']: 
-            for st in plot_dict_flow['stations_dict']['usgs_station_name']:
+    for yr in plot_dict['Years']:
+        for d in plot_dict['Dates']: 
+            for st in plot_dict['stations_dict']['usgs_station_name']:
                 f = df_flow['flow_cfs'][
                                     (df_flow['usgs_station_name']==st) &
-                                    (df_flow['date_full']==d) & 
-                                    (df_flow['year']==yr)
+                                    (df_flow['Dates']==d.date()) & 
+                                    (df_flow['Years']==yr)
                                  ]
                 if f.empty == False:
 
-                    # if st == plot_dict_flow['stations_dict']['usgs_station_name'][3]:
+                    # if st == plot_dict['stations_dict']['usgs_station_name'][3]:
                     #     print(st, "is not empty")
 
                     arr_all[k,j,i] = f 
@@ -145,13 +145,18 @@ def _make_HeatMap(df_dry, plot_dict):
 
     return arr_all
 
-def make_HeatMap(df_dry, plot_dict, read=True, write=False, dir='riogrande/static/data', nm='heatmap'):
-    
+def make_HeatMap(df, plot_dict, read=True, write=False, dir='riogrande/static/data', nm='heatmap'):
+    '''
+    name must be flowgrid (flow) or heatmap (dryness)
+    '''
     # see if write; write it
     if write:
         try: 
             with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: # os.path.join(dir,nm)
-                pickle.dump(_make_HeatMap(df_dry=df_dry, plot_dict=plot_dict), f)
+                if nm == 'heatmap':
+                    pickle.dump(_make_HeatMap(df_dry=df, plot_dict=plot_dict), f)
+                elif nm == 'flowgrid':
+                    pickle.dump(_make_FlowGrid(df_flow=df, plot_dict=plot_dict), f)
             with open(os.path.join(dir,nm+'_meta.pickle'), 'wb') as f:
                 pickle.dump(plot_dict, f)
         except Exception as e:
@@ -167,11 +172,17 @@ def make_HeatMap(df_dry, plot_dict, read=True, write=False, dir='riogrande/stati
 
         except:
             print('something happened while reading file; recreating')
-            arr_all = _make_HeatMap(df_dry=df_dry, plot_dict=plot_dict)
+            if nm == 'heatmap':
+                arr_all = _make_HeatMap(df_dry=df, plot_dict=plot_dict)
+            elif nm == 'flowgrid':
+                arr_all = _make_FlowGrid(df_flow=df, plot_dict=plot_dict)
 
     else:
         # just make it again
-        arr_all = _make_HeatMap(df_dry=df_dry, plot_dict=plot_dict)
+        if nm == 'heatmap':
+            arr_all = _make_HeatMap(df_dry=df, plot_dict=plot_dict)
+        elif nm == 'flowgrid':
+            arr_all = _make_FlowGrid(df_flow=df, plot_dict=plot_dict)
 
     # return it
     return arr_all
