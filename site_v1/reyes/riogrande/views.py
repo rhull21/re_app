@@ -26,10 +26,8 @@ from django_tables2 import SingleTableMixin, SingleTableView, RequestConfig
 from django_tables2.export.views import ExportMixin
 from django_tables2.export.export import TableExport
 
-# sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models, tables, filters, forms, plotly_app
-from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata, _make_FlowGrid
-
+from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata 
 
 '''
 to do: 
@@ -118,19 +116,28 @@ def drysegments(request):
     # read in data
     qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
+    qry_rm_feat = models.FeatureRm.objects.all()
+    qry_reach = models.Reach.objects.all()
+    qry_subreach = models.Subreach.objects.all()
+
     df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
+    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
+    df_reach = pd.DataFrame.from_records(qry_reach.values())
+    df_subreach = pd.DataFrame.from_records(qry_subreach.values())
+    
 
-    del qry_rm, qry_dry
+    del qry_rm, qry_dry, qry_rm_feat, qry_reach, qry_subreach
 
     # metadata
     plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
 
     # transform
     arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
+    df_rm_feat['rm'] = df_rm_feat['rm'].astype(float)
 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm)
+    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat, df_reach, df_subreach)
      
     return render(request, 
                 "riogrande/drysegments.html",

@@ -17,7 +17,8 @@ from riogrande.plotly_dash_helpers import addscatter, addimshow, addgagescatters
 
 import numpy as np
 
-def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
+def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
+
 
     fig = px.imshow(data, animation_frame=2, 
                     # aspect='equal', 
@@ -39,6 +40,30 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
         step = dict(label=yr)
         steps.append(step)
 
+    # add hover line
+    for reach in df_reach['reach']:
+        fig.add_hline(y=(df_reach['upstream_rm_id'][df_reach['reach']==reach].iloc[0]), 
+                    line = dict(
+                        color = "#F2E3D5",
+                        dash = "dot",
+                    ),
+                    opacity = 0.5,
+                    annotation_text=f"{reach} Reach",
+                    annotation_position="bottom left", 
+                    annotation_font=dict(
+                                size=20,
+                                color='#F2E3D5',
+                        ))    
+        fig.add_hline(y=(df_reach['downstream_rm'][df_reach['reach']==reach].iloc[0]), 
+                    visible = False,  #only displays text annotation
+                    annotation_text=f"{reach} Reach",
+                    annotation_position="top left", 
+                    annotation_font=dict(
+                                size=20,
+                                color='#F2E3D5',
+                        ))    
+
+
     # update color (red, blue), color name (dry, wet), features, update tick/label formatting
     fig.update_layout(
                     xaxis=dict(
@@ -57,6 +82,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             )
                         ),
                     yaxis = dict(
+                        range = [min(plot_dict['River Miles']), max(plot_dict['River Miles'])],
                         title_font = dict(
                             size = 20,
                             color = '#012E40'
@@ -84,19 +110,14 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                             prefix = 'Selected Year: ',
                             xanchor = 'center'
                             ),
-                        # transition = dict(
-                        # #        easing = 'quad',
-                        #         duration = 300),
-                        y = -0.04,
-                        # xanchor = 'left',
+                        y = 1.1,
                         x = -0.001,
                             )],
-                      margin = dict(
+                    margin = dict(
                             l=0, r=0,t=0,b=0
-                      )
-                      )
-    fig.update_coloraxes(showscale=False) # reversescale=True,
-
+                      ),
+              )
+    
     fig.update_traces(
                 hovertemplate="%{x} <extra>RM %{y}</extra>",    #displays date in one box, and RM in another
                 hoverlabel = dict(
@@ -109,59 +130,122 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                 )
     )
 
-    fig.add_hline(y=116, 
-                  line = dict(
-                    color = "#F2E3D5",
-                    dash = "dot",
-                  ),
-                  opacity = 0.5,
-                  annotation_text="San Acacia Reach",
-                  annotation_position="bottom left", 
-                  annotation_font=dict(
-                            size=20,
-                            color='#F2E3D5',
-                       ))    # San Acacia reach US boundary
-    fig.add_hline(y=116, 
-                  visible = False,  #only displays text annotation
-                  annotation_text="Isleta Reach",
-                  annotation_position="top left", 
-                  annotation_font=dict(
-                            size=20,
-                            color='#F2E3D5',
-                       ))    # Isleta reach US boundary 
 
-   
-#     # add the features as a scatterplot
-#     df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
-
-#     [
-#     fig.add_trace(
-#         go.Scatter(
-#             name=df_rm_feat['feature'].loc[i],
-#             x=[plot_dict['Dates'][0], plot_dict['Dates'][-1]],
-#             y=[df_rm_feat['rm_rounded'].loc[i],df_rm_feat['rm_rounded'].loc[i]],
-#             hovertemplate="(%{y})",
-#             # mode="lines",
-#             line=go.scatter.Line(color="black"),
-#             opacity=0.25,
-#             showlegend=True,
-#             visible='legendonly'    # features not visible by default, but can be toggled on
-#         )
-#         )
-#    for i in df_rm_feat.index
-#     ]
-
+    # Add dropdown (reomve existing one first)
+    fig["layout"].pop("updatemenus")
     fig.update_layout(
-        legend=dict(
-                yanchor='top',
-                y=-0.5,
-                xanchor='left',
-                x=0.25
+        updatemenus=[
+            dict( # reaches
+                buttons=list([ 
+                    dict(
+                        args=["yaxis.range", [min(plot_dict['River Miles']), max(plot_dict['River Miles'])]], 
+                        label="All",
+                        method="relayout"
+                    )
+                    ] + 
+                    [
+                    dict(
+                        args=["yaxis.range", [df_reach['downstream_rm'].iloc[i], df_reach['upstream_rm_id'].iloc[i]]], # for some reason labeled with `id` here
+                        label=df_reach['reach'].iloc[i],
+                        method="relayout"
+                    )
+                    for i in range(len(df_reach))
+                ] 
+                ),
+                direction="down",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                x=0.1,
+                xanchor="left",
+                y=1.1,
+                yanchor="top"
+            ),
+         dict( # subreaches
+                buttons=list( [
+                    dict(
+                        args=["yaxis.range", [min(plot_dict['River Miles']), max(plot_dict['River Miles'])]], 
+                        label="All",
+                        method="relayout"
+                    )
+                    ] + 
+                    [
+                    dict(
+                        args=["yaxis.range", [df_subreach['downstream_rm'].iloc[i], df_subreach['upstream_rm_id'].iloc[i]]], # for some reason labeled with `id` here
+                        label=df_subreach['subreach'].iloc[i],
+                        method="relayout"
+                    )
+                    for i in range(len(df_subreach))
+                ]
+                   
+                ),
+                direction="down",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                x=0.3,
+                xanchor="left",
+                y=1.1,
+                yanchor="top"
+            ),
+        ]
     )
-    )
-    # fig.update_xaxes(
-    #     range=['2002-06-1','2002-11-01']
-    # )
+
+    # this isn't working for some reason
+    # fig.update_layout(
+    #     annotations=[
+    #         dict(text="Reaches", x=0.1, y=1.2),
+    #         dict(text="Subeaches", x=0.3, y=1.2)
+    #     ]
+    #     )
+
+    fig.update_coloraxes(showscale=False) # reversescale=True,
+
+
+
+    ### traces for features and gages ###
+
+    # add the features as a scatterplot (note the inline ternary conditional operator syntax)
+    dict_rm_feat = {'Features' : df_rm_feat[df_rm_feat['usgs_station_name'].isnull()],
+                    'Stream Gages' : df_rm_feat[df_rm_feat['usgs_station_name'].notnull()],
+                    }
+
+    for key in dict_rm_feat:
+
+        df = dict_rm_feat[key]
+
+        if key == 'Features': 
+            color = 'black'
+        else: 
+            color = 'red'
+
+        fig.add_trace( # A backhanded way of labeling things in groups without Lambda
+                go.Scatter(
+                    name=key,
+                    x=[plot_dict['Dates'][int(len(plot_dict['Dates'])/2)]],
+                    y=[plot_dict['River Miles'][int(len(plot_dict['River Miles'])/2)]],
+                    opacity=0.25,
+                    visible='legendonly',    # features not visible by default, but can be toggled on
+                    hoverinfo="skip",
+                    legendgroup=key,
+                    line=go.scatter.Line(color=color),
+                    showlegend=True,
+            )
+            )
+
+        for i in df.index:
+
+            fig.add_trace(
+                go.Scatter(
+                    name=df['feature'].loc[i],
+                    x=plot_dict['Dates'],
+                    y=np.ones(len(plot_dict['Dates']))*df['rm'].loc[i],
+                    opacity=0.25,
+                    visible='legendonly',    # features not visible by default, but can be toggled on
+                    hovertemplate=key, 
+                    legendgroup=key,
+                    line=go.scatter.Line(color=color),
+                    showlegend=False,
+            )
+            )
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') # add command to turn animations off
