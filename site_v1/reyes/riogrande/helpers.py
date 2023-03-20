@@ -62,7 +62,7 @@ class GeoJsonContext():
                 ''' modify to make more general eventually '''
                 feat_dict['properties']['name'] = q.feature # +' \ud83c\uddee\ud83c\uddf9'
                 feat_dict['properties']['pk'] = str(pk)
-                feat_dict['geometry']['coordinates'] = [q.longitude_rounded, q.latitude_rounded]
+                feat_dict['geometry']['coordinates'] = [q.longitude, q.latitude]
 
                 feat_list.append(deepcopy(feat_dict))
 

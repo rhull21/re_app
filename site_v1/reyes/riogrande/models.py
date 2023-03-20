@@ -311,15 +311,25 @@ class DryLengthAggUsgsData(models.Model):
 
 
 class FeatureRm(models.Model):
-    rm_rounded = models.DecimalField(primary_key=True, max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. River Mile")  # Field renamed to remove unsuitable characters.
+    fid = models.IntegerField(primary_key=True)
+    rm = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="River Mile")  # Field renamed to remove unsuitable characters.
+    latitude = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Latitude, Decimal Degrees")
+    longitude = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Longitude, Decimal Degrees")
     feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Feature")
-    latitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Latitude, Decimal Degrees")
-    longitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Longitude, Decimal Degrees")
-    # latlong = models.TextField(blank=True, null=True) #lat_long = PointField()#
+    usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
+    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
     
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'feature_rm'
+
+class RoundedRm(models.Model):
+    rm_rounded = models.DecimalField(primary_key=True,max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. River Mile")  # Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'rounded_rm'
+
 
 class FlatTable(models.Model):
     rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)

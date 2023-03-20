@@ -131,25 +131,25 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
                        ))    # Isleta reach US boundary 
 
    
-    # add the features as a scatterplot
-    df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
+#     # add the features as a scatterplot
+#     df_rm_feat = df_rm_feat[df_rm_feat['feature'].notnull()]
 
-    [
-    fig.add_trace(
-        go.Scatter(
-            name=df_rm_feat['feature'].loc[i],
-            x=[plot_dict['Dates'][0], plot_dict['Dates'][-1]],
-            y=[df_rm_feat['rm_rounded'].loc[i],df_rm_feat['rm_rounded'].loc[i]],
-            hovertemplate="(%{y})",
-            # mode="lines",
-            line=go.scatter.Line(color="black"),
-            opacity=0.25,
-            showlegend=True,
-            visible='legendonly'    # features not visible by default, but can be toggled on
-        )
-        )
-   for i in df_rm_feat.index
-    ]
+#     [
+#     fig.add_trace(
+#         go.Scatter(
+#             name=df_rm_feat['feature'].loc[i],
+#             x=[plot_dict['Dates'][0], plot_dict['Dates'][-1]],
+#             y=[df_rm_feat['rm_rounded'].loc[i],df_rm_feat['rm_rounded'].loc[i]],
+#             hovertemplate="(%{y})",
+#             # mode="lines",
+#             line=go.scatter.Line(color="black"),
+#             opacity=0.25,
+#             showlegend=True,
+#             visible='legendonly'    # features not visible by default, but can be toggled on
+#         )
+#         )
+#    for i in df_rm_feat.index
+#     ]
 
     fig.update_layout(
         legend=dict(

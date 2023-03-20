@@ -15,11 +15,11 @@ class DrySegFilter(django_filters.FilterSet):
 
 class FeatureFilter(django_filters.FilterSet):
     feature = django_filters.CharFilter(lookup_expr='icontains')
-    rm_rounded = django_filters.RangeFilter()
+    rm = django_filters.RangeFilter()
     
     class Meta:
         model = models.FeatureRm
-        fields = ("feature", "rm_rounded" , "latitude_rounded", "longitude_rounded")
+        fields = ("feature", "rm" , "latitude", "longitude")
 
 class DryLenFilter(django_filters.FilterSet):
     isleta_sum_len = django_filters.RangeFilter()

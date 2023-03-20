@@ -113,41 +113,30 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
 
 def drysegments(request):
     '''
-    to do - 
-    20230103 - Move the tables into separate views, and call them into this view 
-    20230117 - cashe this file locally and set it up for ingestion and occasional update 
     '''
 
-
     # read in data
-    qry_rm_feat = models.FeatureRm.objects.all()
+    qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
-    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
+    df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
 
-    #tables
-    table1 = tables.DrySegsTable(qry_dry)
-    table2 = tables.FeatureRmTable(qry_rm_feat)
-    RequestConfig(request,paginate={"per_page" : 10}).configure(table1)
-    RequestConfig(request,paginate={"per_page" : 10}).configure(table2)
-    
-    del qry_rm_feat, qry_dry
+    del qry_rm, qry_dry
 
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
 
     # transform
     arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat)
+    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm)
      
     return render(request, 
                 "riogrande/drysegments.html",
-                {'target_plot' : target_plot, 
-                "table1" : table1,
-                "table2" : table2,
-                "filter" : filter}
+                {'target_plot' : target_plot
+                } 
+
                 )
 
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
@@ -277,7 +266,7 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     print('started')
  
     # read in data
-    qry_rm_feat = models.FeatureRm.objects.all()
+    qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
     qry_flow = models.UsgsFeatureData.objects.filter(
                                                         Q(date__month__gte=str(mos[0])) &
@@ -286,15 +275,15 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
                                                         Q(date__year__gte=str(yrs[0])) &
                                                         Q(date__year__lte=str(yrs[1]))
                                             )
-    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
+    df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
     df_flow = pd.DataFrame.from_records(qry_flow.values())
 
-    del qry_rm_feat, qry_dry, qry_flow
+    del qry_rm, qry_dry, qry_flow
 
     ### Drynesss Stuff
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
     # transform
     arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
 

@@ -70,7 +70,7 @@ class FeatureRmTable(tables2.Table):
     class Meta:
         model = models.FeatureRm
         template_name = "django_tables2/semantic.html"
-        fields = ("feature", "rm_rounded", "latitude_rounded", "longitude_rounded")
+        fields = ("feature", "rm", "latitude", "longitude")
 
 class SummaryUsgsTable(tables2.Table):
     class Meta:
@@ -90,8 +90,3 @@ class DryLengthAggUsgsDataTable(tables2.Table):
         model = models.DryLengthAggUsgsData
         template_name = "django_tables2/semantic.html"
 
-class NameTable(tables2.Table):
-    name = tables2.Column()
-
-    # class Meta:
-    #     attrs = {"class": "paleblue"}
