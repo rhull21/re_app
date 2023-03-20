@@ -5,11 +5,17 @@ from datetime import date
 from plotly.offline import plot # plotly.offline.plot
 import plotly.express as px
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+import plotly.io as io
 
 from dash import dcc 
 from dash import html
 from dash.dependencies import Input, Output
 from django_plotly_dash import DjangoDash
+
+from riogrande.plotly_dash_helpers import addscatter, addimshow, addgagescatters, frame_args
+
+import numpy as np
 
 def plotly_drysegsimshow(data, plot_dict, df_rm_feat):
 
@@ -238,7 +244,6 @@ def plotly_seriesusgs(data):
 
     return plotly_plot_obj
 
-
 def plotly_dry_usgs_dash_1(data):
 
     # make plot
@@ -265,6 +270,161 @@ def plotly_dry_usgs_dash_1(data):
 
     #Turn graph object into local plotly graph
     plotly_plot_obj = plot({'data': fig }, output_type='div')
+
+    return plotly_plot_obj
+
+def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
+    '''
+    '''
+    nm = 'plotly_dry_usgs_dash_2'
+    
+    if writefig: 
+        print('start figure write')
+        ### data
+        # indexed by rows, 
+        plot_labels = { 
+                    1 : 
+                        {
+                            'plot' : 'imshow',
+                            'x_label' : 'Date',
+                            'y_label' : 'Dry River Miles', 
+                        },
+                    4 : 
+                        {
+                            'plot' : 'scatter',
+                            'x_label' : 'Date',
+                            'y_label' : 'Flow, CFS', 
+                        }
+                    }
+        colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_station_name']))]
+        height = 400
+        round = 100
+
+        ### plots
+        fig = make_subplots(
+                            rows=len(plot_data['usgs_station_name']) + 1,
+                            row_heights=[height*2/3]+[(height*1/3)/(len(plot_data['usgs_station_name'])) for i in range(len(plot_data['usgs_station_name']))],
+                            cols = 1,
+                            shared_xaxes=True
+                            )
+
+        fig.add_trace(addimshow(plot_data, k=0),                
+                        row=1, col=1
+                    )
+
+        for i, station in enumerate(plot_data['usgs_station_name'],start=0):
+            fig.add_trace( addscatter(plot_data, colors, i, k=0),                
+                            row=i+2, col=1, 
+                        )  
+            
+        for i, station in enumerate(plot_data['usgs_station_name'],start=0):
+            fig.add_trace( addgagescatters(plot_data, colors, i),                
+                            row=1, col=1
+                        )  
+
+        ### frames
+        frames=[
+                    go.Frame(
+                        data=[addimshow(plot_data,k)]+[addscatter(plot_data,colors,i,k) for i in range(len(plot_data['usgs_station_name']))],
+                        name=f"{plot_data['Years'][k]}",
+                        traces=[i for i in range(len(plot_data['usgs_station_name'])+1)]
+                            ) for k in range(plot_data['arr_flow'].shape[2])
+                ]
+        fig.update(frames=frames)
+        fr_duration=50
+        sliders = [
+                    {
+                        "pad": {"b": 10, "t": 50},
+                        "len": 0.9,
+                        "x": 0.1,
+                        "y": 0,
+                        "steps": [
+                            {
+                                "args": [[f.name], frame_args(fr_duration)],
+                                "label": f"{plot_data['Years'][k]}",
+                                "method": "animate",
+                            }
+                            for k, f in enumerate(fig.frames)
+                        ],
+                        "bgcolor" : '#012E40',
+                        "activebgcolor" : '#F2E3D5',
+                        "borderwidth" : 0,
+
+                        "currentvalue" : dict(
+                            font = dict(
+                                size = 20,
+                                color = '#012E40'),
+                            offset = 15,
+                            prefix = 'Selected Year: ',
+                            xanchor = 'center'
+                            ),
+                        "y" : 1.3,    
+                        "x" : -0.001,                
+                    }
+                    ]
+
+        ### layout
+        fig.update_layout(sliders=sliders)
+
+        fig.update_xaxes(
+                        tickformat='%m-%d',
+                        ticks="outside",
+                        tickwidth=1.5,
+                        ticklen=15,
+                        tickangle=315,
+                        tickmode="linear",
+                        tick0 = "2002-06-01",
+                        dtick = "M1",
+                        minor = dict(
+                            ticklen=7,
+                            tick0 = "2002-06-15",
+                            dtick = "M1"
+                            ),
+                        # side = 'top',
+                        )
+        fig.update_yaxes(
+                        dict(
+                            title_font = dict(
+                                size = 16,
+                                color = '#012E40'
+                            ),
+                        ticks="outside",
+                        tickwidth = 2,
+                        ticklen = 10,
+                        ),
+                )
+    
+        for i, station in enumerate(plot_data['usgs_station_name'],start=0):
+            fig.update_yaxes(
+                                range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
+                                tick0=0,
+                                dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
+                                row=i+2, col=1
+                                )
+            if i in plot_labels.keys():
+                fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
+                                row=i, col=1, 
+                                side='left')
+
+        fig.update_traces(dict(showscale=False, 
+                            coloraxis=None, 
+                            colorscale=['#012E40','#F2E3D5']), selector={'type':'heatmap'})       
+
+        fig.update_layout(height=height*2)      
+        fig.write_json(f"riogrande/static/figs/{nm}.json")
+
+        print('done figure write')
+    
+    
+    if readfig:
+        print('start figure read')
+        fig = io.read_json(f"riogrande/static/figs/{nm}.json")
+        print('end figure read')
+
+    print('start figure converstion')
+    #Turn graph object into local plotly graph
+    plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') # add command to turn animations off
+    print('END figure converstion')
 
     return plotly_plot_obj
 
