@@ -277,8 +277,6 @@ def dashdrylenflow2(request):
     # read in data
     qry_rm_feat = models.FeatureRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
-    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
-    df_dry = pd.DataFrame.from_records(qry_dry.values())
     qry_flow = models.UsgsFeatureData.objects.filter(
                                                         Q(date__month__gte=str(mos[0])) &
                                                         Q(date__month__lte=str(mos[1])) 
@@ -286,6 +284,8 @@ def dashdrylenflow2(request):
                                                         Q(date__year__gte=str(yrs[0])) &
                                                         Q(date__year__lte=str(yrs[1]))
                                             )
+    df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
+    df_dry = pd.DataFrame.from_records(qry_dry.values())
     df_flow = pd.DataFrame.from_records(qry_flow.values())
 
     del qry_rm_feat, qry_dry, qry_flow

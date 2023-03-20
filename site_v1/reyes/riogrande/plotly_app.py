@@ -297,6 +297,7 @@ def plotly_dry_usgs_dash_2(plot_data):
                   }
     colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_station_name']))]
     height=400
+    round=100
 
     ### plots
     fig = make_subplots(
@@ -393,7 +394,12 @@ def plotly_dry_usgs_dash_2(plot_data):
             )
  
     for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-        # fig.update_xaxes(range=[np.nanmin(plot_data['arr_flow'][i,:,:]),np.nanmax(plot_data['arr_flow'][i,:,:])], row=i+2, col=1)
+        fig.update_yaxes(
+                            range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
+                            tick0=0,
+                            dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
+                            row=i+2, col=1
+                            )
         if i in plot_labels.keys():
             fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
                             row=i, col=1, 
