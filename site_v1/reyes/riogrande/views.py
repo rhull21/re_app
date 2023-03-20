@@ -118,6 +118,7 @@ def drysegments(request):
     20230117 - cashe this file locally and set it up for ingestion and occasional update 
     '''
 
+
     # read in data
     qry_rm_feat = models.FeatureRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
@@ -267,13 +268,14 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False, readfig=False, writefig=True):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
-    # data
-    yrs, mos = (2002,2022), (6,11) 
 
+    now = datetime.now()
+    print('started')
+ 
     # read in data
     qry_rm_feat = models.FeatureRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
@@ -294,7 +296,7 @@ def dashdrylenflow2(request):
     # metadata
     plot_dict = createmetadata(df=df_dry, df_rms=df_rm_feat)
     # transform
-    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
+    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
 
 
     ### Flow Stuff
@@ -313,7 +315,7 @@ def dashdrylenflow2(request):
     df_flow['Years'] = [d.year for d in df_flow['date']]
     df_flow['Dates'] = [date(1900,d.month,d.day) for d in df_flow['date']]
     arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
-                                read=True, write=False,
+                                read=read, write=write,
                                 nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
 
     # bring it together
@@ -329,11 +331,13 @@ def dashdrylenflow2(request):
                 'Station River Miles' : plot_dict["stations_dict"]['rm'],
                 }
 
+    print('done data')
 
     ### Return Flow 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_dry_usgs_dash_2(plot_data)
+    target_plot = plotly_app.plotly_dry_usgs_dash_2(plot_data, readfig, writefig)
 
+    print(f'done figure {datetime.now()-now}')
 
     return render(request, 
                 "riogrande/dash_drylen_aggusgsdata_view2.html",
