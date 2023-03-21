@@ -6,9 +6,21 @@ import numpy as np
 import os
 from openpyxl import Workbook
 
-dir = '../site_v1/reyes/riogrande/static/data'
+
+# import models, tables, filters, forms, plotly_app
+# from helpers import dictfetchall
+
+dir = 'static/data'
 nm = 'heatmap'
 nm_meta = 'heatmap_meta.pickle'
+
+'''
+to do : 
+    - refactor into three functions
+        - automate download of heatmap
+        - automate writing of xlsx, 2 ways
+    - move to use models  
+'''
 
 
 with open(os.path.join(dir,nm+'.pickle'), 'rb') as f:
@@ -17,11 +29,9 @@ with open(os.path.join(dir,nm+'.pickle'), 'rb') as f:
 with open(os.path.join(dir,nm+'_meta.pickle'), 'rb') as f:
     plot_dict = pickle.load(f)
 
-# %%
+# %% 3d (rm, date, yr) file
 print(arr_all.shape)
 print(plot_dict.keys())
-
-# %%
 wb = Workbook()
 ws = wb.active
 
@@ -34,7 +44,7 @@ with pd.ExcelWriter(os.path.join(dir,nm+'.xlsx'), engine="openpyxl") as writer:
         
 
 
-# %%
+# %% 2d (flat) file
 arr_all2 = np.zeros((arr_all.shape[0],arr_all.shape[1]*arr_all.shape[2]))
 for i in range(arr_all.shape[2]):
     arr_all2[:,i*len(plot_dict['strf_dates']):(i+1)*len(plot_dict['strf_dates'])] = arr_all[:,:,i]
@@ -47,7 +57,6 @@ print(arr_all2.shape)
 print(columns2)
 
 
-# %%
 wb = Workbook()
 ws = wb.active
 

@@ -23,7 +23,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
     fig = px.imshow(data, animation_frame=2, 
                     # aspect='equal', 
                     #width=1500,  
-                    height=2000, # best way to set dimensions for website rendering?
+                    height=1000, # best way to set dimensions for website rendering?
                     labels={'animation_frame' : 'Year',
                      #       'x' : 'Dates',
                             'y' : 'River Mile', 
@@ -42,18 +42,19 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
 
     # add hover line
     for reach in df_reach['reach']:
-        fig.add_hline(y=(df_reach['upstream_rm_id'][df_reach['reach']==reach].iloc[0]), 
-                    line = dict(
-                        color = "#F2E3D5",
-                        dash = "dot",
-                    ),
-                    opacity = 0.5,
-                    annotation_text=f"{reach} Reach",
-                    annotation_position="bottom left", 
-                    annotation_font=dict(
-                                size=20,
-                                color='#F2E3D5',
-                        ))    
+        if reach != "Angostura": # some weirdness about this hoverline negatively affecting rendering of y limits
+            fig.add_hline(y=(df_reach['upstream_rm_id'][df_reach['reach']==reach].iloc[0]), 
+                        line = dict(
+                            color = "#F2E3D5",
+                            dash = "dot",
+                        ),
+                        opacity = 0.5,
+                        annotation_text=f"{reach} Reach",
+                        annotation_position="bottom left", 
+                        annotation_font=dict(
+                                    size=20,
+                                    color='#F2E3D5',
+                            ))    
         fig.add_hline(y=(df_reach['downstream_rm'][df_reach['reach']==reach].iloc[0]), 
                     visible = False,  #only displays text annotation
                     annotation_text=f"{reach} Reach",
@@ -79,7 +80,8 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                             ticklen=7,
                             tick0 = "2002-06-15",
                             dtick = "M1"
-                            )
+                            ),
+                        side='top'
                         ),
                     yaxis = dict(
                         range = [min(plot_dict['River Miles']), max(plot_dict['River Miles'])],
@@ -95,7 +97,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                             dtick = 5,
                             ticklen = 5,
                             tickwidth = 0.75
-                            )  
+                            ),
                         ),
                     sliders=[dict(
                         steps=steps,
@@ -110,8 +112,10 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                             prefix = 'Selected Year: ',
                             xanchor = 'center'
                             ),
-                        y = 1.1,
-                        x = -0.001,
+                        x = 0.5,
+                        xanchor="center",
+                        y = 1.3,
+                        yanchor="top"
                             )],
                     margin = dict(
                             l=0, r=0,t=0,b=0
@@ -139,7 +143,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                 buttons=list([ 
                     dict(
                         args=["yaxis.range", [min(plot_dict['River Miles']), max(plot_dict['River Miles'])]], 
-                        label="All",
+                        label="All Middle Rio Grande Reaches",
                         method="relayout"
                     )
                     ] + 
@@ -155,16 +159,16 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                 direction="down",
                 pad={"r": 10, "t": 10},
                 showactive=True,
-                x=0.1,
+                x=-0.001,
                 xanchor="left",
-                y=1.1,
+                y=1.3,
                 yanchor="top"
             ),
          dict( # subreaches
                 buttons=list( [
                     dict(
                         args=["yaxis.range", [min(plot_dict['River Miles']), max(plot_dict['River Miles'])]], 
-                        label="All",
+                        label="All Middle Rio Grande Subreaches",
                         method="relayout"
                     )
                     ] + 
@@ -181,21 +185,14 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach):
                 direction="down",
                 pad={"r": 10, "t": 10},
                 showactive=True,
-                x=0.3,
-                xanchor="left",
-                y=1.1,
+                x=1.001,
+                xanchor="right",
+                y=1.3,
                 yanchor="top"
             ),
         ]
     )
 
-    # this isn't working for some reason
-    # fig.update_layout(
-    #     annotations=[
-    #         dict(text="Reaches", x=0.1, y=1.2),
-    #         dict(text="Subeaches", x=0.3, y=1.2)
-    #     ]
-    #     )
 
     fig.update_coloraxes(showscale=False) # reversescale=True,
 
