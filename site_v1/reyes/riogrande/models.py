@@ -296,15 +296,19 @@ class DryLengthAgg(models.Model):
         managed = False  # Created from a view. Don't remove.
         db_table = 'dry_length_agg'
 
-class DryLengthAggUsgsData(models.Model):
-    date = models.DateField(primary_key=True, blank=True, null=False, verbose_name='Date')
+class DryLengthAggUsgsData(models.Model): 
+    usgs_id = models.IntegerField()
+    uoid = models.AutoField(primary_key=True, blank=True, null=False)
+    date = models.DateField(blank=True, null=False, verbose_name='Date')
     dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
     rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
     rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Upstream River Mile')
     usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
     usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
     flow_cfs = models.FloatField(blank=True, null=True,  verbose_name='Discharge, Cubic Feet per Second')
-
+    prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
+    
+    
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'dry_length_agg_usgs_data'
@@ -383,12 +387,15 @@ class IsletaLen(models.Model):
 
 
 class UsgsFeatureData(models.Model):
+    usgs_id = models.IntegerField()
     uoid = models.AutoField(primary_key=True, blank=True, null=False)
     rm = models.DecimalField(max_digits=22, decimal_places=2, blank=True, null=False, verbose_name="River Mile")
     usgs_station_name = models.CharField(max_length=8, verbose_name='USGS Station Name')
     usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Feature Name')
     date = models.DateField(verbose_name='Date')
     flow_cfs = models.FloatField(blank=True, null=True, verbose_name='Discharge, Cubic Feet per Second')
+    prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
+    
     class Meta:
         managed = False
         db_table = 'usgs_feature_data'

@@ -76,7 +76,7 @@ class SummaryUsgsTable(tables2.Table):
     class Meta:
         model = models.UsgsFeatureData
         template_name = "django_tables2/semantic.html"
-        fields = ("usgs_station_name", "usgs_feature_short_name", "date", "flow_cfs")
+        fields = ("usgs_station_name", "usgs_feature_short_name", "date", "flow_cfs", "prov_flag")
 
 
 class FeatureTable(tables2.Table):
@@ -89,4 +89,5 @@ class DryLengthAggUsgsDataTable(tables2.Table):
     class Meta:
         model = models.DryLengthAggUsgsData
         template_name = "django_tables2/semantic.html"
+        fields = ("date", "rm_up", "dry_length", "usgs_station_name", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
 

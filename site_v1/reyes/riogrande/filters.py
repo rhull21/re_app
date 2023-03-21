@@ -58,20 +58,23 @@ class SummaryUsgsFilter(django_filters.FilterSet):
                                                     )
     date = django_filters.DateFromToRangeFilter(label='Date Range')
     flow_cfs = django_filters.RangeFilter()
+    prov_flag = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = models.UsgsFeatureData
-        fields = ('usgs_station_name', 'date', 'flow_cfs')
+        fields = ('usgs_station_name', 'date', 'flow_cfs', 'prov_flag')
 
 class DryLengthAggUsgsDataFilter(django_filters.FilterSet):
-    usgs_station_name = django_filters.MultipleChoiceFilter(choices=models.UsgsGages.objects.values_list('usgs_station_name','usgs_station_name'),
-                                                    )
+    usgs_id = django_filters.MultipleChoiceFilter(choices=models.UsgsGages.objects.values_list('usgs_id','usgs_station_name'))
+                                                    
     date = django_filters.DateFromToRangeFilter(label='Date Range')
     flow_cfs = django_filters.RangeFilter(label='Flow Range')
     rm_up = django_filters.RangeFilter(label='River Miles Range')
     dry_length = django_filters.RangeFilter(label='Dry Length Range')
+    prov_flag =  django_filters.CharFilter(lookup_expr='icontains')
+
 
     class Meta:
         model = models.DryLengthAggUsgsData
-        fields = ('usgs_station_name', 'rm_up', 'dry_length','date', 'flow_cfs')
+        fields = ('usgs_id', 'rm_up', 'dry_length','date', 'flow_cfs', 'prov_flag')
 
