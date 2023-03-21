@@ -26,8 +26,8 @@ urlpatterns = [
     # Dashboards
     path('dashboard/dryflow', views.DryLengthAggUsgsDataView.as_view(), name='dashboard_dry_length_flow_table'),
     path('dashboard/dryevents', views.DashboardDryEventsView.as_view(), name='dashboard_dry_events'),
-    path('dashboard/drysegs', views.DashboardDryLengthAggUsgsDataView1, name='dash_drylen_aggusgsdata_view1'),
-    path('dashboard/drysegs', views.DashboardDryLengthAggUsgsDataView2.as_view(), name='dash_drylen_aggusgsdata_view2'),
+    path('dashboard/drysegs', views.dashdrylenflow1, name='dash_drylen_aggusgsdata_view1'),
+    path('dashboard/dashdryflow', views.dashdrylenflow2, name='dash_drylen_aggusgsdata_view2'),
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
