@@ -6,13 +6,19 @@ from django_filters.widgets import RangeWidget
 from riogrande import models 
 
 class DrySegFilter(django_filters.FilterSet):
-    dat = django_filters.DateFromToRangeFilter(label='Date Range', widget=RangeWidget(attrs={'placeholder': 'YYYY/MM/DD'}))
-    dry_length = django_filters.RangeFilter(label='Dry Length Range')
-    rm_up = django_filters.RangeFilter(label='River Miles Range')
+    dat__gt = django_filters.DateFilter(label='Date, Min <YYYY-MM-DD>',field_name='dat', lookup_expr='gt')
+    dat__lt = django_filters.DateFilter(label='Date, Max <YYYY-MM-DD>',field_name='dat', lookup_expr='lt')
+    dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name='dry_length', lookup_expr='gt')
+    dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name='dry_length', lookup_expr='lt')
+    rm_up__lt = django_filters.NumberFilter(label='Upstream River Mile, Max', field_name='rm_up', lookup_expr='lt')
+    rm_down__gt = django_filters.NumberFilter(label='Downstream River Mile, Min', field_name='rm_down', lookup_expr='gt')
     
+    # rm_down__lt = django_filters.MultipleChoiceFilter(choices=models.Reach.objects.values_list('reach','reach'), )
+
+
     class Meta:
         model = models.DryLengthAgg
-        fields = ("dat", "dry_length", "rm_up") 
+        fields = ("dat__gt", "dat__lt", "dry_length__gt", "dry_length__lt", "rm_down__gt", "rm_up__lt") 
 
 class FeatureFilter(django_filters.FilterSet):
     feature = django_filters.CharFilter(lookup_expr='icontains')
@@ -48,7 +54,7 @@ class DeltaDryFilter(django_filters.FilterSet):
 
 class DryCompFilter(django_filters.FilterSet):
     reach = django_filters.MultipleChoiceFilter(choices=models.Reach.objects.values_list('reach','reach'), )
-    year = django_filters.NumberFilter()
+    year = django_filters.NumberFilter(default=2022)
 
     class Meta: 
         model = models.DryCompAgg

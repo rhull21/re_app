@@ -289,9 +289,9 @@ class DryLength(models.Model):
 
 
 class DryLengthAgg(models.Model):
-    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream River Mile')
-    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
-    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
+    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream Dry Extent')
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream Dry Extent')
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (River Miles)')
     dat = models.DateField(blank=True, null=True, verbose_name='Date')
     rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Downstream River Mile')
     rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Upstream River Mile')
