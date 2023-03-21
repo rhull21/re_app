@@ -29,13 +29,18 @@ crsr = cnx.cursor()
 cnx.database = db_name
 
 # %%
-usgs_dict = {'08358400': {'data' : None, 'usgs_id' : 1},
-                '08331160' : {'data' : None, 'usgs_id' : 2},
-                '08331510' : {'data' : None, 'usgs_id' : 3},
-                '08332010' : {'data' : None, 'usgs_id' : 4},
-                '08354900' : {'data' : None, 'usgs_id' : 5},
-                '08355050' : {'data' : None, 'usgs_id' : 6},
-                '08355490' : {'data' : None, 'usgs_id' : 7}}
+# usgs_dict = {'08358400': {'data' : None, 'usgs_id' : 1},
+#                 '08331160' : {'data' : None, 'usgs_id' : 2},
+#                 '08331510' : {'data' : None, 'usgs_id' : 3},
+#                 '08332010' : {'data' : None, 'usgs_id' : 4},
+#                 '08354900' : {'data' : None, 'usgs_id' : 5},
+#                 '08355050' : {'data' : None, 'usgs_id' : 6},
+#                 '08355490' : {'data' : None, 'usgs_id' : 7}}
+usgs_dict =  {
+                '08330000': {'data' : None, 'usgs_id' : 8},
+                '08329928' : {'data' : None, 'usgs_id' : 9},
+                '08329918' : {'data' : None, 'usgs_id' : 10},
+}
 
 # get daily values (dv)
 for site, value in usgs_dict.items(): 
@@ -63,13 +68,13 @@ for site, value in usgs_dict.items():
 
 
 # %% testing a more streamlined version of doing the above
-from utils import helpers
-import pandas as pd
-tbl_name = 'usgs_data'
-df = pd.DataFrame({'ones' : [1,2], 'text' : ['five','three'], 'date' : ['1999-10-03', '2035-02-05']})
-sql = helpers.insertMany(data=df,tbl_name='usgs_data',header_name='INSERT')
-print(sql)
-# crsr.execute(sql)
+# from utils import helpers
+# import pandas as pd
+# tbl_name = 'usgs_data'
+# df = pd.DataFrame({'ones' : [1,2], 'text' : ['five','three'], 'date' : ['1999-10-03', '2035-02-05']})
+# sql = helpers.insertMany(data=df,tbl_name='usgs_data',header_name='INSERT')
+# print(sql)
+# # crsr.execute(sql)
 # cnx.commit()
 
 # %%
