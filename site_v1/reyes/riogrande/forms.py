@@ -29,9 +29,16 @@ class DrySelectForm(forms.Form):
                         ('DATE', 'Date')]
 
     reach_choices = [   ('All', 'All'),
+                        ('Riverwide', 'River Wide'),
                         ('Angostura', 'Angostura'),
                         ('San Acacia', 'San Acacia'),
                         ('Isleta', 'Isleta')]
 
     group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))
     reach_select = forms.CharField(label='Filter by reach', widget=forms.Select(choices=reach_choices))
+
+class DryDaysForm(DrySelectForm):
+    group_by_choices = [('YEAR', 'Year'),
+                        ('MONTH', 'Month')]
+
+    group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))

@@ -1,11 +1,12 @@
 import django_filters
 import sys 
+from django_filters.widgets import RangeWidget
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
 
 class DrySegFilter(django_filters.FilterSet):
-    dat = django_filters.DateFromToRangeFilter()
+    dat = django_filters.DateFromToRangeFilter(label='Date Range', widget=RangeWidget(attrs={'placeholder': 'YYYY/MM/DD'}))
     dry_length = django_filters.RangeFilter(label='Dry Length Range')
     rm_up = django_filters.RangeFilter(label='River Miles Range')
     
@@ -15,20 +16,20 @@ class DrySegFilter(django_filters.FilterSet):
 
 class FeatureFilter(django_filters.FilterSet):
     feature = django_filters.CharFilter(lookup_expr='icontains')
-    rm = django_filters.RangeFilter()
+    rm = django_filters.RangeFilter(label='River Mile Range')
     
     class Meta:
         model = models.FeatureRm
         fields = ("feature", "rm" , "latitude", "longitude")
 
 class DryLenFilter(django_filters.FilterSet):
-    isleta_sum_len = django_filters.RangeFilter()
+    isleta_sum_len = django_filters.RangeFilter(label='Example Label')
     isleta_frac_len = django_filters.RangeFilter()
     acacia_sum_len = django_filters.RangeFilter()
     acacia_frac_len = django_filters.RangeFilter()
     combined_sum_len = django_filters.RangeFilter()
     combined_frac_len = django_filters.RangeFilter()
-    thedate = django_filters.DateFromToRangeFilter()
+    thedate = django_filters.DateFromToRangeFilter(label='Date Range', widget=RangeWidget(attrs={'placeholder': 'YYYY/MM/DD'}))
 
     class Meta:
         model = models.AllLen

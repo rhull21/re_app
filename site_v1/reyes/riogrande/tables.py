@@ -9,26 +9,32 @@ class DryLenTable(tables2.Table):
         model = models.AllLen
         template_name = "django_tables2/semantic.html" 
 
+class DayColumn(tables2.Column):
+    def render(self, value):
+        return '{:0.0f}'.format(value)
+
 class DeltaDryTable(tables2.Table):
 
     def __init__(self, data, grp_type,*args, **kwargs):
 
-        self.base_columns['len'] = tables2.Column(verbose_name='Dry Length (miles)')
-        self.base_columns['diff'] = tables2.Column(verbose_name='Difference Previous Dry Length (miles)')
+        # print(help(tables2.Column))
+
+        self.base_columns['len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
+        self.base_columns['diff'] = tables2.Column(verbose_name='Difference Previous Dry Length (River Miles)')
         self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
+        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry Extent')
+        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry Extent')
 
-        if (grp_type == "YEAR") or (grp_type == "MONTH"):
-            self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
-            seq  = ['YEAR(`dat`)', 'len', 'diff', 'domain']
-            if grp_type == "MONTH":
-                self.base_columns['MONTH(`dat`)'] = tables2.Column(verbose_name='Month')
-                seq  = ['MONTH(`dat`)', 'YEAR(`dat`)', 'len', 'diff', 'domain']
-        else:
-            self.base_columns['dat'] = tables2.DateColumn(verbose_name='Date')
-            seq = ['dat', 'len', 'diff', 'domain']
+        self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
+        seq  = ['YEAR(`dat`)', 'len', 'diff', 'rm_up', 'rm_down', 'domain', ]
+        if (grp_type == "MONTH") or (grp_type == "DATE"):
+            self.base_columns['MONTHNAME(`dat`)'] = tables2.Column(verbose_name='Month')
+            seq  = ['MONTHNAME(`dat`)'] + seq 
+            if (grp_type == "DATE"):
+                self.base_columns['DAYOFMONTH(`dat`)'] = DayColumn(verbose_name='Day')
+                seq = ['DAYOFMONTH(`dat`)'] + seq 
 
-
-        super(DeltaDryTable, self).__init__(data, *args, **kwargs)
+        super(DeltaDryTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
 
@@ -45,26 +51,28 @@ class DryCompTable(tables2.Table):
 
 class DryDaysTable(tables2.Table):
 
-    def __init__(self, data, grp_type,*args, **kwargs):
+    def __init__(self, data, grp_type, *args, **kwargs):
 
         self.base_columns['dry_days'] = tables2.Column(verbose_name='Total Number of Intermittent Days')
-        self.base_columns['max_len'] = tables2.Column(verbose_name='Maximum Length (RMs)')
-        self.base_columns['ave_len'] = tables2.Column(verbose_name='Average Length (RMs)')
+        self.base_columns['max_len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
+        self.base_columns['ave_len'] = tables2.Column(verbose_name='Average Dry Length (River Miles)')
         self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
+        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry Extent')
+        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry Extent')
 
-        if (grp_type == "YEAR") or (grp_type == "MONTH"):
-            self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
-            seq  = ['YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'domain']
-            if grp_type == "MONTH":
-                self.base_columns['MONTH(`dat`)'] = tables2.Column(verbose_name='Month')
-                seq  = ['MONTH(`dat`)', 'YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'domain']
-        else:
-            self.base_columns['dat'] = tables2.DateColumn(verbose_name='Date')
-            seq = ['dat', 'dry_days', 'max_len', 'ave_len', 'domain']
+        self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
+        seq  = ['YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'rm_up', 'rm_down', 'domain', ]
+        if (grp_type == "MONTH") or (grp_type == "DATE"):
+            self.base_columns['MONTHNAME(`dat`)'] = tables2.Column(verbose_name='Month')
+            seq  = ['MONTHNAME(`dat`)'] + seq 
+            if (grp_type == "DATE"):
+                self.base_columns['DAYOFMONTH(`dat`)'] = DayColumn(verbose_name='Day')
+                seq = ['DAYOFMONTH(`dat`)'] + seq 
 
-        super(DryDaysTable, self).__init__(data, *args, **kwargs)
+        super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
+
 
 class FeatureRmTable(tables2.Table):
     class Meta:

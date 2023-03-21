@@ -168,6 +168,8 @@ class AcaciaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -177,6 +179,8 @@ class AngosturaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -380,6 +384,8 @@ class IsletaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
