@@ -168,6 +168,8 @@ class AcaciaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -177,6 +179,8 @@ class AngosturaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -296,30 +300,44 @@ class DryLengthAgg(models.Model):
         managed = False  # Created from a view. Don't remove.
         db_table = 'dry_length_agg'
 
-class DryLengthAggUsgsData(models.Model):
-    date = models.DateField(primary_key=True, blank=True, null=False, verbose_name='Date')
+class DryLengthAggUsgsData(models.Model): 
+    usgs_id = models.IntegerField()
+    uoid = models.AutoField(primary_key=True, blank=True, null=False)
+    date = models.DateField(blank=True, null=False, verbose_name='Date')
     dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
     rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
     rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Upstream River Mile')
     usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
     usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
     flow_cfs = models.FloatField(blank=True, null=True,  verbose_name='Discharge, Cubic Feet per Second')
-
+    prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
+    
+    
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'dry_length_agg_usgs_data'
 
 
 class FeatureRm(models.Model):
-    rm_rounded = models.DecimalField(primary_key=True, max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. River Mile")  # Field renamed to remove unsuitable characters.
+    fid = models.IntegerField(primary_key=True)
+    rm = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="River Mile")  # Field renamed to remove unsuitable characters.
+    latitude = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Latitude, Decimal Degrees")
+    longitude = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Longitude, Decimal Degrees")
     feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Feature")
-    latitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Latitude, Decimal Degrees")
-    longitude_rounded = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. Longitude, Decimal Degrees")
-    # latlong = models.TextField(blank=True, null=True) #lat_long = PointField()#
+    usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
+    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
     
     class Meta:
         managed = False  # Created from a view. Don't remove.
         db_table = 'feature_rm'
+
+class RoundedRm(models.Model):
+    rm_rounded = models.DecimalField(primary_key=True,max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Approx. River Mile")  # Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'rounded_rm'
+
 
 class FlatTable(models.Model):
     rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
@@ -366,6 +384,8 @@ class IsletaLen(models.Model):
     dat = models.DateField(primary_key=True, blank=True, null=False)
     sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True)
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -373,12 +393,15 @@ class IsletaLen(models.Model):
 
 
 class UsgsFeatureData(models.Model):
+    usgs_id = models.IntegerField()
     uoid = models.AutoField(primary_key=True, blank=True, null=False)
     rm = models.DecimalField(max_digits=22, decimal_places=2, blank=True, null=False, verbose_name="River Mile")
     usgs_station_name = models.CharField(max_length=8, verbose_name='USGS Station Name')
     usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Feature Name')
     date = models.DateField(verbose_name='Date')
     flow_cfs = models.FloatField(blank=True, null=True, verbose_name='Discharge, Cubic Feet per Second')
+    prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
+    
     class Meta:
         managed = False
         db_table = 'usgs_feature_data'

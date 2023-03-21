@@ -30,14 +30,26 @@
 </form>
 </div>
 
-<div class="container" style="margin-bottom:30px">
-{% load querystring from django_tables2 %}
-<a href="{% querystring '_export'='csv' %}">Download CSV</a>
-<a href="{% querystring '_export'='xlsx' %}">Download XLSX</a>
+<div class="col-sm-10">
+    <div class="pull-right">
+        {% load querystring from django_tables2 %}
+        <a href="{% querystring '_export'='csv' %}" class="btn btn-xs btn-default">
+            Download CSV
+        </a>
+        <a href="{% querystring '_export'='xlsx' %}" class="btn btn-xs btn-default">
+            Download XLXS
+        </a>
+    </div>
+    {% if filter %}
+        <form action="" method="get" class="form form-inline">
+            {% bootstrap_form filter.form layout='inline' %}
+            {% bootstrap_button 'Filter' %}
+        </form>
+    {% endif %}
 </div>
 
 <div class="container">
-{% render_table table %}
+    {% render_table table %}
 </div>
 
 {% endblock %}
