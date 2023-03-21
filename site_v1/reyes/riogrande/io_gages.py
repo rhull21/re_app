@@ -9,6 +9,7 @@ from helpers import dictfetchall
 # %%
 '''
 to do : 
+    - make sure the list of usgs stations is complete
     - look up max data for each site in database
     - look up prov flag
     - move to use models  
