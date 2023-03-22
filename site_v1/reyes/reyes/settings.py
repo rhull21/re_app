@@ -103,16 +103,16 @@ DATABASES = db_info
 # }
 
 ''' docker '''
-# DATABASES = {
-#     'default': {
-# 		'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'rivereyes',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-# 		'HOST': 'db',
-# 		'PORT': '3306'
-#     }
-# }
+DATABASES = {
+    'default': {
+		'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'rivereyes',
+        'USER': 'root',
+        'PASSWORD': 'root',
+		'HOST': 'db',
+		'PORT': '3306'
+    }
+}
 
 
 # Password validation
