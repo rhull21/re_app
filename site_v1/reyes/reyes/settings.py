@@ -84,27 +84,27 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 
 
 ''' local '''
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
-#         'NAME': 'rivereyes',
-#         'USER': 'root',
-#         'PASSWORD': '300667',
-#         'HOST': '127.0.0.1'
-#     }
-# }
-
-# ''' docker '''
 DATABASES = {
     'default': {
-		'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
         'NAME': 'rivereyes',
         'USER': 'root',
-        'PASSWORD': 'root',
-		'HOST': 'db',
-		'PORT': '3306'
+        'PASSWORD': '300667',
+        'HOST': '127.0.0.1'
     }
 }
+
+# ''' docker '''
+# DATABASES = {
+#     'default': {
+# 		'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'rivereyes',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+# 		'HOST': 'db',
+# 		'PORT': '3306'
+#     }
+# }
 
 
 # Password validation
