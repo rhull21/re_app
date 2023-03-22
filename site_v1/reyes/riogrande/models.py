@@ -1,6 +1,21 @@
 from django.db import models
 # from django.contrib.gis.db.models import PointField
 
+class PercentageField(models.fields.DecimalField):
+    description = "Percent field"
+    
+    def __init__(self, *args, **kwargs):
+        kwargs["max_digits"] = 3
+        kwargs["decimal_places"] = 0 
+        super().__init__(*args, **kwargs)
+
+    def from_db_value(self, value, expression, connection):
+        # value = super(PercentageField, self).from_db_value(self, value, expression, connection)
+        if value is None: 
+            return None
+        
+        return value*100
+
 # Tables: 
 class DischargeGsa(models.Model):
     qid = models.AutoField(primary_key=True)
@@ -188,13 +203,15 @@ class AngosturaLen(models.Model):
 
 
 class AllLen(models.Model):
-    thedate = models.DateField(primary_key=True, blank=True, null=False, verbose_name='Date')
-    isleta_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Sum of Dry Lengths (miles)')
-    isleta_frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Percent Dry')
-    acacia_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Acacia, Sum of Dry Lengths (miles)')
-    acacia_frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True, verbose_name='Acacia, Percent Dry')
-    combined_sum_len = models.DecimalField(max_digits=29, decimal_places=2, blank=True, null=True, verbose_name='Rio Grande, Sum of Dry Lengths (miles)')
-    combined_frac_len = models.DecimalField(max_digits=32, decimal_places=2, blank=True, null=True, verbose_name='Rio Grande, Percent Dry')
+    dat = models.DateField(db_column='thedate', primary_key=True, blank=True, null=False, verbose_name='Date',)
+    isleta_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Dry Length (River Miles)')
+    isleta_frac_len = PercentageField(blank=True, null=True, verbose_name='Isleta, Percent Dry')
+    acacia_sum_len = models.DecimalField(max_digits=28, decimal_places=0, blank=True, null=True, verbose_name='Acacia, Dry Length (River Miles)')
+    acacia_frac_len = PercentageField(blank=True, null=True, verbose_name='Acacia, Percent Dry')
+    angostura_sum_len = models.DecimalField(max_digits=28, decimal_places=0, blank=True, null=True, verbose_name='Angostura, Dry Length (River Miles)')
+    angostura_frac_len = PercentageField(blank=True, null=True, verbose_name='Angostura, Percent Dry')
+    combined_sum_len = models.DecimalField(max_digits=29, decimal_places=2, blank=True, null=True, verbose_name='Middle Rio Grande, Dry Length (River Miles)')
+    combined_frac_len = PercentageField(blank=True, null=True, verbose_name='Middle Rio Grande, Percent Dry')
 
     class Meta:
         managed = False  # Created from a view. Don't remove.

@@ -4,14 +4,24 @@ import sys
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
 
+class DayColumn(tables2.Column):
+    def render(self, value):
+        return '{:0.0f}'.format(value)
+
+class PercentColumn(tables2.Column):
+    def render(self, value):
+        return '{:0.0f}%'.format(value)
+
+
 class DryLenTable(tables2.Table):
+    isleta_frac_len = PercentColumn()
+    acacia_frac_len = PercentColumn()
+    angostura_frac_len = PercentColumn()
+    combined_frac_len = PercentColumn()
     class Meta:
         model = models.AllLen
         template_name = "django_tables2/semantic.html" 
 
-class DayColumn(tables2.Column):
-    def render(self, value):
-        return '{:0.0f}'.format(value)
 
 class DeltaDryTable(tables2.Table):
 

@@ -145,7 +145,6 @@ def drysegments(request):
                 "riogrande/drysegments.html",
                 {'target_plot' : target_plot
                 } 
-
                 )
 
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
