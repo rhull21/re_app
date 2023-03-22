@@ -149,7 +149,7 @@ def drysegments(request):
                 )
 
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
-    table_class = tables.DryLenTable
+    table_class = tables.DryLenTable 
     model = models.AllLen
     template_name = "riogrande/drylen.html"
     filterset_class = filters.DryLenFilter

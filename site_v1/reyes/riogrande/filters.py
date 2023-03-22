@@ -10,9 +10,9 @@ class DrySegFilter(django_filters.FilterSet):
     dat__lt = django_filters.DateFilter(label='Date, Max <YYYY-MM-DD>',field_name='dat', lookup_expr='lt')
     dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name='dry_length', lookup_expr='gt')
     dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name='dry_length', lookup_expr='lt')
-    rm_up__lt = django_filters.NumberFilter(label='Upstream River Mile, Max', field_name='rm_up', lookup_expr='lt')
-    rm_down__gt = django_filters.NumberFilter(label='Downstream River Mile, Min', field_name='rm_down', lookup_expr='gt')
-    
+    rm_down__gt = django_filters.NumberFilter(label='River Mile, Min', field_name='rm_down', lookup_expr='gt')
+    rm_up__lt = django_filters.NumberFilter(label='River Mile, Max', field_name='rm_up', lookup_expr='lt')
+
     # rm_down__lt = django_filters.MultipleChoiceFilter(choices=models.Reach.objects.values_list('reach','reach'), )
 
 
@@ -29,13 +29,15 @@ class FeatureFilter(django_filters.FilterSet):
         fields = ("feature", "rm" , "latitude", "longitude")
 
 class DryLenFilter(django_filters.FilterSet):
+    thedate__gt = django_filters.DateFilter(label='Date, Min <YYYY-MM-DD>',field_name='thedate', lookup_expr='gt')
+    thedate__lt = django_filters.DateFilter(label='Date, Max <YYYY-MM-DD>',field_name='thedate', lookup_expr='lt')
     isleta_sum_len = django_filters.RangeFilter(label='Example Label')
     isleta_frac_len = django_filters.RangeFilter()
     acacia_sum_len = django_filters.RangeFilter()
     acacia_frac_len = django_filters.RangeFilter()
     combined_sum_len = django_filters.RangeFilter()
     combined_frac_len = django_filters.RangeFilter()
-    thedate = django_filters.DateFromToRangeFilter(label='Date Range', widget=RangeWidget(attrs={'placeholder': 'YYYY/MM/DD'}))
+
 
     class Meta:
         model = models.AllLen
