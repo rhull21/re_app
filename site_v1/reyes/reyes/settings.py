@@ -82,7 +82,6 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
 ''' local '''
 DATABASES = {
     'default': {
@@ -94,7 +93,7 @@ DATABASES = {
     }
 }
 
-# ''' docker '''
+''' docker '''
 # DATABASES = {
 #     'default': {
 # 		'ENGINE': 'django.db.backends.mysql',

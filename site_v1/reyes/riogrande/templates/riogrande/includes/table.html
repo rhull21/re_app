@@ -15,12 +15,14 @@
         {% endif %}
     </div>
     {% if filter %}
+    <div class="form-group col-sm-12"> 
         <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}
-            {% bootstrap_button 'Filter' %}
+            {% bootstrap_button 'Filter' button_type='submit'%}
         </form>
+    
+    </div>
     {% endif %}
-</div>
 <div class="col-sm-10">
     {% render_table table %}
 </div>

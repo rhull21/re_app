@@ -42,7 +42,7 @@ class DrySegsTable(tables2.Table):
     class Meta:
         model = models.DryLengthAgg
         template_name = "django_tables2/semantic.html"
-        fields = ("dat", "dry_length", "rm_up", "rm_down")
+        fields = ("dat", "dry_length", "rm_down", "rm_up")
 
 class DryCompTable(tables2.Table):
     class Meta:
