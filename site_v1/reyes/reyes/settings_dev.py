@@ -23,13 +23,16 @@ etc_dir = '../../etc'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "1Q4mu9NTBzD(0S5ZknENljdBSiSKYzgw9S@kIm1c6TXYdkGcYj"
+with open(os.path.join(etc_dir,'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'True'
+with open(os.path.join(etc_dir,'debug.txt')) as f:
+    DEBUG = f.read().strip() !='False'
 
 # This value ['*'] is not safe for production usage. Refer to the Django documentation for more information.
-ALLOWED_HOSTS = ["*"]
+with open(os.path.join(etc_dir,'hosts.txt')) as f:
+    ALLOWED_HOSTS = f.read().splitlines()
 
 # Application definition
 INSTALLED_APPS = [
@@ -81,6 +84,12 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+''' production '''
+with open(os.path.join(etc_dir,'db_info.json')) as f:
+    db_info = json.load(f)
+
+DATABASES = db_info
 
 ''' local '''
 # DATABASES = {

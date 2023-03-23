@@ -170,7 +170,8 @@ def make_HeatMap(df, plot_dict, read=True, write=False, dir='riogrande/static/da
             with open(os.path.join(dir,nm+'.pickle'), 'rb') as f:
                 arr_all = pickle.load(f)
 
-        except:
+        except Exception as e:
+            print(f'unable to write, {e}')
             print('something happened while reading file; recreating')
             if nm == 'heatmap':
                 arr_all = _make_HeatMap(df_dry=df, plot_dict=plot_dict)

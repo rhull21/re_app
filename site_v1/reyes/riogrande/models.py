@@ -1,6 +1,21 @@
 from django.db import models
 # from django.contrib.gis.db.models import PointField
 
+class PercentageField(models.fields.DecimalField):
+    description = "Percent field"
+    
+    def __init__(self, *args, **kwargs):
+        kwargs["max_digits"] = 3
+        kwargs["decimal_places"] = 0 
+        super().__init__(*args, **kwargs)
+
+    def from_db_value(self, value, expression, connection):
+        # value = super(PercentageField, self).from_db_value(self, value, expression, connection)
+        if value is None: 
+            return None
+        
+        return value*100
+
 # Tables: 
 class DischargeGsa(models.Model):
     qid = models.AutoField(primary_key=True)
@@ -188,13 +203,15 @@ class AngosturaLen(models.Model):
 
 
 class AllLen(models.Model):
-    thedate = models.DateField(primary_key=True, blank=True, null=False, verbose_name='Date')
-    isleta_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Sum of Dry Lengths (miles)')
-    isleta_frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Percent Dry')
-    acacia_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Acacia, Sum of Dry Lengths (miles)')
-    acacia_frac_len = models.DecimalField(max_digits=31, decimal_places=2, blank=True, null=True, verbose_name='Acacia, Percent Dry')
-    combined_sum_len = models.DecimalField(max_digits=29, decimal_places=2, blank=True, null=True, verbose_name='Rio Grande, Sum of Dry Lengths (miles)')
-    combined_frac_len = models.DecimalField(max_digits=32, decimal_places=2, blank=True, null=True, verbose_name='Rio Grande, Percent Dry')
+    dat = models.DateField(db_column='thedate', primary_key=True, blank=True, null=False, verbose_name='Date',)
+    isleta_sum_len = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True, verbose_name='Isleta, Dry Length (River Miles)')
+    isleta_frac_len = PercentageField(blank=True, null=True, verbose_name='Isleta, Percent Dry')
+    acacia_sum_len = models.DecimalField(max_digits=28, decimal_places=0, blank=True, null=True, verbose_name='Acacia, Dry Length (River Miles)')
+    acacia_frac_len = PercentageField(blank=True, null=True, verbose_name='Acacia, Percent Dry')
+    angostura_sum_len = models.DecimalField(max_digits=28, decimal_places=0, blank=True, null=True, verbose_name='Angostura, Dry Length (River Miles)')
+    angostura_frac_len = PercentageField(blank=True, null=True, verbose_name='Angostura, Percent Dry')
+    combined_sum_len = models.DecimalField(max_digits=29, decimal_places=2, blank=True, null=True, verbose_name='Middle Rio Grande, Dry Length (River Miles)')
+    combined_frac_len = PercentageField(blank=True, null=True, verbose_name='Middle Rio Grande, Percent Dry')
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -216,12 +233,12 @@ class DryCompAcacia(models.Model):
 class DryCompAgg(models.Model):
     reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Reach")
     year = models.IntegerField(blank=True, null=True, verbose_name="Year")
-    min_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Approximate Lower River Mile Affected")
-    max_rm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Approximate Upper River Mile Affected")
-    max_dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name="Maximum One-Day Drying Extent")
-    first_dry_date = models.DateField(blank=True, null=True, verbose_name="First Day Drying Occurred")
-    last_dry_date = models.DateField(blank=True, null=True, verbose_name="Last Day Drying Occurred")
-    date_max_dry_length = models.DateField(blank=True, null=True, verbose_name="Date of Maximum One-Day Drying Extent")
+    rm_down = models.DecimalField(db_column='min_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Minimum Downstream Dry Extent")
+    rm_up = models.DecimalField(db_column='max_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Maximum Upstream Dry Extent")
+    max_dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name="Maximum Dry Length (River Miles)")
+    first_dry_date = models.DateField(blank=True, null=True, verbose_name="First Day of Drying")
+    last_dry_date = models.DateField(blank=True, null=True, verbose_name="Last Day of Drying")
+    date_max_dry_length = models.DateField(blank=True, null=True, verbose_name="Date of Maximum Dry Length")
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -289,9 +306,9 @@ class DryLength(models.Model):
 
 
 class DryLengthAgg(models.Model):
-    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream River Mile')
-    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
-    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
+    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream Dry Extent')
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream Dry Extent')
+    dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (River Miles)')
     dat = models.DateField(blank=True, null=True, verbose_name='Date')
     rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Downstream River Mile')
     rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Upstream River Mile')
@@ -303,12 +320,12 @@ class DryLengthAgg(models.Model):
 class DryLengthAggUsgsData(models.Model): 
     usgs_id = models.IntegerField()
     uoid = models.AutoField(primary_key=True, blank=True, null=False)
-    date = models.DateField(blank=True, null=False, verbose_name='Date')
+    dat = models.DateField(blank=True, null=False, verbose_name='Date', db_column='date')
     dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
     rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
     rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Upstream River Mile')
     usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
-    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
+    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Full Name')
     flow_cfs = models.FloatField(blank=True, null=True,  verbose_name='Discharge, Cubic Feet per Second')
     prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
     
@@ -325,7 +342,7 @@ class FeatureRm(models.Model):
     longitude = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=False, verbose_name="Longitude, Decimal Degrees")
     feature = models.TextField(db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Feature")
     usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
-    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Feature Name')
+    usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Full Name')
     
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -397,12 +414,28 @@ class UsgsFeatureData(models.Model):
     uoid = models.AutoField(primary_key=True, blank=True, null=False)
     rm = models.DecimalField(max_digits=22, decimal_places=2, blank=True, null=False, verbose_name="River Mile")
     usgs_station_name = models.CharField(max_length=8, verbose_name='USGS Station Name')
-    usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Feature Name')
-    date = models.DateField(verbose_name='Date')
+    usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Full Name')
+    usgs_feature_display_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Short Name')
+    dat = models.DateField(verbose_name='Date', db_column='date')
     flow_cfs = models.FloatField(blank=True, null=True, verbose_name='Discharge, Cubic Feet per Second')
     prov_flag = models.CharField(blank=True, null=True, max_length=8, verbose_name='Data Qualifier')
     
     class Meta:
         managed = False
         db_table = 'usgs_feature_data'
+
+class UsgsFeatureGages(models.Model):
+    usgs_id = models.AutoField(primary_key=True)
+    fid = models.ForeignKey(Feature, models.DO_NOTHING, db_column='fid')
+    rm = models.ForeignKey('Rivermile', models.DO_NOTHING, db_column='rm', blank=True, null=True)
+    usgs_station_name = models.CharField(max_length=8)
+    usgs_feature_short_name = models.CharField(max_length=150, blank=True, null=True)
+    usgs_feature_display_name = models.CharField(max_length=150, blank=True, null=True, verbose_name='USGS Short Name')
+
+
+    class Meta:
+        managed = False
+        db_table = 'usgs_feature_gages'
+
+
 
