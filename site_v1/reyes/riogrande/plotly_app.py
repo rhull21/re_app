@@ -383,8 +383,8 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
 
         ### plots
         fig = make_subplots(
-                            rows=len(plot_data['usgs_station_name']) + 1,
-                            row_heights=[height*2/3]+[(height*1/3)/(len(plot_data['usgs_station_name'])) for i in range(len(plot_data['usgs_station_name']))],
+                            rows=2,
+                            row_heights=[height, height],
                             cols = 1,
                             shared_xaxes=True
                             )
@@ -395,7 +395,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
 
         for i, station in enumerate(plot_data['usgs_station_name'],start=0):
             fig.add_trace( addscatter(plot_data, colors, i, k=0),                
-                            row=i+2, col=1, 
+                            row=2, col=1, 
                         )  
             
         for i, station in enumerate(plot_data['usgs_station_name'],start=0):
@@ -406,7 +406,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
         ### frames
         frames=[
                     go.Frame(
-                        data=[addimshow(plot_data,k)]+[addscatter(plot_data,colors,i,k) for i in range(len(plot_data['usgs_station_name']))],
+                        data=[addimshow(plot_data,k, stylized=False)]+[addscatter(plot_data,colors,i,k, stylized=False) for i in range(len(plot_data['usgs_station_name']))],
                         name=f"{plot_data['Years'][k]}",
                         traces=[i for i in range(len(plot_data['usgs_station_name'])+1)]
                             ) for k in range(plot_data['arr_flow'].shape[2])
@@ -439,16 +439,18 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                             prefix = 'Selected Year: ',
                             xanchor = 'center'
                             ),
-                        "y" : 1.3,    
-                        "x" : -0.001,                
+                        "y" : 1.4,    
+                        "x" : 0.5,
+                        'xanchor' : 'center'                
                     }
                     ]
 
         ### layout
         fig.update_layout(sliders=sliders)
 
+        fig.update_layout(xaxis1_showticklabels=True, xaxis2_showticklabels=False)
         fig.update_xaxes(
-                        tickformat='%m-%d',
+                        tickformat='%b %e',
                         ticks="outside",
                         tickwidth=1.5,
                         ticklen=15,
@@ -461,7 +463,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                             tick0 = "2002-06-15",
                             dtick = "M1"
                             ),
-                        # side = 'top',
+                        side = 'top',
                         )
         fig.update_yaxes(
                         dict(
@@ -475,17 +477,17 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                         ),
                 )
     
-        for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-            fig.update_yaxes(
-                                range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
-                                tick0=0,
-                                dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
-                                row=i+2, col=1
-                                )
-            if i in plot_labels.keys():
-                fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
-                                row=i, col=1, 
-                                side='left')
+        # for i, station in enumerate(plot_data['usgs_station_name'],start=0):
+        #     fig.update_yaxes(
+        #                         range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
+        #                         tick0=0,
+        #                         dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
+        #                         row=2, col=1
+        #                         )
+        #     if i in plot_labels.keys():
+        #         fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
+        #                         row=i, col=1, 
+        #                         side='left')
 
         fig.update_traces(dict(showscale=False, 
                             coloraxis=None, 

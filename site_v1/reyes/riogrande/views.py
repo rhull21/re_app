@@ -145,7 +145,6 @@ def drysegments(request):
                 "riogrande/drysegments.html",
                 {'target_plot' : target_plot
                 } 
-
                 )
 
 class FilteredDryLen(ExportMixin, SingleTableMixin, FilterView):
@@ -167,6 +166,7 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
     export_formats = ("xls", "csv")
 
     def get_queryset(self):
+        # print(self.model.objects.order_by('year').distinct('year').values_list('year', flat=True))
         return super().get_queryset()
 
 
@@ -212,7 +212,7 @@ class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     '''
     table_class = tables.SummaryUsgsTable
     model = models.UsgsFeatureData
-    template_name = "riogrande/summaryusgs.html" # could merge this back with drylen.html
+    template_name = "riogrande/summaryusgs.html"
     filterset_class = filters.SummaryUsgsFilter
     export_formats = ("xls", "csv")
 
@@ -225,6 +225,10 @@ def usgs_series(request):
     qry = models.UsgsFeatureData.objects.all()
     data = pd.DataFrame.from_records(qry.values())
 
+    data.rename(columns={'dat' : 'date'}, inplace=True)
+    # print('#####################')
+    # print(data.columns)
+    # print('\n, \n, \n, \n')
 
     data['year'] = [d.year for d in data['date']]
     target_plot = plotly_app.plotly_seriesusgs(data)
@@ -266,7 +270,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False, readfig=True, writefig=False):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False, readfig=False, writefig=True):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -278,11 +282,11 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
     qry_flow = models.UsgsFeatureData.objects.filter(
-                                                        Q(date__month__gte=str(mos[0])) &
-                                                        Q(date__month__lte=str(mos[1])) 
+                                                        Q(dat__month__gte=str(mos[0])) &
+                                                        Q(dat__month__lte=str(mos[1])) 
                                             ).filter(
-                                                        Q(date__year__gte=str(yrs[0])) &
-                                                        Q(date__year__lte=str(yrs[1]))
+                                                        Q(dat__year__gte=str(yrs[0])) &
+                                                        Q(dat__year__lte=str(yrs[1]))
                                             )
     df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
@@ -310,8 +314,8 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     plot_dict['stations_dict'] = stations
 
     # transform
-    df_flow['Years'] = [d.year for d in df_flow['date']]
-    df_flow['Dates'] = [date(1900,d.month,d.day) for d in df_flow['date']]
+    df_flow['Years'] = [d.year for d in df_flow['dat']]
+    df_flow['Dates'] = [date(1900,d.month,d.day) for d in df_flow['dat']]
     arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
                                 read=read, write=write,
                                 nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
