@@ -1,6 +1,7 @@
 import django_filters
 import sys 
 from django_filters.widgets import RangeWidget
+from datetime import date, datetime
 
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
@@ -31,6 +32,21 @@ labels = {
                 'gt' : 'Min, Dry Length (River Miles)', 
                 'lt' : 'Max, Dry Length (River Miles)',
             }, 
+        'flow_cfs' :
+            {
+                'gt' : 'Min, Flow (cfs)', 
+                'lt' : 'Max, Flow (cfs)',
+            }, 
+        'latitude' : 
+            {
+                'gt' : 'Ymin (Latitude)', 
+                'lt' : 'Ymax (Latitude)',
+            }, 
+        'longitude' : 
+            {
+                'gt' : 'Xmin (Longitude)', 
+                'lt' : 'Xmax (Longitude)',
+            }, 
 
 }
 
@@ -48,12 +64,20 @@ class DrySegFilter(django_filters.FilterSet):
         fields = ("dat__gt", "dat__lt", "dry_length__gt", "dry_length__lt", "rm_down__gt", "rm_up__lt") 
 
 class FeatureFilter(django_filters.FilterSet):
-    feature = django_filters.CharFilter(lookup_expr='icontains')
-    rm = django_filters.RangeFilter(label='River Mile Range')
+    feature = django_filters.CharFilter(label='Feature Name Contains', lookup_expr='icontains')
+
+    rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
+    rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
     
+    latitude__gt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['gt'])
+    latitude__lt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['lt'])
+    longitude__gt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['gt'])
+    longitude__lt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['lt'])
+
+
     class Meta:
         model = models.FeatureRm
-        fields = ("feature", "rm" , "latitude", "longitude")
+        fields = ("latitude__gt", "latitude__lt", "longitude__gt", "longitude__lt", "rm_down__gt" , "rm_up__lt", "feature",)
 
 class DryLenFilter(django_filters.FilterSet):
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
@@ -97,34 +121,48 @@ class DeltaDryFilter(django_filters.FilterSet):
 
 class DryCompFilter(django_filters.FilterSet):
     reach = django_filters.MultipleChoiceFilter(choices=models.Reach.objects.values_list('reach','reach'), )
-    year = django_filters.NumberFilter(default=2022)
+    year = django_filters.NumberFilter()
 
     class Meta: 
         model = models.DryCompAgg
         fields = ['reach', 'year']
 
 class SummaryUsgsFilter(django_filters.FilterSet):
-    usgs_station_name = django_filters.MultipleChoiceFilter(choices=models.UsgsGages.objects.values_list('usgs_station_name','usgs_station_name'),
+    usgs_id = django_filters.MultipleChoiceFilter(choices=models.UsgsFeatureGages.objects.values_list('usgs_id', 'usgs_feature_display_name'),
                                                     )
-    date = django_filters.DateFromToRangeFilter(label='Date Range')
-    flow_cfs = django_filters.RangeFilter()
+    dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
+    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['lt'])
+
+
+
+    flow_cfs__gt = django_filters.NumberFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['gt'])
+    flow_cfs__lt = django_filters.NumberFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['lt'])
+
     prov_flag = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = models.UsgsFeatureData
-        fields = ('usgs_station_name', 'date', 'flow_cfs', 'prov_flag')
+        fields = ('dat__gt', 'dat__lt', 'flow_cfs__gt', 'flow_cfs__lt', 'prov_flag', 'usgs_id')
 
 class DryLengthAggUsgsDataFilter(django_filters.FilterSet):
-    usgs_id = django_filters.MultipleChoiceFilter(choices=models.UsgsGages.objects.values_list('usgs_id','usgs_station_name'))
+    usgs_id = django_filters.MultipleChoiceFilter(choices=models.UsgsFeatureGages.objects.values_list('usgs_id', 'usgs_feature_display_name'),
+                                                    )
                                                     
-    date = django_filters.DateFromToRangeFilter(label='Date Range')
-    flow_cfs = django_filters.RangeFilter(label='Flow Range')
-    rm_up = django_filters.RangeFilter(label='River Miles Range')
-    dry_length = django_filters.RangeFilter(label='Dry Length Range')
+    dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
+    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['lt'])
+
+    flow_cfs__gt = django_filters.DateFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['gt'])
+    flow_cfs__lt = django_filters.DateFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['lt'])
+
+    rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
+    rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
+
+    dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name='dry_length', lookup_expr='gt')
+    dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name='dry_length', lookup_expr='lt')
+
     prov_flag =  django_filters.CharFilter(lookup_expr='icontains')
 
 
     class Meta:
         model = models.DryLengthAggUsgsData
-        fields = ('usgs_id', 'rm_up', 'dry_length','date', 'flow_cfs', 'prov_flag')
-
+        fields = ('dat__gt', 'dat__lt', 'flow_cfs__gt', 'flow_cfs__lt', "dry_length__gt", "dry_length__lt", "rm_down__gt", "rm_up__lt", 'prov_flag', 'usgs_id') 

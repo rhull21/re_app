@@ -12,6 +12,9 @@ class PercentColumn(tables2.Column):
     def render(self, value):
         return '{:0.0f}%'.format(value)
 
+class ShortDateColumn(tables2.Column):
+    def render(self, value):
+        return '{:%b %e}'.format(value)
 
 class DryLenTable(tables2.Table):
     isleta_frac_len = PercentColumn()
@@ -47,6 +50,7 @@ class DeltaDryTable(tables2.Table):
         super(DeltaDryTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
+        self.orderable = False
 
 class DrySegsTable(tables2.Table):
     class Meta:
@@ -55,6 +59,9 @@ class DrySegsTable(tables2.Table):
         fields = ("dat", "dry_length", "rm_down", "rm_up")
 
 class DryCompTable(tables2.Table):
+    first_dry_date = ShortDateColumn()
+    last_dry_date = ShortDateColumn()
+    date_max_dry_length = ShortDateColumn()
     class Meta:
         model = models.DryCompAgg
         template_name = "django_tables2/semantic.html"
@@ -82,6 +89,8 @@ class DryDaysTable(tables2.Table):
         super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
+        self.orderable = False
+
 
 
 class FeatureRmTable(tables2.Table):
@@ -94,7 +103,7 @@ class SummaryUsgsTable(tables2.Table):
     class Meta:
         model = models.UsgsFeatureData
         template_name = "django_tables2/semantic.html"
-        fields = ("usgs_station_name", "usgs_feature_short_name", "date", "flow_cfs", "prov_flag")
+        fields = ("dat", "usgs_station_name", "usgs_feature_short_name", "flow_cfs", "prov_flag")
 
 
 class FeatureTable(tables2.Table):
@@ -107,5 +116,5 @@ class DryLengthAggUsgsDataTable(tables2.Table):
     class Meta:
         model = models.DryLengthAggUsgsData
         template_name = "django_tables2/semantic.html"
-        fields = ("date", "rm_up", "dry_length", "usgs_station_name", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
+        fields = ("dat", "rm_up", "dry_length", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
 

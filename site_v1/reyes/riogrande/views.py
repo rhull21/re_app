@@ -166,6 +166,7 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
     export_formats = ("xls", "csv")
 
     def get_queryset(self):
+        # print(self.model.objects.order_by('year').distinct('year').values_list('year', flat=True))
         return super().get_queryset()
 
 
@@ -211,7 +212,7 @@ class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     '''
     table_class = tables.SummaryUsgsTable
     model = models.UsgsFeatureData
-    template_name = "riogrande/summaryusgs.html" # could merge this back with drylen.html
+    template_name = "riogrande/summaryusgs.html"
     filterset_class = filters.SummaryUsgsFilter
     export_formats = ("xls", "csv")
 
