@@ -8,7 +8,7 @@ print(tree)
 root = tree.getroot()
 print(root)
 # %%
-root = ET.fromstring(country='Panama')
+# root = ET.fromstring(country='Panama')
 # %%
 root.tag
 # %%
