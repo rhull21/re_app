@@ -1,0 +1,65 @@
+{ "tables" :
+    [
+    {
+        "table_name": "table_name", 
+        "verbose_name" : "x", 
+        "description" : "y",
+        "source" : "z"
+    }, 
+    {
+        "table_name": "DryLenTable", 
+        "verbose_name" : "Table of Dry Lengths", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "DeltaDryTable", 
+        "verbose_name" : "Table of Dry Changes", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "DrySegsTable", 
+        "verbose_name" : "Table of Dry Segments", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "DryCompTable", 
+        "verbose_name" : "Table of Dry Comparisons", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "DryDaysTable", 
+        "verbose_name" : "Table of Dry Days", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "FeatureRmTable", 
+        "verbose_name" : "Table of Features and River Miles", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "SummaryUsgsTable", 
+        "verbose_name" : "A summary table of USGS Data", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "FeatureTable", 
+        "verbose_name" : "A summary table of USGS Features", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    },
+    {
+        "table_name": "DryLengthAggUsgsDataTable", 
+        "verbose_name" : "A summary table of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "A Table About Dry Lengths",
+        "source" : "None"
+    }
+    ]
+}
+

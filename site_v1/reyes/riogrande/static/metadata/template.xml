@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Jonathan.</origin>
+        <pubdate>20211029</pubdate>
+        <title>Rio Grande Drying Information...</title>
+        <otherfields>...</otherfields>
+      </citeinfo>
+    <citation>
+  <idinfo>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl></enttypl>
+        <enttypd>Aqueous Sample Data</enttypd>
+        <enttypds>Producer Defined</enttypds>
+      </enttyp>
+      <attr>
+        <attrlabl>Sample</attrlabl>
+        <attrdef>Sample names</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <udom>Sample names for field samples, field duplicates, and equipment blanks.</udom>
+        </attrdomv>
+      </attr>
+    </detailed>
+  </eainfo>

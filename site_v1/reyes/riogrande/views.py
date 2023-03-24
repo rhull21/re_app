@@ -387,3 +387,68 @@ def heatmap(request):
 
 def about(request):
     return render(request, "riogrande/about.html")
+
+def metadata(request):
+    '''
+    This example is meant to show a simplified version of how we might generate metadata reports from our models
+    '''
+    import xml.etree.ElementTree as ET 
+    import json
+
+    qry = models.RoundedRm.objects.all()
+    columns = pd.DataFrame.from_records(qry.values()).columns
+    
+    with open('riogrande/static/metadata/rosetta_columns.json') as f: 
+        metajson = json.load(f)
+
+    # resources: 
+        # https://docs.python.org/3/library/json.html
+        # https://docs.python.org/3/library/xml.etree.elementtree.html
+
+
+    # XML Routine: 
+
+        # load an XML snippet (attribute_snippet.xml) for column/attribute with tags 
+        # tree = ET.parse('column_template.xml')
+        # root = tree.getroot()   
+        
+        # for each column/attribute
+
+            # lookup field in JSON
+            # try: 
+            #   metajson[key] 
+            # except: 
+            #   move forward
+
+            # modify the targets (Element.set()) to be consistent with rosetta columns
+            # try: 
+            #   
+
+
+            # append (Element.append()) new attribute to table
+
+            # cache and save filled column/attribute JSON for late
+
+
+        # load an XML template (table_template.xml) for a table/entity with tags
+        # tree = ET.parse('table_template.xml')
+        # root = tree.getroot()
+
+        # for each model/table
+
+            # modify the targets (Element.set()) to be consistent with rosetta table 
+
+            # for each model/table:
+                # modify entity : tag=JSON
+                # modify attributes : tag=JSON
+
+        # save (tree.write()) 
+    
+    
+    ### Pseudo code: 
+        # 1. read in query
+        # 2. Extract column headers
+        # 3. Read column headers from JSON
+        # 4. Push to XML Format
+        # 5. Push XML Format to 
+    return render(request, "riogrande/metadata.html")
