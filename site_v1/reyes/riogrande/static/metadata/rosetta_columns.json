@@ -1,0 +1,133 @@
+{
+    "columns" :
+        [
+        {
+            "column_name": "column_name", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "rm", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "usgs_station_name", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "usgs_feature_display_name", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "dat", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "flow_cfs", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "prov_flag", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "sum_len", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "frac_len", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "rm_up", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "rm_down", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "rm_rounded", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "feature", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "longitude", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "latitude", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "dry_length", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }, 
+        {
+            "column_name": "reach", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        },
+        {
+            "column_name": "sub", 
+            "verbose_name" : "x", 
+            "description" : "y",
+            "source" : "z",
+            "units" : "?"
+        }
+        ]
+    
+    }
+    

@@ -4,7 +4,7 @@ import sys
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
 
-class DayColumn(tables2.Column):
+class DayColumn(tables2.Column): 
     def render(self, value):
         return '{:0.0f}'.format(value)
 
