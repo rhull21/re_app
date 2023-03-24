@@ -1,65 +1,96 @@
-{ "tables" :
+{ "views" :
     [
     {
-        "table_name": "table_name", 
+        "view_name": "view_name", 
         "verbose_name" : "x", 
         "description" : "y",
         "source" : "z"
     }, 
     {
-        "table_name": "DryLenTable", 
-        "verbose_name" : "Table of Dry Lengths", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "deltadry", 
+        "verbose_name" : "A view about change in dryness", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "DeltaDryTable", 
-        "verbose_name" : "Table of Dry Changes", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "drysegments", 
+        "verbose_name" : "view of Dry Changes", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "DrySegsTable", 
-        "verbose_name" : "Table of Dry Segments", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "FilteredDrySegs", 
+        "verbose_name" : "view of Dry Segments", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "DryCompTable", 
-        "verbose_name" : "Table of Dry Comparisons", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "FilteredFeatures", 
+        "verbose_name" : "view of Dry Comparisons", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "DryDaysTable", 
-        "verbose_name" : "Table of Dry Days", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "FilteredDryLen", 
+        "verbose_name" : "view of Dry Days", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "FeatureRmTable", 
-        "verbose_name" : "Table of Features and River Miles", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "DryCompView", 
+        "verbose_name" : "view of Features and River Miles", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "SummaryUsgsTable", 
-        "verbose_name" : "A summary table of USGS Data", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "drydays", 
+        "verbose_name" : "A summary view of USGS Data", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "FeatureTable", 
-        "verbose_name" : "A summary table of USGS Features", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "DryEventsView", 
+        "verbose_name" : "A summary view of USGS Features", 
+        "description" : "",
         "source" : "None"
     },
     {
-        "table_name": "DryLengthAggUsgsDataTable", 
-        "verbose_name" : "A summary table of USGS Features and Dryness Data Aggregated Together", 
-        "description" : "A Table About Dry Lengths",
+        "view_name": "FilteredSummaryUsgs", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "usgs_series", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DryLengthAggUsgsDataView", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DashboardDryEventsView", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    }, 
+    {
+        "view_name": "dashdrylenflow1", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "dashdrylenflow2", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
         "source" : "None"
     }
+
     ]
 }
 
