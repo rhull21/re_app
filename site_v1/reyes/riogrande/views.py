@@ -30,11 +30,9 @@ from django_tables2.export.export import TableExport
 from riogrande import models, tables, filters, forms, plotly_app
 from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata 
 
-'''
-to do: 
-09222022 - figure out how to get models to import successfully w/o path.append
-01172023 - Refactor and pull out functions
-'''
+# Globals for procedure-based views
+grp_type="YEAR"
+reach_select="ALL"
 
 def index(request):
     return render(request, 
@@ -53,9 +51,9 @@ class MapView(TemplateView):
         qs = models.FeatureRm.objects.all()
         context["markers"]  = d.to_GeoJsonDict(qs)
         print(context["markers"])
-        return context  
-
-def deltadry(request, grp_type="YEAR", reach_select="ALL"):
+        return context
+    
+def deltadry(request):
     '''
     to do - 
     20221228 : Can we apply a filterset to a dictionary of values
@@ -63,12 +61,17 @@ def deltadry(request, grp_type="YEAR", reach_select="ALL"):
     '''
 
     if request.method == 'POST' :
+        # POST
         form = forms.DrySelectForm(request.POST)
         if form.is_valid():
+            # make sticky
+            global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
+    
 
     else:
+        # GET
         form = forms.DrySelectForm()
 
     with connection.cursor() as cursor:
@@ -169,14 +172,15 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
         # print(self.model.objects.order_by('year').distinct('year').values_list('year', flat=True))
         return super().get_queryset()
 
-
-def drydays(request, grp_type="YEAR", reach_select="ALL"):
+def drydays(request):
     '''
     '''
 
     if request.method == 'POST' :
         form = forms.DryDaysForm(request.POST)
         if form.is_valid():
+            # make sticky
+            global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
     else:

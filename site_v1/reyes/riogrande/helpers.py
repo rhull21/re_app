@@ -19,7 +19,6 @@ def dictfetchall(cursor):
 
 class GeoJsonContext():
 
-
     def __init__(self):
         '''
         Passes a model object (by default a Django one) for conversion to GeoJSON

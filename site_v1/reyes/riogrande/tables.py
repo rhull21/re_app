@@ -50,7 +50,7 @@ class DeltaDryTable(tables2.Table):
         super(DeltaDryTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
-        self.orderable = False
+        # self.orderable = False
 
 class DrySegsTable(tables2.Table):
     class Meta:
@@ -89,7 +89,7 @@ class DryDaysTable(tables2.Table):
         super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
-        self.orderable = False
+        # self.orderable = False
 
 
 
