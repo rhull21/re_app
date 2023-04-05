@@ -114,7 +114,7 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def drysegments(request):
+def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False):
     '''
     '''
 
@@ -135,10 +135,10 @@ def drysegments(request):
     del qry_rm, qry_dry, qry_rm_feat, qry_reach, qry_subreach
 
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm, mos=mos, ds=ds)
 
     # transform
-    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
+    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
     df_rm_feat['rm'] = df_rm_feat['rm'].astype(float)
 
     # pass data to and return from plotly app
@@ -274,7 +274,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False, readfig=False, writefig=True):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=False, writefig=True):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -286,21 +286,23 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
     qry_flow = models.UsgsFeatureData.objects.filter(
-                                                        Q(dat__month__gte=str(mos[0])) &
-                                                        Q(dat__month__lte=str(mos[1])) 
-                                            ).filter(
                                                         Q(dat__year__gte=str(yrs[0])) &
                                                         Q(dat__year__lte=str(yrs[1]))
+                                            ).filter(
+                                                        Q(dat__month__gte=str(mos[0])) &
+                                                        Q(dat__month__lte=str(mos[1])) 
                                             )
     df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
     df_flow = pd.DataFrame.from_records(qry_flow.values())
 
+
     del qry_rm, qry_dry, qry_flow
 
     ### Drynesss Stuff
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm, yrs=yrs, mos=mos)
+
     # transform
     arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
 
@@ -323,7 +325,6 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
                                 read=read, write=write,
                                 nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
-
     # bring it together
     plot_data = {
                 'arr_all' : arr_all, # this is the heatmap of dryness data

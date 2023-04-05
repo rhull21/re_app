@@ -354,10 +354,9 @@ def plotly_dry_usgs_dash_1(data):
 
     return plotly_plot_obj
 
-def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
+def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_dash_2'):
     '''
     '''
-    nm = 'plotly_dry_usgs_dash_2'
     
     if writefig: 
         print('start figure write')
@@ -370,11 +369,11 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                             'x_label' : 'Date',
                             'y_label' : 'Dry River Miles', 
                         },
-                    4 : 
+                    2 : 
                         {
                             'plot' : 'scatter',
                             'x_label' : 'Date',
-                            'y_label' : 'Flow, CFS', 
+                            'y_label' : 'Discharge, Cubic Feet per Second', 
                         }
                     }
         colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_station_name']))]
@@ -411,6 +410,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                         traces=[i for i in range(len(plot_data['usgs_station_name'])+1)]
                             ) for k in range(plot_data['arr_flow'].shape[2])
                 ]
+        
         fig.update(frames=frames)
         fr_duration=50
         sliders = [
@@ -477,17 +477,16 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                         ),
                 )
     
-        # for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-        #     fig.update_yaxes(
-        #                         range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
-        #                         tick0=0,
-        #                         dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
-        #                         row=2, col=1
-        #                         )
-        #     if i in plot_labels.keys():
-        #         fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
-        #                         row=i, col=1, 
-        #                         side='left')
+        for row in range(2):
+            # fig.update_yaxes(
+            #                     range=[0,np.ceil(np.nanmax(plot_data['arr_flow']/round))*round], 
+            #                     tick0=0,
+            #                     dtick=np.ceil(np.nanmax(plot_data['arr_flow']/round))*round,
+            #                     row=row, col=1
+            #                     )
+            fig.update_yaxes(title_text=plot_labels[row+1]['y_label'], 
+                            row=row+1, col=1, 
+                            side='left')
 
         fig.update_traces(dict(showscale=False, 
                             coloraxis=None, 
