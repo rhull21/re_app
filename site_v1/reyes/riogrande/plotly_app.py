@@ -354,10 +354,9 @@ def plotly_dry_usgs_dash_1(data):
 
     return plotly_plot_obj
 
-def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
+def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_dash_2'):
     '''
     '''
-    nm = 'plotly_dry_usgs_dash_2'
     
     if writefig: 
         print('start figure write')
@@ -394,7 +393,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig):
                     )
 
         for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-            fig.add_trace( addscatter(plot_data, colors, i, k=0),                
+            fig.add_trace( addscatter(plot_data, colors, i, k=0, stylized=False),                
                             row=2, col=1, 
                         )  
             
