@@ -410,6 +410,19 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_da
                         traces=[i for i in range(len(plot_data['usgs_station_name'])+1)]
                             ) for k in range(plot_data['arr_flow'].shape[2])
                 ]
+        
+        # for k in range(plot_data['arr_flow'].shape[2]):
+        # # print([addimshow(plot_data,k, stylized=False)]+[addscatter(plot_data,colors,i,k, stylized=False) for i in range(len(plot_data['usgs_station_name']))])
+        #     # print(type(addimshow(plot_data,k, stylized=False)), 
+        #     #         len(addimshow(plot_data,k, stylized=False)['x'])
+        #     #         )
+        #     for i in range(len(plot_data['usgs_station_name'])):
+        #         # print(type(addscatter(plot_data,colors,i,k, stylized=False)), 
+        #         #     len(addscatter(plot_data,colors,i,k, stylized=False)['x'])
+        #         #     )
+        #         print(addscatter(plot_data,colors,i,k, stylized=False)
+        #             )
+            # print('')
         fig.update(frames=frames)
         fr_duration=50
         sliders = [
