@@ -369,11 +369,11 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_da
                             'x_label' : 'Date',
                             'y_label' : 'Dry River Miles', 
                         },
-                    4 : 
+                    2 : 
                         {
                             'plot' : 'scatter',
                             'x_label' : 'Date',
-                            'y_label' : 'Flow, CFS', 
+                            'y_label' : 'Discharge, Cubic Feet per Second', 
                         }
                     }
         colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_station_name']))]
@@ -393,7 +393,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_da
                     )
 
         for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-            fig.add_trace( addscatter(plot_data, colors, i, k=0, stylized=False),                
+            fig.add_trace( addscatter(plot_data, colors, i, k=0),                
                             row=2, col=1, 
                         )  
             
@@ -411,18 +411,6 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_da
                             ) for k in range(plot_data['arr_flow'].shape[2])
                 ]
         
-        # for k in range(plot_data['arr_flow'].shape[2]):
-        # # print([addimshow(plot_data,k, stylized=False)]+[addscatter(plot_data,colors,i,k, stylized=False) for i in range(len(plot_data['usgs_station_name']))])
-        #     # print(type(addimshow(plot_data,k, stylized=False)), 
-        #     #         len(addimshow(plot_data,k, stylized=False)['x'])
-        #     #         )
-        #     for i in range(len(plot_data['usgs_station_name'])):
-        #         # print(type(addscatter(plot_data,colors,i,k, stylized=False)), 
-        #         #     len(addscatter(plot_data,colors,i,k, stylized=False)['x'])
-        #         #     )
-        #         print(addscatter(plot_data,colors,i,k, stylized=False)
-        #             )
-            # print('')
         fig.update(frames=frames)
         fr_duration=50
         sliders = [
@@ -489,17 +477,16 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm ='plotly_dry_usgs_da
                         ),
                 )
     
-        # for i, station in enumerate(plot_data['usgs_station_name'],start=0):
-        #     fig.update_yaxes(
-        #                         range=[0,np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round], 
-        #                         tick0=0,
-        #                         dtick=np.ceil(np.nanmax(plot_data['arr_flow'][i,:,:]/round))*round,
-        #                         row=2, col=1
-        #                         )
-        #     if i in plot_labels.keys():
-        #         fig.update_yaxes(title_text=plot_labels[i]['y_label'], 
-        #                         row=i, col=1, 
-        #                         side='left')
+        for row in range(2):
+            # fig.update_yaxes(
+            #                     range=[0,np.ceil(np.nanmax(plot_data['arr_flow']/round))*round], 
+            #                     tick0=0,
+            #                     dtick=np.ceil(np.nanmax(plot_data['arr_flow']/round))*round,
+            #                     row=row, col=1
+            #                     )
+            fig.update_yaxes(title_text=plot_labels[row+1]['y_label'], 
+                            row=row+1, col=1, 
+                            side='left')
 
         fig.update_traces(dict(showscale=False, 
                             coloraxis=None, 

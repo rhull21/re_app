@@ -187,7 +187,7 @@ def make_HeatMap(df, plot_dict, read=True, write=False, dir='riogrande/static/da
     # return it
     return arr_all
 
-def createmetadata(df, df_rms, yrs=(None,None), mos=(4,10), ds=(15, 15)):
+def createmetadata(df, df_rms, yrs=(None,None), mos=(4,11), ds=(1, 1)):
     # loop through all dates
     if yrs == (None,None): 
         minyr, maxyr = df['dat'].min().year, df['dat'].max().year+1
