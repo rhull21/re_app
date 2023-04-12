@@ -18,8 +18,6 @@ from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
 
-import pickle
-
 from django_filters.views import FilterView
 
 import django_tables2 as tables2
@@ -114,7 +112,7 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False):
+def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False, readfig=True, writefig=False):
     '''
     '''
 
@@ -142,7 +140,7 @@ def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False):
     df_rm_feat['rm'] = df_rm_feat['rm'].astype(float)
 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat, df_reach, df_subreach)
+    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat, df_reach, df_subreach, readfig=readfig, writefig=writefig)
      
     return render(request, 
                 "riogrande/drysegments.html",
@@ -223,7 +221,7 @@ class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def usgs_series(request):
+def usgs_series(request, readfig=True, writefig=False):
 
     # read in data
     qry = models.UsgsFeatureData.objects.all()
@@ -235,7 +233,7 @@ def usgs_series(request):
     # print('\n, \n, \n, \n')
 
     data['year'] = [d.year for d in data['date']]
-    target_plot = plotly_app.plotly_seriesusgs(data)
+    target_plot = plotly_app.plotly_seriesusgs(data, readfig=readfig, writefig=writefig)
 
     return render(request, 
                 "riogrande/seriesusgs.html",
@@ -274,7 +272,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=False, writefig=True):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=False):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -292,9 +290,14 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
                                                         Q(dat__month__gte=str(mos[0])) &
                                                         Q(dat__month__lte=str(mos[1])) 
                                             )
+    qry_reach = models.Reach.objects.all()
+    qry_subreach = models.Subreach.objects.all()
+
     df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
     df_flow = pd.DataFrame.from_records(qry_flow.values())
+    df_reach = pd.DataFrame.from_records(qry_reach.values())
+    df_subreach = pd.DataFrame.from_records(qry_subreach.values())
 
 
     del qry_rm, qry_dry, qry_flow
@@ -313,11 +316,13 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
                                 {
                                     'usgs_station_name' : pd.unique(df_flow['usgs_station_name']),
                                     'usgs_feature_short_name' : pd.unique(df_flow['usgs_feature_short_name']),
+                                    'usgs_feature_display_name' : pd.unique(df_flow['usgs_feature_display_name']),
                                     'rm' : pd.unique(df_flow['rm']).astype(float)
                                 }
                             )
     stations = stations.sort_values(by='rm', ascending=False)
     plot_dict['stations_dict'] = stations
+
 
     # transform
     df_flow['Years'] = [d.year for d in df_flow['dat']]
@@ -325,6 +330,7 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
     arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
                                 read=read, write=write,
                                 nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
+    
     # bring it together
     plot_data = {
                 'arr_all' : arr_all, # this is the heatmap of dryness data
@@ -334,8 +340,12 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
                 'Years' : plot_dict['Years'],
 
                 'arr_flow' : arr_flow, # this is the grid of flows 
-                'usgs_station_name' : plot_dict["stations_dict"]['usgs_station_name'], #stations, order by rm!
+                'usgs_station_name' : plot_dict["stations_dict"]['usgs_station_name'],
+                'usgs_feature_display_name' : plot_dict["stations_dict"]['usgs_feature_display_name'],
                 'Station River Miles' : plot_dict["stations_dict"]['rm'],
+
+                'df_reach' : df_reach ,
+                'df_subreach' : df_subreach,
                 }
 
     print('done data')
