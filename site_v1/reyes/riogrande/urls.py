@@ -32,5 +32,6 @@ urlpatterns = [
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
     path('heatmap/',views.heatmap, name='heatmap'),
-    path('about/',views.about, name='about')
+    path('about/',views.about, name='about'), 
+    path('metadata/', views.metadata, name='metadata')
     ]

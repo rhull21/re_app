@@ -17,14 +17,18 @@ def frame_args(duration):
 
 def addscatter(plot_data, colors, i, k=0, stylized=True):
     if stylized: 
+        if plot_data['usgs_feature_display_name'].iloc[i] == "USGS 08332010 Bernardo":
+            visible=True
+        else:
+            visible="legendonly"
         return go.Scatter(
                         x=plot_data['Dates'],
                         y=plot_data['arr_flow'][i,:,k],
                         customdata=plot_data['strf_dates'],
-                        name=plot_data['usgs_station_name'][i],
-                        legendgroup=plot_data['usgs_station_name'][i],
+                        name=plot_data['usgs_feature_display_name'].iloc[i],
+                        legendgroup=plot_data['usgs_feature_display_name'].iloc[i],
                         showlegend=True,
-                        hovertemplate="Date: %{customdata} <extra> Flow, cfs %{y}</extra>",    
+                        hovertemplate=f"Gage: {plot_data['usgs_feature_display_name'].iloc[i]} \n"+"Date: %{customdata} <extra> Streamflow, cfs %{y}</extra>",    
                         hoverlabel = dict(
                         bgcolor = "#012E40",
                         bordercolor = '#F2E3D5',
@@ -34,6 +38,7 @@ def addscatter(plot_data, colors, i, k=0, stylized=True):
                             size = 16,
                         ),
                         line=go.scatter.Line(color=colors[i]),
+                        visible=visible,
                     )
     else: 
         return go.Scatter(
@@ -70,18 +75,25 @@ def addimshow(plot_data, k=0, stylized=True):
 
 def addgagescatters(plot_data, colors, i, stylized=True):
     if stylized: 
+        if plot_data['usgs_feature_display_name'].iloc[i] == "USGS 08332010 Bernardo":
+            visible=True
+        else:
+            visible="legendonly"
         return go.Scatter(
                     x=plot_data['Dates'],
-                    y=np.ones(len(plot_data['Dates']))*plot_data["Station River Miles"][i],
-                    name=plot_data['usgs_station_name'][i],
-                    legendgroup=plot_data['usgs_station_name'][i],
+                    y=[plot_data["Station River Miles"].iloc[i]]*len(plot_data['Dates']),
+                    name=plot_data['usgs_feature_display_name'].iloc[i],
+                    legendgroup=plot_data['usgs_feature_display_name'].iloc[i],
                     showlegend=False,
+                    customdata=[plot_data['usgs_feature_display_name'].iloc[i]]*len(plot_data['Dates']),
+                    hovertemplate="Gage: %{customdata} <extra> River Mile: %{y}</extra>",
                     hoverinfo='skip',
                     line=go.scatter.Line(color=colors[i]),
-                    opacity=0.25,
+                    opacity=0.4,
+                    visible=visible
                 ) 
     else: 
         return go.Scatter(
                     x=plot_data['Dates'],
-                    y=np.ones(len(plot_data['Dates']))*plot_data["Station River Miles"][i],
+                    y=np.ones(len(plot_data['Dates']))*plot_data["Station River Miles"].iloc[i],
                 ) 

@@ -1,0 +1,96 @@
+{ "views" :
+    [
+    {
+        "view_name": "view_name", 
+        "verbose_name" : "x", 
+        "description" : "y",
+        "source" : "z"
+    }, 
+    {
+        "view_name": "deltadry", 
+        "verbose_name" : "A view about change in dryness", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "drysegments", 
+        "verbose_name" : "view of Dry Changes", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "FilteredDrySegs", 
+        "verbose_name" : "view of Dry Segments", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "FilteredFeatures", 
+        "verbose_name" : "view of Dry Comparisons", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "FilteredDryLen", 
+        "verbose_name" : "view of Dry Days", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DryCompView", 
+        "verbose_name" : "view of Features and River Miles", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "drydays", 
+        "verbose_name" : "A summary view of USGS Data", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DryEventsView", 
+        "verbose_name" : "A summary view of USGS Features", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "FilteredSummaryUsgs", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "usgs_series", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DryLengthAggUsgsDataView", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "DashboardDryEventsView", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    }, 
+    {
+        "view_name": "dashdrylenflow1", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    },
+    {
+        "view_name": "dashdrylenflow2", 
+        "verbose_name" : "A summary view of USGS Features and Dryness Data Aggregated Together", 
+        "description" : "",
+        "source" : "None"
+    }
+
+    ]
+}
+

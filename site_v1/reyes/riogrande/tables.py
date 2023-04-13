@@ -4,7 +4,7 @@ import sys
 # sys.path.append('''c/Users/QuinnHull/OneDrive/Workspace/Work/05_GSA/03_projects/2218_RiverEyes/re_app/site_v1/reyes/riogrande''')
 from riogrande import models 
 
-class DayColumn(tables2.Column):
+class DayColumn(tables2.Column): 
     def render(self, value):
         return '{:0.0f}'.format(value)
 
@@ -50,7 +50,7 @@ class DeltaDryTable(tables2.Table):
         super(DeltaDryTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
-        self.orderable = False
+        # self.orderable = False
 
 class DrySegsTable(tables2.Table):
     class Meta:
@@ -89,7 +89,7 @@ class DryDaysTable(tables2.Table):
         super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
         self.sequence  = seq 
         self.template_name = "django_tables2/semantic.html" 
-        self.orderable = False
+        # self.orderable = False
 
 
 
