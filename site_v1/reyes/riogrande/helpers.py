@@ -19,7 +19,6 @@ def dictfetchall(cursor):
 
 class GeoJsonContext():
 
-
     def __init__(self):
         '''
         Passes a model object (by default a Django one) for conversion to GeoJSON
@@ -188,14 +187,14 @@ def make_HeatMap(df, plot_dict, read=True, write=False, dir='riogrande/static/da
     # return it
     return arr_all
 
-def createmetadata(df, df_rms, yrs=(None,None), mos=(6,10)):
+def createmetadata(df, df_rms, yrs=(None,None), mos=(4,11), ds=(1, 1)):
     # loop through all dates
     if yrs == (None,None): 
         minyr, maxyr = df['dat'].min().year, df['dat'].max().year+1
     else: 
         minyr, maxyr = yrs[0], yrs[1]+1
     
-    mindat, maxdat = date(1900,mos[0],1), date(1900,mos[1]+1,1)
+    mindat, maxdat = date(1900,mos[0],ds[0]), date(1900,mos[1]+1,ds[1])
     full_date = list(pd.date_range(mindat,maxdat,freq='d'))
     strf_date = [date.strftime(d, '%m-%d') for d in full_date]
     yrs = [yr for yr in range(minyr, maxyr)]

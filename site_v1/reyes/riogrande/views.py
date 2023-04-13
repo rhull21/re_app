@@ -18,8 +18,6 @@ from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
 
-import pickle
-
 from django_filters.views import FilterView
 
 import django_tables2 as tables2
@@ -30,11 +28,9 @@ from django_tables2.export.export import TableExport
 from riogrande import models, tables, filters, forms, plotly_app
 from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, createmetadata 
 
-'''
-to do: 
-09222022 - figure out how to get models to import successfully w/o path.append
-01172023 - Refactor and pull out functions
-'''
+# Globals for procedure-based views
+grp_type="YEAR"
+reach_select="ALL"
 
 def index(request):
     return render(request, 
@@ -53,9 +49,9 @@ class MapView(TemplateView):
         qs = models.FeatureRm.objects.all()
         context["markers"]  = d.to_GeoJsonDict(qs)
         print(context["markers"])
-        return context  
-
-def deltadry(request, grp_type="YEAR", reach_select="ALL"):
+        return context
+    
+def deltadry(request):
     '''
     to do - 
     20221228 : Can we apply a filterset to a dictionary of values
@@ -63,12 +59,17 @@ def deltadry(request, grp_type="YEAR", reach_select="ALL"):
     '''
 
     if request.method == 'POST' :
+        # POST
         form = forms.DrySelectForm(request.POST)
         if form.is_valid():
+            # make sticky
+            global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
+    
 
     else:
+        # GET
         form = forms.DrySelectForm()
 
     with connection.cursor() as cursor:
@@ -111,7 +112,7 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def drysegments(request):
+def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False, readfig=True, writefig=False):
     '''
     '''
 
@@ -132,14 +133,14 @@ def drysegments(request):
     del qry_rm, qry_dry, qry_rm_feat, qry_reach, qry_subreach
 
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm, mos=mos, ds=ds)
 
     # transform
-    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=True, write=False)
+    arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
     df_rm_feat['rm'] = df_rm_feat['rm'].astype(float)
 
     # pass data to and return from plotly app
-    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat, df_reach, df_subreach)
+    target_plot = plotly_app.plotly_drysegsimshow(arr_all, plot_dict, df_rm_feat, df_reach, df_subreach, readfig=readfig, writefig=writefig)
      
     return render(request, 
                 "riogrande/drysegments.html",
@@ -169,14 +170,15 @@ class DryCompView(ExportMixin, SingleTableMixin, FilterView):
         # print(self.model.objects.order_by('year').distinct('year').values_list('year', flat=True))
         return super().get_queryset()
 
-
-def drydays(request, grp_type="YEAR", reach_select="ALL"):
+def drydays(request):
     '''
     '''
 
     if request.method == 'POST' :
         form = forms.DryDaysForm(request.POST)
         if form.is_valid():
+            # make sticky
+            global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
     else:
@@ -219,7 +221,7 @@ class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def usgs_series(request):
+def usgs_series(request, readfig=True, writefig=False):
 
     # read in data
     qry = models.UsgsFeatureData.objects.all()
@@ -231,7 +233,7 @@ def usgs_series(request):
     # print('\n, \n, \n, \n')
 
     data['year'] = [d.year for d in data['date']]
-    target_plot = plotly_app.plotly_seriesusgs(data)
+    target_plot = plotly_app.plotly_seriesusgs(data, readfig=readfig, writefig=writefig)
 
     return render(request, 
                 "riogrande/seriesusgs.html",
@@ -270,7 +272,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False, readfig=False, writefig=True):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=False):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -282,21 +284,28 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     qry_rm = models.RoundedRm.objects.all()
     qry_dry = models.DryLengthAgg.objects.all()
     qry_flow = models.UsgsFeatureData.objects.filter(
-                                                        Q(dat__month__gte=str(mos[0])) &
-                                                        Q(dat__month__lte=str(mos[1])) 
-                                            ).filter(
                                                         Q(dat__year__gte=str(yrs[0])) &
                                                         Q(dat__year__lte=str(yrs[1]))
+                                            ).filter(
+                                                        Q(dat__month__gte=str(mos[0])) &
+                                                        Q(dat__month__lte=str(mos[1])) 
                                             )
+    qry_reach = models.Reach.objects.all()
+    qry_subreach = models.Subreach.objects.all()
+
     df_rm = pd.DataFrame.from_records(qry_rm.values())
     df_dry = pd.DataFrame.from_records(qry_dry.values())
     df_flow = pd.DataFrame.from_records(qry_flow.values())
+    df_reach = pd.DataFrame.from_records(qry_reach.values())
+    df_subreach = pd.DataFrame.from_records(qry_subreach.values())
+
 
     del qry_rm, qry_dry, qry_flow
 
     ### Drynesss Stuff
     # metadata
-    plot_dict = createmetadata(df=df_dry, df_rms=df_rm)
+    plot_dict = createmetadata(df=df_dry, df_rms=df_rm, yrs=yrs, mos=mos)
+
     # transform
     arr_all = make_HeatMap(df=df_dry, plot_dict=plot_dict, read=read, write=write)
 
@@ -307,11 +316,13 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
                                 {
                                     'usgs_station_name' : pd.unique(df_flow['usgs_station_name']),
                                     'usgs_feature_short_name' : pd.unique(df_flow['usgs_feature_short_name']),
+                                    'usgs_feature_display_name' : pd.unique(df_flow['usgs_feature_display_name']),
                                     'rm' : pd.unique(df_flow['rm']).astype(float)
                                 }
                             )
     stations = stations.sort_values(by='rm', ascending=False)
     plot_dict['stations_dict'] = stations
+
 
     # transform
     df_flow['Years'] = [d.year for d in df_flow['dat']]
@@ -319,7 +330,7 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
     arr_flow = make_HeatMap(df=df_flow,plot_dict=plot_dict, 
                                 read=read, write=write,
                                 nm='flowgrid')    # dimensions: 0=stations, 1=date_full, 2=years            
-
+    
     # bring it together
     plot_data = {
                 'arr_all' : arr_all, # this is the heatmap of dryness data
@@ -329,8 +340,12 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(6,11), read=True, write=False
                 'Years' : plot_dict['Years'],
 
                 'arr_flow' : arr_flow, # this is the grid of flows 
-                'usgs_station_name' : plot_dict["stations_dict"]['usgs_station_name'], #stations, order by rm!
+                'usgs_station_name' : plot_dict["stations_dict"]['usgs_station_name'],
+                'usgs_feature_display_name' : plot_dict["stations_dict"]['usgs_feature_display_name'],
                 'Station River Miles' : plot_dict["stations_dict"]['rm'],
+
+                'df_reach' : df_reach ,
+                'df_subreach' : df_subreach,
                 }
 
     print('done data')
@@ -387,3 +402,68 @@ def heatmap(request):
 
 def about(request):
     return render(request, "riogrande/about.html")
+
+def metadata(request):
+    '''
+    This example is meant to show a simplified version of how we might generate metadata reports from our models
+    '''
+    import xml.etree.ElementTree as ET 
+    import json
+
+    qry = models.RoundedRm.objects.all()
+    columns = pd.DataFrame.from_records(qry.values()).columns
+    
+    with open('riogrande/static/metadata/rosetta_columns.json') as f: 
+        metajson = json.load(f)
+
+    # resources: 
+        # https://docs.python.org/3/library/json.html
+        # https://docs.python.org/3/library/xml.etree.elementtree.html
+
+
+    # XML Routine: 
+
+        # load an XML snippet (attribute_snippet.xml) for column/attribute with tags 
+        # tree = ET.parse('column_template.xml')
+        # root = tree.getroot()   
+        
+        # for each column/attribute
+
+            # lookup field in JSON
+            # try: 
+            #   metajson[key] 
+            # except: 
+            #   move forward
+
+            # modify the targets (Element.set()) to be consistent with rosetta columns
+            # try: 
+            #   
+
+
+            # append (Element.append()) new attribute to table
+
+            # cache and save filled column/attribute JSON for late
+
+
+        # load an XML template (table_template.xml) for a table/entity with tags
+        # tree = ET.parse('table_template.xml')
+        # root = tree.getroot()
+
+        # for each model/table
+
+            # modify the targets (Element.set()) to be consistent with rosetta table 
+
+            # for each model/table:
+                # modify entity : tag=JSON
+                # modify attributes : tag=JSON
+
+        # save (tree.write()) 
+    
+    
+    ### Pseudo code: 
+        # 1. read in query
+        # 2. Extract column headers
+        # 3. Read column headers from JSON
+        # 4. Push to XML Format
+        # 5. Push XML Format to 
+    return render(request, "riogrande/metadata.html")
