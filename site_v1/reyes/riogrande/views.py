@@ -66,11 +66,14 @@ def deltadry(request):
             global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
-    
 
     else:
         # GET
-        form = forms.DrySelectForm()
+        form = forms.DrySelectForm(initial=
+                                    {'group_by' : grp_type,
+                                     "reach_select" : reach_select
+                                    }
+        )
 
     with connection.cursor() as cursor:
         cursor.execute("CALL proc_delta_dry(%s, %s)", params=[grp_type, reach_select])
@@ -182,7 +185,11 @@ def drydays(request):
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
     else:
-        form = forms.DryDaysForm()
+        form = forms.DryDaysForm(initial=
+                                    {'group_by' : grp_type,
+                                     "reach_select" : reach_select
+                                    }
+                                )
 
     with connection.cursor() as cursor:
         cursor.execute("CALL proc_dry_days(%s, %s)", params=[grp_type, reach_select])
