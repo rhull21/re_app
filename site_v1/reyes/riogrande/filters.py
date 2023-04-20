@@ -72,7 +72,7 @@ class FeatureFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.FeatureRm
-        fields = ("latitude__gt", "latitude__lt", "longitude__gt", "longitude__lt", "rm_down__gt" , "rm_up__lt", "feature",)
+        fields = ("rm_down__gt" , "rm_up__lt", "feature",)
 
 class DryLenFilter(django_filters.FilterSet):
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
