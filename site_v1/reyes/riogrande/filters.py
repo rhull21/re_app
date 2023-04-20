@@ -68,16 +68,11 @@ class FeatureFilter(django_filters.FilterSet):
 
     rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
     rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
-    
-    latitude__gt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['gt'])
-    latitude__lt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['lt'])
-    longitude__gt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['gt'])
-    longitude__lt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['lt'])
 
 
     class Meta:
         model = models.FeatureRm
-        fields = ("latitude__gt", "latitude__lt", "longitude__gt", "longitude__lt", "rm_down__gt" , "rm_up__lt", "feature",)
+        fields = ("rm_down__gt" , "rm_up__lt", "feature",)
 
 class DryLenFilter(django_filters.FilterSet):
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])

@@ -17,6 +17,7 @@ class ShortDateColumn(tables2.Column):
         return '{:%b %e}'.format(value)
 
 class DryLenTable(tables2.Table):
+
     isleta_frac_len = PercentColumn()
     acacia_frac_len = PercentColumn()
     angostura_frac_len = PercentColumn()
@@ -29,7 +30,6 @@ class DryLenTable(tables2.Table):
 class DeltaDryTable(tables2.Table):
 
     def __init__(self, data, grp_type,*args, **kwargs):
-
         # print(help(tables2.Column))
 
         self.base_columns['len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
@@ -97,7 +97,7 @@ class FeatureRmTable(tables2.Table):
     class Meta:
         model = models.FeatureRm
         template_name = "django_tables2/semantic.html"
-        fields = ("feature", "rm", "latitude", "longitude")
+        fields = ("feature", "rm")
 
 class SummaryUsgsTable(tables2.Table):
     class Meta:

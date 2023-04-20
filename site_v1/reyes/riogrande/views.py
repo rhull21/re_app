@@ -107,6 +107,7 @@ class FilteredDrySegs(ExportMixin, SingleTableMixin, FilterView):
 
 class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     table_class = tables.FeatureRmTable
+    table_pagination = False
     model = models.FeatureRm
     template_name = "riogrande/filteredfeatures.html"
     filterset_class = filters.FeatureFilter
