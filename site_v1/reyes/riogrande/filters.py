@@ -68,11 +68,6 @@ class FeatureFilter(django_filters.FilterSet):
 
     rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
     rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
-    
-    latitude__gt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['gt'])
-    latitude__lt = django_filters.NumberFilter(field_name='latitude', lookup_expr='gt', label=labels['latitude']['lt'])
-    longitude__gt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['gt'])
-    longitude__lt = django_filters.NumberFilter(field_name='longitude', lookup_expr='gt', label=labels['longitude']['lt'])
 
 
     class Meta:
