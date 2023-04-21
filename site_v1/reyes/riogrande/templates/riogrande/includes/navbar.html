@@ -22,35 +22,36 @@
             <ul class="nav nav-pills navbar-right" style="font-size: 18px">
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Drying Data <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tables <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
-                      <li><a href="{% url 'delta_dryness' %}">Drying Change Table</a></li>
-                      <li><a href="{% url 'dry_length_comparison' %}">Dry Lengths Affected Table</a></li>
-                      <li><a href="{% url 'filtered_dry_segments' %}">Dry Segments Table</a></li>
-                      <li><a href="{% url 'filtered_features' %}">River Miles and Features Table</a></li> 
-                      <li><a href="{% url 'dry_comp' %}">Annual Drying Statistics Table</a></li>
-                      <li><a href="{% url 'dry_days' %}">Dry Days Table</a></li> 
+                      <li><a href="{% url 'delta_dryness' %}">Changes in Dry Length</a></li>
+                      <li><a href="{% url 'dry_length_comparison' %}">Dry Length by Day</a></li>
+                      <li><a href="{% url 'filtered_dry_segments' %}">Dry Segment Details</a></li>
+                      <li><a href="{% url 'dry_comp' %}">Annual Drying Statistics</a></li>
+                      <li><a href="{% url 'dry_days' %}">Total Number of Dry Days</a></li>
+                      <li><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow</a></li> 
+                      <li><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages</a></li> 
+                      <li><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks</a></li> 
                     </ul>
                     
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Flow Data <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Figures <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'usgs_series' %}"> Visualization of USGS Time Series Data</a></li>
-                        <li><a href="{% url 'summary_usgs' %}"> Summary table of USGS discharge measurements</a></li>
+                        <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
+                        <li><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a></li>
+                        <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a></li>
+                        <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li>
+                        
                     </ul>
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps and Dashboards<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'map' %}">Feature Map</a></li>
+                        <li><a href="{% url 'map' %}">Features and Landmarks</a></li>
                         <li><a href="{% url 'heatmap' %}">Drying Heatmap</a></li>
-                        <li><a href="{% url 'dashboard_dry_length_flow_table' %}">Discharge and Flow Table</a></li> 
                         <!-- <li><a href="{% url 'dash_drylen_aggusgsdata_view1' %}">Discharge and Flow Dashboard</a></li>  -->
-                        <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Discharge and Flow Dashboard Dev</a></li>
-                        <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li>
                     </ul>
                 </li>
                 <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>

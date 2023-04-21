@@ -6,11 +6,14 @@
 {% load render_table from django_tables2 %}
 {% block title %} River Eyes Monitoring Program - Features Table {% endblock %}
 {% block content %}
+<div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px"> 
+    <h1 class="text-center" style="color:#012E40"> <strong>Feature and Landmark Locations</strong> </h1>
+    <p class="text-center" style="color:#012E40">  This table displays the nearest river mile hundredth and lat/long coordinates for various features and landmarks along the Middle Rio Grande</p>
+    <!-- <p class="text-center" style="color:#012E40"> <i>> There are various ways to filter the data: by date, by total dry length, and by percentage dry. For each filter type, you can enter a minimum and/or maximum value</i></p>
+    <p class="text-center" style="color:#012E40"> <i>> "Middle Rio Grande" refers to the aggregated dry lengths of the San Acacia, Isleta and Angostura reaches</i></p> -->
+</div>
 <div class="container"> 
     {% include 'riogrande/includes/table.html' %}
 </div>
-<div class="container"> 
-    <h3> Details of Features  </h3>
-    <p class="font-weight-bold"> This is a detail page containing important features along the Middle Rio Grande </p>
-</div>
+
 {% endblock %}
