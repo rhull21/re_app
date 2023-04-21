@@ -79,35 +79,27 @@ class DryDaysTable(tables2.Table):
 
         seq = ['dry_days', 'max_len', 'ave_len', 'rm_up', 'rm_down']
 
-        if grp_type == 'YEAR':
+        if (grp_type == 'YEAR') or (grp_type == 'MONTH'):
             self.base_columns['year'] = tables2.Column(verbose_name='Year')
-            self.base_columns['first_dry_date'] = tables2.Column(verbose_name="First Day of Drying")
-            self.base_columns['last_dry_date'] = tables2.Column(verbose_name="Last Day of Drying")
-            self.base_columns['date_max_dry_length'] = tables2.Column(verbose_name="Date of Maximum Dry Length")
+            self.base_columns['first_dry_date'] = ShortDateColumn(verbose_name="First Day of Drying")
+            self.base_columns['last_dry_date'] = ShortDateColumn(verbose_name="Last Day of Drying")
+            self.base_columns['date_max_dry_length'] = ShortDateColumn(verbose_name="Date of Maximum Dry Length")
 
             seq  = ['year'] + seq + ['first_dry_date', 'last_dry_date', 'date_max_dry_length', 'domain']
-
-        if grp_type == "MONTH": 
-            self.base_columns['year'] = tables2.Column(verbose_name='Year')
-            self.base_columns['first_dry_date'] = tables2.Column(verbose_name="First Day of Drying")
-            self.base_columns['last_dry_date'] = tables2.Column(verbose_name="Last Day of Drying")
-            self.base_columns['date_max_dry_length'] = tables2.Column(verbose_name="Date of Maximum Dry Length")
-
-            self.base_columns['monthname'] = tables2.Column(verbose_name='Month')
-            seq  = ['year', 'month'] + seq + ['first_dry_date', 'last_dry_date', 'date_max_dry_length', 'domain']
+            
+            if grp_type == 'MONTH':
+                self.base_columns['monthname'] = tables2.Column(verbose_name='Month')
+                seq = ['monthname'] + seq
             
         if grp_type == "DATE":
             self.base_columns['year'] = tables2.Column(verbose_name='Year')
-            self.base_columns['first_dry_date'] = tables2.Column(verbose_name="First Day of Drying")
-            self.base_columns['last_dry_date'] = tables2.Column(verbose_name="Last Day of Drying")
-            self.base_columns['date_max_dry_length'] = tables2.Column(verbose_name="Date of Maximum Dry Length")
             self.base_columns['monthname'] = tables2.Column(verbose_name='Month')
-
             self.base_columns['dayofmonth'] = DayColumn(verbose_name='Day')
-            seq  = ['year', 'month', 'dayofmonth'] + seq + ['domain']
+    
+            seq  = ['year', 'monthname', 'dayofmonth'] + seq + ['domain']
 
         super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
-        self.sequence  = seq 
+        self.sequence  = seq
         self.template_name = "django_tables2/semantic.html" 
         # self.orderable = False
 
