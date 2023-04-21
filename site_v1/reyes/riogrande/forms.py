@@ -28,6 +28,8 @@ class DrySelectForm(forms.Form):
                         ('MONTH', 'Month'),
                         ('DATE', 'Date')]
 
+    print(group_by_choices)
+
     reach_choices = [   ('All', 'All'),
                         ('Riverwide', 'River Wide'),
                         ('Angostura', 'Angostura'),
