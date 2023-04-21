@@ -38,8 +38,8 @@
     <p><b><a href="{% url 'delta_dryness' %}">Changes in Dry Length: </a> </b> Table displaying changes in dry length relative to the previous day/month/year </p>
     <p><b><a href="{% url 'dry_length_comparison' %}">Dry Length by Day: </a></b> Displays dry length by day in both river miles and percentage of the total reach </p>
     <p><b><a href="{% url 'filtered_dry_segments' %}">Dry Segment Details: </a></b> For all recorded dry segments, displays length in river miles, upstream extent and downstream extent </p>
-    <p><b><a href="{% url 'dry_comp' %}">Annual Drying Statistics: </a> </b> Summary statistics for each year, including min/max dry extents, max dry length, first and last day of drying </p>
-    <p><b><a href="{% url 'dry_days' %}">Total Number of Dry Days: </a> </b> For each reach, displays total number of dry days, grouped by month or year. </p>
+    <!-- <p><b><a href="{% url 'dry_comp' %}">Annual Drying Statistics: </a> </b> Summary statistics for each year, including min/max dry extents, max dry length, first and last day of drying </p> -->
+    <p><b><a href="{% url 'dry_days' %}">Annual and Monthly Drying Statistics: </a> </b> Summary statistics for each reach, including total number of dry days, min/max dry extents, max dry length, first and last day of drying, grouped by month or year. </p>
     <p><b><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow: </a> </b> For each dry segment, displays dry length, upstream river mile, and mean daily discharge of USGS gages on that day </p>
     <p><b><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages: </a> </b> Displays mean discharge by day, for USGS stream gages along the Middle Rio Grande</p>
     <p><b><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks: </a> </b> For features and landmarks along the Middle Rio Grande such as USGS gages, diversion dams, outfalls, etc, displays river mile and lat/long coordinates </p>
@@ -48,7 +48,7 @@
     <p><b><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a> </b> Visualization of dry segments throughout each year, with date on the horizontal axis and river mile on the vertical axis. </p>
     <p><b><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a> </b> Interactive graphs of mean daily discharge, for all USGS stream gages in the Middle Rio Grande </p>
     <p><b><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a> </b> A combination of the above two figures, for comparing dryness with stream discharge </p>
-    <p><b><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a> </b> ??? </p>
+    <!-- <p><b><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a> </b> ??? </p> -->
 
 <h3>Web Maps</h3>
     <p><b><a href="{% url 'map' %}">Features and Landmarks</a> </b> Interactive web map with locations of features and landmarks, river mile hundredths along the centerline, stream gages, conveyances and range lines. </p>
