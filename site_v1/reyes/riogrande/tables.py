@@ -73,21 +73,33 @@ class DryDaysTable(tables2.Table):
         self.base_columns['dry_days'] = tables2.Column(verbose_name='Total Number of Intermittent Days')
         self.base_columns['max_len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
         self.base_columns['ave_len'] = tables2.Column(verbose_name='Average Dry Length (River Miles)')
-        self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
         self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry Extent')
         self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry Extent')
+        self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
 
-        self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
-        seq  = ['YEAR(`dat`)', 'dry_days', 'max_len', 'ave_len', 'rm_up', 'rm_down', 'domain', ]
-        if (grp_type == "MONTH") or (grp_type == "DATE"):
-            self.base_columns['MONTHNAME(`dat`)'] = tables2.Column(verbose_name='Month')
-            seq  = ['MONTHNAME(`dat`)'] + seq 
-            if (grp_type == "DATE"):
-                self.base_columns['DAYOFMONTH(`dat`)'] = DayColumn(verbose_name='Day')
-                seq = ['DAYOFMONTH(`dat`)'] + seq 
+        seq = ['dry_days', 'max_len', 'ave_len', 'rm_up', 'rm_down']
+
+        if (grp_type == 'YEAR') or (grp_type == 'MONTH'):
+            self.base_columns['year'] = tables2.Column(verbose_name='Year')
+            self.base_columns['first_dry_date'] = ShortDateColumn(verbose_name="First Day of Drying")
+            self.base_columns['last_dry_date'] = ShortDateColumn(verbose_name="Last Day of Drying")
+            self.base_columns['date_max_dry_length'] = ShortDateColumn(verbose_name="Date of Maximum Dry Length")
+
+            seq  = ['year'] + seq + ['first_dry_date', 'last_dry_date', 'date_max_dry_length', 'domain']
+            
+            if grp_type == 'MONTH':
+                self.base_columns['monthname'] = tables2.Column(verbose_name='Month')
+                seq = ['monthname'] + seq
+            
+        if grp_type == "DATE":
+            self.base_columns['year'] = tables2.Column(verbose_name='Year')
+            self.base_columns['monthname'] = tables2.Column(verbose_name='Month')
+            self.base_columns['dayofmonth'] = DayColumn(verbose_name='Day')
+    
+            seq  = ['year', 'monthname', 'dayofmonth'] + seq + ['domain']
 
         super(DryDaysTable, self).__init__(data, grp_type, *args, **kwargs)
-        self.sequence  = seq 
+        self.sequence  = seq
         self.template_name = "django_tables2/semantic.html" 
         # self.orderable = False
 
