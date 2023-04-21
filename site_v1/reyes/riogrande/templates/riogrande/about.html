@@ -1,0 +1,80 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block title %} River Eyes Monitoring Program - About {% endblock %}
+
+{% block content %}
+<div class="container">
+    <img class="center-block" src="{% static 'images/AboutImage.jpg' %}" alt="Rewetting" style="width:70%; justify-content: center;">
+</div>
+
+<div style="padding: 25px">
+
+<h1>Background</h1>
+
+    <p>The monitoring effort (referred to as “RiverEyes”) assists with meeting requirements under Reasonable and Prudent Measure 4, and Terms and Conditions 3.2, 9.1, and 9.2 of the December 2016 Final Biological and Conference Opinion for Bureau of Reclamation, Bureau of Indian Affairs (BIA), and Non-federal Water Management and Maintenance Activities on the Middle Rio Grande, New Mexico (2016 BO).  When flows fell below key thresholds known to increase flow intermittency risk, field observations were relayed to an interagency water management team and, particularly when flow intermittency occurred, reported to the U.S. Fish and Wildlife Service (USFWS) to support endangered Rio Grande silvery minnow (Hybognathus amarus) rescue and relocation activities.</p>
+
+    <p>Mainstem channel drying within the Middle Rio Grande (MRG) has been actively monitored since 1996.  The monitoring effort became more formal in 2002 when SS Papadopulos and Associates, Inc., systematically mapped the extent of flow intermittency under contract with New Mexico Interstate Stream Commission (NMISC).  Since its inception, four entities have been contracted under the RiverEyes program – SS Papadopulos, SWCA, AJAC Enterprises (AJAC), and GeoSystems Analysis, Inc (GSA). Between 2017 and 2020, AJAC subcontracted GSA to manage the RiverEyes effort and beginning in 2021, GSA has worked directly under contract with U.S. Bureau of Reclamation, Albuquerque Area Office (Reclamation).   </p>
+
+    <p>The RiverEyes project has numerous important monitoring responsibilities which include reporting the extent of channel drying and remnant pool formation and providing information that may help prevent unexpected drying and slow the rate of drying.  Timely and accurate reporting is essential to provide USFWS silvery minnow relocation crews with key information to assist with their field planning and site prioritization and to provide water managers with observations to inform their management decisions.</p>
+
+    <p>RiverEyes uses the terms “channel drying,” “drying,” and “flow intermittency” to describe an episode when continuous surface water flow becomes interrupted, creating occasionally short segments of exposed riverbed.  “Rewetting” refers to an event where surface water flow reenters a location affected by channel drying, reducing the dried length, but surface flow may not necessarily reconnect the entire affected area.  “Reconnection” refers to an event where a segment of river channel affected by channel drying entirely rewets and there is continuous surface flow throughout. </p>
+
+    <p>The U.S. Geological Survey (USGS) maintains a network of streamflow monitoring stations throughout the MRG that publish real-time, provisional streamflow to the internet (e.g., https://waterdata.usgs.gov/nm/nwis/current/?type=flow).  Per the contractual agreement with Reclamation, field reconnaissance within specific high-risk segments of the MRG was conducted when streamflow was below 300 cubic feet per second (cfs) at USGS 08354900 Rio Grande Floodway at San Acacia, New Mexico (NM); below 80 cfs at USGS 08331160 Rio Grande Near Bosque Farms, NM; or below 100 cfs at USGS 08330000 Rio Grande at Albuquerque, NM</p>
+
+    <p>While RiverEyes encompasses potential monitoring that may occur anywhere between Cochiti Dam and Elephant Butte Reservoir, channel drying episodes have historically concentrated in two MRG reaches – the Isleta and San Acacia.  RiverEyes crews also monitored through the Angostura Reach periodically during 2020, 2021, and 2022, whenever flows at the Albuquerque gage fell below 100 cfs but the Angostura Reach only experienced drying in 2022. </p>
+
+<h1>Description</h1>
+
+    <p>This web application was initially developed by GSA between Fall 2022 and Spring 2023. It is intended to be a platform to review, visualize, extract, and interact with all years of RiverEyes project data.  To support development of this tool, reported dried extents from 2002 through the most recent monitoring year were migrated into a custom-designed relational database. Prior to the creation of this central database, it was more difficult to analyze multi-temporal trends because data were stored in multiple spreadsheets, often with inconsistent structures.  </p>
+
+    <p>This platform includes numerous individual pages, as listed below. A brief description of the data fields, usage recommendations, and sometimes other notes are included at the top of each page. For questions, please reach out to the personnel listed below.</p>
+
+    <h3>Tabular Data</h3>
+    <p><b><a href="{% url 'delta_dryness' %}">Changes in Dry Length: </a> </b> Table displaying changes in dry length relative to the previous day/month/year </p>
+    <p><b><a href="{% url 'dry_length_comparison' %}">Dry Length by Day: </a></b> Displays dry length by day in both river miles and percentage of the total reach </p>
+    <p><b><a href="{% url 'filtered_dry_segments' %}">Dry Segment Details: </a></b> For all recorded dry segments, displays length in river miles, upstream extent and downstream extent </p>
+    <p><b><a href="{% url 'dry_comp' %}">Annual Drying Statistics: </a> </b> Summary statistics for each year, including min/max dry extents, max dry length, first and last day of drying </p>
+    <p><b><a href="{% url 'dry_days' %}">Total Number of Dry Days: </a> </b> For each reach, displays total number of dry days, grouped by month or year. </p>
+    <p><b><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow: </a> </b> For each dry segment, displays dry length, upstream river mile, and mean daily discharge of USGS gages on that day </p>
+    <p><b><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages: </a> </b> Displays mean discharge by day, for USGS stream gages along the Middle Rio Grande</p>
+    <p><b><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks: </a> </b> For features and landmarks along the Middle Rio Grande such as USGS gages, diversion dams, outfalls, etc, displays river mile and lat/long coordinates </p>
+
+<h3>Figures and Dashboards</h3>
+    <p><b><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a> </b> Visualization of dry segments throughout each year, with date on the horizontal axis and river mile on the vertical axis. </p>
+    <p><b><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a> </b> Interactive graphs of mean daily discharge, for all USGS stream gages in the Middle Rio Grande </p>
+    <p><b><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a> </b> A combination of the above two figures, for comparing dryness with stream discharge </p>
+    <p><b><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a> </b> ??? </p>
+
+<h3>Web Maps</h3>
+    <p><b><a href="{% url 'map' %}">Features and Landmarks</a> </b> Interactive web map with locations of features and landmarks, river mile hundredths along the centerline, stream gages, conveyances and range lines. </p>
+    <p><b><a href="{% url 'heatmap' %}">Drying Heatmap</a> </b> Visualization of number of dry days along the Middle Rio Grande as a heat map. Layers are included for individual years, mean dry days and total dry days since 2002 </p>
+
+
+<h3>Data Usage Considerations</h3>
+
+    <p>RiverEyes reports the extent of drying according to the nearest river mile (RM). RMs are segmented from Reclamation’s digitized channel centerline and Reclamation typically produces and circulates a new centerline every 10 years.  Since channel morphology changes over time, so do the relative RM locations. We believe that most RiverEyes data are reported according to either the 2002 or 2012 RMs, however, the specific year that the RiverEyes project transitioned from the 2002 to 2012 RMs is not inherently clear. </p>
+
+    <p>It is also important to note that the precision that the extent of drying was reported has increased over time, as has GPS accuracy. It is also not entirely clear how lat/long or UTM coordinate-based observations were transcribed into RMs during some of the earlier monitoring years. Regardless, all data distributed within this platform are reported according to 2012 RMs, and based on a nearest neighbor analysis, the 2002 and 2012 RMs are typically within +/- 0.2 RMs of each other, particularly within the channel segments traditionally affected by drying.  </p>
+
+    <p>The extent of drying often changes throughout the day, depending on a variety of factors which include evapotranspiration, inflow fluctuations, interactions with groundwater, irrigation diversions and returns, and the distribution of sometimes small but significant in-channel features like scour holes, channel constrictions, and sediment deposition zones. During some years, dried extent was mapped multiple times during the same day. When this occurred, we only ingested the earlies daily observation record, since early morning monitoring has become more customary.    </p>
+
+<h3>Disclaimer</h3>
+
+    <p>Each party agrees and acknowledges that these data are for reference purposes only. Data may contain inconsistencies, defects, errors, or omissions. End user accepts that all data that GeoSystems Analysis, Inc. distributes on this website is provided "as is" without warranty of any kind. You agree that we will not be liable for any direct, indirect, incidental, special, consequential, or exemplary damages related to the use, or inability to use, this utility.</p>
+
+<h3>Points of Contact</h3>
+
+    <p>For any general questions about the RiverEyes monitoring program, data access, data requests, please contact Chad McKenna (chad@gsanalysis.com).</p>
+
+    <p>For technical difficulties on data tables, please contact Quinn Hull (rhull@gsanalysis.com).</p>
+
+    <p>For technical difficulties on web maps, please contact Jonathan Tanis (jtanis@gsanalysis.com).</p>
+
+</div>
+
+{% endblock %}

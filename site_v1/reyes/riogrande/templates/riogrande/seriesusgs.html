@@ -9,12 +9,17 @@
 
 {% block content %}
 <body>
-    <div class="container"> 
-        <h3> Time Series of USGS Streamflow Along the Riogrande  </h3>
-        <p class="font-weight-bold"> This is a detail page for USGS river discharge in the Middle Rio Grande </p>
+    <div class="container.col-md-4"></div>
+    <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
+        <h1 class="text-center" style="color:#012E40"> <strong> USGS Streamflow Data </strong> </h1>
+        <p class="text-center" style="color:#012E40">  This figure displays a time series of measured streamflow at USGS gages along the Middle Rio Grande, with date on the horizontal axis and discharge (in cubic feet per second) on the vertical axis. </p>
+        <p class="text-center" style="color:#012E40"> <i>> Click on a gage name to add it to the figure. It is possible to view multiple gages at once</i></p>
+        <p class="text-center" style="color:#012E40"> <i> > Use the range slider underneath the main figure to adjust the date range, by adjusting the left and right endpoints</i></p>
+        
     </div>
+    <div class="container.col-md-4"></div>
    
-    <div class="container-fluid">
+    <div class="container">
         {{target_plot|safe}}
     </div>
 
