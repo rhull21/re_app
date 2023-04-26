@@ -408,6 +408,9 @@ def contact_us(request):
 def heatmap(request):
     return render(request, "riogrande/heatmap.html")
 
+def featuremap(request):
+    return render(request, "riogrande/featuremap.html")
+
 def about(request):
     return render(request, "riogrande/about.html")
 
