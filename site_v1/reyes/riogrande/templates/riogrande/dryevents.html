@@ -4,21 +4,59 @@
 {% load bootstrap3 %}
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
-
+{% block title %} River Eyes Monitoring Program - Dry Events {% endblock %}
 {% block content %}
 
-<div class="container">
-    <img src="{% static 'images/dry_events.PNG' %}" > 
-</div>
+<body>
+    <div class="container.col-md-4"></div>
+    <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
+        <h1 class="text-center" style="color:#012E40"> <strong>Drying Events</strong> </h1>
+        <p class="text-center" style="color:#012E40">  The tables below represent the number of days the Rio remained dry and indicates which specific day of dryness corresponds to a particular drying event. This pattern of multiple drying and rewetting events can be observed within a single year for the Rio. </p>
+        <p class="text-center" style="color:#012E40"> <i>> Use the dropdown menu to filter by year. Multiple years can be selected at once. </i></p>
+        <p class="text-center" style="color:#012E40"> <i>> The first table is a summary of the event data, grouped by one or several years. The second table contains all drying event data within each year, for further investigation. </i></p>
+        <p class="text-center" style="color:#012E40"> <i>> Event number indicates the discrete number of times the Rio remained dry (i.e. `events`); Day number indicates the specific day within the drying event. </i></p>
+        <p class="text-center" style="color:#012E40"> <i>> Click on column headers once to sort ascending, and a second time to sort descending</i></p>
+        
+    </div>
+    <div class="container.col-md-4"></div>
+
+    <div class="container" style="margin-top:30px">
+            
+            <form action="" method="post">
+            {% csrf_token %}
+            <ul class="list-unstyled" style="display:inline-block">
+                {{ form.as_ul }}
+            </ul>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <div class="col-sm-10">
+        <div class="pull-right">
+            {% load querystring from django_tables2 %}
+            <a href="{% querystring '_export'='csv' %}" class="btn btn-xs btn-default">
+                Download CSV
+            </a>
+            <a href="{% querystring '_export'='xlsx' %}" class="btn btn-xs btn-default">
+                Download XLXS
+            </a>
+        </div>
+        {% if filter %}
+            <form action="" method="get" class="form form-inline">
+                {% bootstrap_form filter.form layout='inline' %}
+                {% bootstrap_button 'Filter' %}
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        {% render_table table2 %}
+    </div>
+
+    <div class="container">
+        {% render_table table %}
+    </div>
 
 
-<div class="container"> 
-    <h3> Drying Events </h3>
-    <p class="font-weight-bold"> You're looking at •	For each day of drying it would be helpful to know the total number of days dry within the reach, which dried “event” it is for the year, and the day within the dried “event”. For context, during most years the Rio dries, but reconnects after storm events, then redries, and so on. So we have multiple drying events within a single year. For example, lets say the Rio initially dried on June 1, remained dry for three days (June 1-3), reconnected by June 4, but then redried on June 10. It would be ideal to design queries around: \n
-        o	June 1 was the first day of the first drying event of the year
-        o	June 3 was the third day of the first drying event of the year
-        o	June 10 was the first day of the second drying event of the year and also the fourth total day of drying for the year
-    </p>
-</div>
-
+</body>
 {% endblock %}
