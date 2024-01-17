@@ -352,7 +352,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=False):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=True):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -443,6 +443,8 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
                 }
                 )
 
+class DashboardDrylenFlow2(TemplateView):
+    template_name = "riogrande/dashboarddrylenflow.html"
 
 class DashboardDryEventsView(TemplateView):
     
