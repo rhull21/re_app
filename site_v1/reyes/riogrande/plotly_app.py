@@ -565,6 +565,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
         with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
             pickle.dump(plotly_plot_obj, f)
         print('done figure write')
+        fig.write_html(os.path.join(dir,nm+".html"))
         
     if readfig:
         print('start figure read')

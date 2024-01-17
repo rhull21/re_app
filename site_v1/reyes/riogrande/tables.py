@@ -26,7 +26,6 @@ class DryLenTable(tables2.Table):
         model = models.AllLen
         template_name = "django_tables2/semantic.html" 
 
-
 class DeltaDryTable(tables2.Table):
 
     def __init__(self, data, grp_type,*args, **kwargs):
@@ -103,8 +102,6 @@ class DryDaysTable(tables2.Table):
         self.template_name = "django_tables2/semantic.html" 
         # self.orderable = False
 
-
-
 class FeatureRmTable(tables2.Table):
     class Meta:
         model = models.FeatureRm
@@ -116,7 +113,6 @@ class SummaryUsgsTable(tables2.Table):
         model = models.UsgsFeatureData
         template_name = "django_tables2/semantic.html"
         fields = ("dat", "usgs_station_name", "usgs_feature_short_name", "flow_cfs", "prov_flag")
-
 
 class FeatureTable(tables2.Table):
     class Meta:
@@ -130,3 +126,40 @@ class DryLengthAggUsgsDataTable(tables2.Table):
         template_name = "django_tables2/semantic.html"
         fields = ("dat", "rm_up", "dry_length", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
 
+class DryEventsTable(tables2.Table):
+    
+    year = tables2.Column()
+    date = ShortDateColumn()
+    rm_up = tables2.Column(verbose_name='Upstream River Mile')
+    rm_down = tables2.Column(verbose_name='Downstream River Mile')
+    dry_length = tables2.Column(verbose_name='Dry Length (RMs)')
+    event_number = tables2.Column()
+    day_number = tables2.Column()
+
+    class Meta:
+        template_name = "django_tables2/semantic.html"
+        fields = ["year", "date", "rm_up", "rm_down", "dry_length", "event_number", "day_number"]
+
+class DryEventsGroupManyTable(tables2.Table):
+    
+    year = tables2.Column()
+    event_number_nunique = tables2.Column(verbose_name='Number of Drying Events')
+    day_number_count = tables2.Column(verbose_name='Number of Drying Days')
+
+    class Meta:
+        template_name = "django_tables2/semantic.html"
+        fields = ['year', 'event_number_nunique', 'day_number_count']
+
+class DryEventsGroupOneTable(tables2.Table):
+    
+    event_number = tables2.Column()
+    date_min = ShortDateColumn(verbose_name='Start of Drying Event')
+    day_number_max = tables2.Column(verbose_name='Number of Days in Drying Event')
+    rm_down_min = tables2.Column(verbose_name='Minimum Downstream extent of drying (RM)')
+    rm_up_max = tables2.Column(verbose_name='Maximum Upstream extent of drying (RM)')
+    dry_length_max = tables2.Column(verbose_name='Maximum Dried Length (RM)')
+
+    class Meta:
+        template_name = "django_tables2/semantic.html"
+        fields = ['event_number', 'date_min', 'day_number_max', 'rm_up_max', 'rm_down_min',
+       'dry_length_max']

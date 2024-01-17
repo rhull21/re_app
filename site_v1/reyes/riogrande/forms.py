@@ -1,4 +1,5 @@
-from django import forms 
+from django import forms
+from datetime import date
 
 class ContactForm(forms.Form):
     sender_choices = [('me', 'Me'),
@@ -49,3 +50,7 @@ class DryDaysForm(DrySelectForm):
 
     group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))
     reach_select = forms.CharField(label='Filter by reach', widget=forms.Select(choices=reach_choices))
+
+class DryEventsForm(forms.Form):
+    year_choices = [(year, year) for year in range(2002,date.today().year)]
+    year_by = forms.MultipleChoiceField(choices=year_choices, label='Group by year period', widget=forms.SelectMultiple())

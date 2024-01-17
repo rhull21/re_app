@@ -17,7 +17,7 @@ urlpatterns = [
     path('dry/drylen', views.FilteredDryLen.as_view(), name='dry_length_comparison'),
     path('dry/comp', views.DryCompView.as_view(), name='dry_comp'),
     path('dry/days', views.drydays, name='dry_days'),
-    path('dry/events', views.DryEventsView.as_view(), name='dry_events'),
+    path('dry/events', views.dryevents, name='dry_events'),
 
     # flow / discharge
     path('flow/summary', views.FilteredSummaryUsgs.as_view(), name='summary_usgs'), 
@@ -27,7 +27,8 @@ urlpatterns = [
     path('dashboard/dryflow', views.DryLengthAggUsgsDataView.as_view(), name='dashboard_dry_length_flow_table'),
     path('dashboard/dryevents', views.DashboardDryEventsView.as_view(), name='dashboard_dry_events'),
     path('dashboard/drysegs', views.dashdrylenflow1, name='dash_drylen_aggusgsdata_view1'),
-    path('dashboard/dashdryflow', views.dashdrylenflow2, name='dash_drylen_aggusgsdata_view2'),
+    # path('dashboard/dashdryflow', views.dashdrylenflow2, name='dash_drylen_aggusgsdata_view2'),
+    path('dashboard/dashdryflow', views.DashboardDrylenFlow2.as_view(), name='dash_drylen_aggusgsdata_view2'),
 
     # Miscellaneous
     path('feature/', views.FeatureListView.as_view(), name='feature_list'),
