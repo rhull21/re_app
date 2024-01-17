@@ -4,6 +4,7 @@ import json
 import pandas as pd 
 import numpy as np
 import sys
+import os
 from datetime import datetime, date, timedelta 
 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -31,6 +32,7 @@ from riogrande.helpers import dictfetchall, GeoJsonContext, make_HeatMap, create
 # Globals for procedure-based views
 grp_type="YEAR"
 reach_select="ALL"
+year_by = [2022]
 
 def index(request):
     return render(request, 
@@ -211,11 +213,81 @@ def drydays(request):
                      # "filter" : filterset}
                     ) 
 
-class DryEventsView(TemplateView):
+def dryevents(request, dir='riogrande/static/data', nm='df_events.csv'):
     """river eyes dry events view."""
-    
-    template_name = "riogrande/dryevents.html"
 
+    df = pd.read_csv(os.path.join(dir,nm),parse_dates=['date'])
+
+    if request.method == 'POST' :
+        form = forms.DryEventsForm(request.POST)
+        if form.is_valid():
+            # make sticky
+            global year_by
+            year_by = form.cleaned_data['year_by']
+            print(year_by)
+        else:
+            print("invalid form entry")
+    else:
+        form = forms.DryEventsForm(initial=
+                                    {'year_by' : year_by,
+                                    }
+                                )
+        
+    year_by = [int(year) for year in year_by]
+    df = df[df['year'].isin(year_by)]
+
+    # -- table 1
+    data = df.to_dict(orient='records')
+    table = tables.DryEventsTable(data)
+    RequestConfig(request, paginate={"per_page": 10}).configure(table)
+
+    export_format = request.GET.get("_export", None)
+    if TableExport.is_valid_format(export_format):
+        exporter = TableExport(export_format, table)
+        return exporter.response("table.{}".format(export_format))
+
+    # -- table 2
+    if len(year_by) > 1: 
+        # Aggregate variables
+        agg = { 
+            'event_number' : 'nunique',
+            'day_number' : 'count'
+        }
+        # groupby
+        df_summary = df[['year', 'event_number', 'day_number']].groupby(by='year').agg(agg).reset_index() 
+    else: 
+        agg = {
+            'date' : 'min',
+            'day_number' : 'max',
+            'rm_up' : 'max',
+            'rm_down' : 'min',
+            'dry_length' : 'max',
+        }
+        df_summary = df[['event_number', 'rm_up', 'rm_down', 'dry_length', 'date', 'day_number']].groupby(by='event_number').agg(agg).reset_index()
+    
+    # rename columns
+    df_summary.columns = [col if col not in agg else f'{col}_{agg[col]}' 
+                for col in df_summary.columns]
+    # for table rendering
+    data = df_summary.to_dict(orient='records')
+
+    if len(year_by) > 1: 
+        table2 = tables.DryEventsGroupManyTable(data)
+    else:
+        table2 = tables.DryEventsGroupOneTable(data)
+
+    RequestConfig(request, paginate={"per_page": 10}).configure(table2)
+
+    return render(  request, 
+                    "riogrande/dryevents.html", 
+                    {
+                    "form" : form,
+                    "table": table,
+                    "table2" : table2
+                    # "filter" : filterset
+                    }
+                    ) 
+    
 class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     '''
     to do - Modify to have this thing actually be able to filter a selction using the appropriate queryset with the choice filter
@@ -280,7 +352,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=False):
+def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=True):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
     '''
@@ -371,6 +443,8 @@ def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False
                 }
                 )
 
+class DashboardDrylenFlow2(TemplateView):
+    template_name = "riogrande/dashboarddrylenflow.html"
 
 class DashboardDryEventsView(TemplateView):
     
@@ -414,7 +488,11 @@ def featuremap(request):
 def about(request):
     return render(request, "riogrande/about.html")
 
+
+
 def metadata(request):
+
+
     '''
     This example is meant to show a simplified version of how we might generate metadata reports from our models
     '''
@@ -478,3 +556,6 @@ def metadata(request):
         # 4. Push to XML Format
         # 5. Push XML Format to 
     return render(request, "riogrande/metadata.html")
+
+
+# %%

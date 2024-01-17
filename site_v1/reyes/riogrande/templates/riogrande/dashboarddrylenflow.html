@@ -1,0 +1,29 @@
+{% extends 'riogrande/header.html' %}
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+{% block title %} River Eyes Monitoring Program - USGS Discharge and Drying Obsevations {% endblock %}
+
+{% block content %}
+<body>
+    <div class="container.col-md-4"></div>
+    <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
+        <h1 class="text-center" style="color:#012E40"> <strong> Dry Segments and Streamflow Dashboard </strong> </h1>
+        <p class="text-center" style="color:#012E40">  This visualization links the Dry Segments Heatmap and USGS Streamflow Time Series figures, in order to explore the relationship between discharge and drying  </p>
+        <p class="text-center" style="color:#012E40"> <i>> Click on a gage name to add it to both figures. It is possible to view multiple gages at once. </i></p>
+        <p class="text-center" style="color:#012E40"> <i>> Select year using the slider below. Click and drag to zoom in on a specific date range. Double-click to zoom back out</i></p>
+        
+    </div>
+    <div class="container.col-md-4"></div>
+    <!-- plot  -->
+    <div class="container-fluid">
+        {% include "riogrande/includes/plotly_dry_usgs_dash_2.html" %}
+    </div>
+
+
+
+
+{% endblock %} 
