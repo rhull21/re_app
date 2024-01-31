@@ -22,6 +22,27 @@
             <ul class="nav nav-pills navbar-right" style="font-size: 18px">
 
                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'heatmap' %}">Drying Heatmap</a></li>
+                        <li><a href="{% url 'featuremap' %}">Features and Landmarks</a></li>
+                        <!-- <li><a href="{% url 'dash_drylen_aggusgsdata_view1' %}">Discharge and Flow Dashboard</a></li>  -->
+                    </ul>
+                </li>
+
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Figures <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
+                        <li><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a></li>
+                        <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a></li>
+                        <!-- <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li> -->
+                        
+                    </ul>
+                </li>
+
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tables <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a href="{% url 'delta_dryness' %}">Changes in Dry Length</a></li>
@@ -34,27 +55,7 @@
                       <li><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages</a></li> 
                       <li><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks</a></li> 
                     </ul>
-                    
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Figures <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
-                        <li><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a></li>
-                        <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a></li>
-                        <!-- <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li> -->
-                        
-                    </ul>
-                </li>
                 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'featuremap' %}">Features and Landmarks</a></li>
-                        <li><a href="{% url 'heatmap' %}">Drying Heatmap</a></li>
-                        <!-- <li><a href="{% url 'dash_drylen_aggusgsdata_view1' %}">Discharge and Flow Dashboard</a></li>  -->
-                    </ul>
-                </li>
                 <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>
             </ul>
         </div>
