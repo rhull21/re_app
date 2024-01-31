@@ -14,8 +14,8 @@ labels = {
             },
         'rm' : 
             {
-                'gt' : 'Min, River Mile', 
-                'lt' : 'Max, River Mile',
+                'gt' : 'Min, Dry River Mile', 
+                'lt' : 'Max, Dry River Mile',
             },
         'sum_len' : 
             {
@@ -54,25 +54,25 @@ labels = {
 class DrySegFilter(django_filters.FilterSet):
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
     dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['lt'])
-    dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name='dry_length', lookup_expr='gt')
-    dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name='dry_length', lookup_expr='lt')
+    dry_length__gt = django_filters.NumberFilter(label=labels['dry_len']['gt'], field_name='dry_length', lookup_expr='gt')
+    dry_length__lt = django_filters.NumberFilter(label=labels['dry_len']['lt'], field_name='dry_length', lookup_expr='lt')
     rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
     rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
 
     class Meta:
         model = models.DryLengthAgg
-        fields = ("dat__gt", "dat__lt", "dry_length__gt", "dry_length__lt", "rm_down__gt", "rm_up__lt") 
+        fields = ("dat__gt", "dat__lt", "dry_length__gt", "dry_length__lt", "rm_up__lt", "rm_down__gt") 
 
 class FeatureFilter(django_filters.FilterSet):
     feature = django_filters.CharFilter(label='Feature Name Contains', lookup_expr='icontains')
 
-    rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
-    rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
+    rm__gt = django_filters.NumberFilter(field_name='rm', lookup_expr='gt', label='Min, River Mile')
+    rm__lt = django_filters.NumberFilter(field_name='rm', lookup_expr='lt', label='Max, River Mile')
 
 
     class Meta:
         model = models.FeatureRm
-        fields = ("rm_down__gt" , "rm_up__lt", "feature",)
+        fields = ("rm__gt" , "rm__lt", "feature",)
 
 class DryLenFilter(django_filters.FilterSet):
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
@@ -126,12 +126,10 @@ class SummaryUsgsFilter(django_filters.FilterSet):
     usgs_id = django_filters.MultipleChoiceFilter(choices=models.UsgsFeatureGages.objects.values_list('usgs_id', 'usgs_feature_display_name'),
                                                     )
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
-    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['lt'])
-
-
+    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='lt', label=labels['dat']['lt'])
 
     flow_cfs__gt = django_filters.NumberFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['gt'])
-    flow_cfs__lt = django_filters.NumberFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['lt'])
+    flow_cfs__lt = django_filters.NumberFilter(field_name='flow_cfs', lookup_expr='lt', label=labels['flow_cfs']['lt'])
 
     prov_flag = django_filters.CharFilter(lookup_expr='icontains')
 
@@ -144,16 +142,16 @@ class DryLengthAggUsgsDataFilter(django_filters.FilterSet):
                                                     )
                                                     
     dat__gt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['gt'])
-    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='gt', label=labels['dat']['lt'])
+    dat__lt = django_filters.DateFilter(field_name='dat', lookup_expr='lt', label=labels['dat']['lt'])
 
     flow_cfs__gt = django_filters.DateFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['gt'])
-    flow_cfs__lt = django_filters.DateFilter(field_name='flow_cfs', lookup_expr='gt', label=labels['flow_cfs']['lt'])
+    flow_cfs__lt = django_filters.DateFilter(field_name='flow_cfs', lookup_expr='lt', label=labels['flow_cfs']['lt'])
 
     rm_down__gt = django_filters.NumberFilter(field_name='rm_down', lookup_expr='gt', label=labels['rm']['gt'])
     rm_up__lt = django_filters.NumberFilter(field_name='rm_up', lookup_expr='lt', label=labels['rm']['lt'])
 
-    dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name='dry_length', lookup_expr='gt')
-    dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name='dry_length', lookup_expr='lt')
+    dry_length__gt = django_filters.NumberFilter(label='Dry Length, Min', field_name=labels['dry_len']['gt'], lookup_expr='gt')
+    dry_length__lt = django_filters.NumberFilter(label='Dry Length, Max', field_name=labels['dry_len']['lt'], lookup_expr='lt')
 
     prov_flag =  django_filters.CharFilter(lookup_expr='icontains')
 
