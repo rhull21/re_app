@@ -34,8 +34,8 @@ class DeltaDryTable(tables2.Table):
         self.base_columns['len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
         self.base_columns['diff'] = tables2.Column(verbose_name='Difference Previous Dry Length (River Miles)')
         self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
-        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry Extent')
-        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry Extent')
+        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry River Mile')
+        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry River Mile')
 
         self.base_columns['YEAR(`dat`)'] = tables2.Column(verbose_name='Year')
         seq  = ['YEAR(`dat`)', 'len', 'diff', 'rm_up', 'rm_down', 'domain', ]
@@ -55,7 +55,7 @@ class DrySegsTable(tables2.Table):
     class Meta:
         model = models.DryLengthAgg
         template_name = "django_tables2/semantic.html"
-        fields = ("dat", "dry_length", "rm_down", "rm_up")
+        fields = ("dat", "dry_length", "rm_up", "rm_down")
 
 class DryCompTable(tables2.Table):
     first_dry_date = ShortDateColumn()
@@ -72,8 +72,8 @@ class DryDaysTable(tables2.Table):
         self.base_columns['dry_days'] = tables2.Column(verbose_name='Total Number of Intermittent Days')
         self.base_columns['max_len'] = tables2.Column(verbose_name='Maximum Dry Length (River Miles)')
         self.base_columns['ave_len'] = tables2.Column(verbose_name='Average Dry Length (River Miles)')
-        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry Extent')
-        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry Extent')
+        self.base_columns['rm_up'] = tables2.Column(verbose_name='Maximum Upstream Dry River Mile')
+        self.base_columns['rm_down'] = tables2.Column(verbose_name='Minimum Downstream Dry River Mile')
         self.base_columns['domain'] = tables2.Column(verbose_name='Reach Name')
 
         seq = ['dry_days', 'max_len', 'ave_len', 'rm_up', 'rm_down']
@@ -130,8 +130,8 @@ class DryEventsTable(tables2.Table):
     
     year = tables2.Column()
     date = ShortDateColumn()
-    rm_up = tables2.Column(verbose_name='Upstream River Mile')
-    rm_down = tables2.Column(verbose_name='Downstream River Mile')
+    rm_up = tables2.Column(verbose_name='Upstream Dry River Mile')
+    rm_down = tables2.Column(verbose_name='Downstream Dry River Mile')
     dry_length = tables2.Column(verbose_name='Dry Length (RMs)')
     event_number = tables2.Column()
     day_number = tables2.Column()
@@ -155,8 +155,8 @@ class DryEventsGroupOneTable(tables2.Table):
     event_number = tables2.Column()
     date_min = ShortDateColumn(verbose_name='Start of Drying Event')
     day_number_max = tables2.Column(verbose_name='Number of Days in Drying Event')
-    rm_down_min = tables2.Column(verbose_name='Minimum Downstream extent of drying (RM)')
-    rm_up_max = tables2.Column(verbose_name='Maximum Upstream extent of drying (RM)')
+    rm_down_min = tables2.Column(verbose_name='Minimum Downstream Dry River Mile')
+    rm_up_max = tables2.Column(verbose_name='Maximum Upstream Dry River Mile')
     dry_length_max = tables2.Column(verbose_name='Maximum Dried Length (RM)')
 
     class Meta:
