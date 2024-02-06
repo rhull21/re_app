@@ -9,17 +9,18 @@
         <div>
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="https://www.linkedin.com/company/geosystems-analysis-inc-/" style="padding: 1px 25px">
-                <img alt="Brand" src="{% static 'images/GSA_alpha.png' %}" > 
-                </a>
-                <a class="navbar-brand" href="https://webapps.usgs.gov/MRGESCP/data/river-eyes#" style="padding: 1px 25px">
-                    <img alt="Brand" src="{% static 'images/usgs_alpha.png' %}" > 
-                    </a>
-                    <a class="navbar-brand site-title" href="{% url 'index' %}" style="font-size:20px">River Eyes Monitoring Program</a>
+                <a class="navbar-brand site-title" href="{% url 'index' %}" style="font-size:20px", title="River Eyes">River Eyes Middle Rio Grande Monitoring Program</a>
             </div>
-    
+
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav nav-pills navbar-right" style="font-size: 18px">
+
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+                <li class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'index' %}" style="padding: 12px 25px", title="River Eyes Home">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
@@ -57,8 +58,19 @@
                     </ul>
                 
                 <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="https://gsanalysis.com/" style="padding: 1px 2-px", title="GeoSystems Analysis">
+                    <img alt="Brand" src="{% static 'images/GSA_alpha.png' %}" > 
+                    </a>
+                    <a class="navbar-brand" href="https://webapps.usgs.gov/MRGESCP/data/river-eyes#" style="padding: 1px 25px", , title="USGS Middle Rio Grande Collaborative Program">
+                    <img alt="Brand" src="{% static 'images/usgs_alpha.png' %}" > 
+                    </a>
+                </div>
             </ul>
-        </div>
+            
+            </div>
+            
          </div>
     </nav>
 </header>
