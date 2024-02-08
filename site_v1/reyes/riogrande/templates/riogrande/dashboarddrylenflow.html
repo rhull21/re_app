@@ -8,8 +8,8 @@
 {% block title %} River Eyes Monitoring Program - USGS Discharge and Drying Obsevations {% endblock %}
 
 {% block content %}
-<body>
-    <div class="container.col-md-4"></div>
+<div class="container-fluid", style="width: 100%; height: 100%">
+    <!-- <div class="container.col-md-4"></div>
     <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
         <h1 class="text-center" style="color:#012E40"> <strong> Dry Segments and Streamflow Dashboard </strong> </h1>
         <p class="text-center" style="color:#012E40">  This visualization links the Dry Segments Heatmap and USGS Streamflow Time Series figures, in order to explore the relationship between discharge and drying  </p>
@@ -18,12 +18,13 @@
         
     </div>
     <div class="container.col-md-4"></div>
+     -->
     <!-- plot  -->
     <div class="container-fluid">
         {% include "riogrande/includes/plotly_dry_usgs_dash_2.html" %}
     </div>
 
-
+</div>
 
 
 {% endblock %} 

@@ -118,9 +118,7 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False, readfig=True, writefig=False):
-    '''
-    '''
+def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False, readfig=False, writefig=True): # 02072024 - modify back to readfig = True, writefig = False after dev
 
     # read in data
     qry_rm = models.RoundedRm.objects.all()
@@ -301,7 +299,7 @@ class FilteredSummaryUsgs(ExportMixin, SingleTableMixin, FilterView):
     def get_queryset(self):
         return super().get_queryset()
 
-def usgs_series(request, readfig=True, writefig=False):
+def usgs_series(request, readfig=False, writefig=True): # 02072024 - modify back to readfig = True, writefig = False after dev
 
     # read in data
     qry = models.UsgsFeatureData.objects.all()

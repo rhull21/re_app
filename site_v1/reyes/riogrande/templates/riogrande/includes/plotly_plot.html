@@ -1,0 +1,28 @@
+{% load static %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load querystring from django_tables2 %}
+{% load render_table from django_tables2 %}
+
+<div class="container-fluid", style="width: 100%; height: 85vh">
+    <div id="plotly-plot" class="container-fluid"> 
+        {{ target_plot|safe }}
+    </div>
+    
+    <script>
+        function resizePlot() {
+            var plotContainer = document.getElementById('plotly-plot');
+            var plotDiv = plotContainer.getElementsByClassName('plotly-graph-div js-plotly-plot')[0];
+            var newHeight = window.innerHeight * 0.9; 
+            plotContainer.style.height = newHeight + 'px';
+            Plotly.relayout(plotDiv, {
+                width: plotContainer.offsetWidth,
+                height: newHeight
+            });
+        }
+    
+        window.addEventListener('resize', resizePlot);
+        window.onload = resizePlot;
+    </script>
+    
+</div>
