@@ -10,22 +10,13 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as io
 
-from dash import dcc 
-from dash import html
-from dash.dependencies import Input, Output
-from django_plotly_dash import DjangoDash
-
 from riogrande.plotly_dash_helpers import addscatter, addimshow, addgagescatters, frame_args
-
 
 
 def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, writefig, readfig, nm='plotly_drysegsimshow', dir="riogrande/static/figs/"):
 
     if writefig: 
         fig = px.imshow(data, animation_frame=2, 
-                        # aspect='equal', 
-                        #width=1500,  
-                        height=1000, # best way to set dimensions for website rendering?
                         labels={'animation_frame' : 'Year',
                         #       'x' : 'Dates',
                                 'y' : 'River Mile', 
@@ -246,8 +237,10 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                 )
                 )
 
+        fig.update_layout(autosize=True)
+
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') 
+        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div', include_plotlyjs=False, config={'responsive': True})
         print('end figure converstion')
 
         with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
@@ -280,7 +273,6 @@ def plotly_seriesusgs(data, writefig, readfig, nm='plotly_seriesusgs', dir="riog
                         hover_name='usgs_feature_short_name',
                         x='date', 
                         y='flow_cfs',
-                        height=900,
                         render_mode = 'webg1')  # necessary for rangeslider to display >500 rows
                         #title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
@@ -331,9 +323,11 @@ def plotly_seriesusgs(data, writefig, readfig, nm='plotly_seriesusgs', dir="riog
                                     text = None
                                 )
                                 ))
-    
+
+        fig.update_layout(autosize=True)
+
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') 
+        plotly_plot_obj = plot({'data': fig }, config={'responsive': True}, auto_play=False, output_type='div', include_plotlyjs=False) 
         print('end figure converstion')
 
         with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
