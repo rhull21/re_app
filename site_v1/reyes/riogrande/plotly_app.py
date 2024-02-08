@@ -360,14 +360,12 @@ def plotly_dry_usgs_dash_1(data):
                                     'dry_length' : 'Dry Length \n (RMs)',
                                     },
                             color_discrete_sequence=[px.colors.qualitative.Bold[i] for i in range(len(labels))],
-                            height=1000
                             )
     
     fig.update_traces(diagonal_visible=False)
 
 
-    #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div')
+    plotly_plot_obj = plot({'data': fig }, config={'responsive': True}, auto_play=False, output_type='div', include_plotlyjs=False) 
 
     return plotly_plot_obj
 
