@@ -23,16 +23,13 @@ etc_dir = '../../etc'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(etc_dir,'secret_key.txt')) as f:
-    SECRET_KEY = f.read().strip()
+SECRET_KEY = "1Q4mu9NTBzD(0S5ZknENljdBSiSKYzgw9S@kIm1c6TXYdkGcYj"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-with open(os.path.join(etc_dir,'debug.txt')) as f:
-    DEBUG = f.read().strip() !='False'
+DEBUG = 'True'
 
 # This value ['*'] is not safe for production usage. Refer to the Django documentation for more information.
-with open(os.path.join(etc_dir,'hosts.txt')) as f:
-    ALLOWED_HOSTS = f.read().splitlines()
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -85,34 +82,28 @@ WSGI_APPLICATION = 'reyes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-''' production '''
-with open(os.path.join(etc_dir,'db_info.json')) as f:
-    db_info = json.load(f)
-
-DATABASES = db_info
-
 ''' local '''
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
-#         'NAME': 'rivereyes',
-#         'USER': 'root',
-#         'PASSWORD': '300667',
-#         'HOST': '127.0.0.1'
-#     }
-# }
-
-''' docker '''
 DATABASES = {
     'default': {
-		'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql', # 'django.contrib.gis.db.backends.mysql', # 'django.db.backends.mysql',
         'NAME': 'rivereyes',
         'USER': 'root',
-        'PASSWORD': 'root',
-		'HOST': 'db',
-		'PORT': '3306'
+        'PASSWORD': '300667',
+        'HOST': '127.0.0.1'
     }
 }
+
+''' docker '''
+# DATABASES = {
+#     'default': {
+# 		'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'rivereyes',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+# 		'HOST': 'db',
+# 		'PORT': '3306'
+#     }
+# }
 
 
 # Password validation
