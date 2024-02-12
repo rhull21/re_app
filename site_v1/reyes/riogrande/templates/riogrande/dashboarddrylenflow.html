@@ -8,23 +8,44 @@
 {% block title %} River Eyes Monitoring Program - USGS Discharge and Drying Obsevations {% endblock %}
 
 {% block content %}
-<div class="container-fluid", style="width: 100%; height: 100%">
-    <!-- <div class="container.col-md-4"></div>
+
+<div id="infoOverlay">
+    <span class="closeBtn"style="font-size: 24px; color: white;" title="Close"><i class="fas fa-times"></i></span>
     <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
-        <h1 class="text-center" style="color:#012E40"> <strong> Dry Segments and Streamflow Dashboard </strong> </h1>
-        <p class="text-center" style="color:#012E40">  This visualization links the Dry Segments Heatmap and USGS Streamflow Time Series figures, in order to explore the relationship between discharge and drying  </p>
-        <p class="text-center" style="color:#012E40"> <i>> Click on a gage name to add it to both figures. It is possible to view multiple gages at once. </i></p>
-        <p class="text-center" style="color:#012E40"> <i>> Select year using the slider below. Click and drag to zoom in on a specific date range. Double-click to zoom back out</i></p>
-        
+
+        <h1 class="text-center"> <strong> Dry Segments and Streamflow Dashboard </strong> </h1>
+        <p class="text-center">  This visualization links the Dry Segments Heatmap and USGS Streamflow Time Series figures, in order to explore the relationship between discharge and drying  </p>
+        <p class="text-center"> <i>> Click on a gage name to add it to both figures. It is possible to view multiple gages at once. </i></p>
+        <p class="text-center"> <i>> Select year using the slider below. Click and drag to zoom in on a specific date range. Double-click to zoom back out</i></p>
+
     </div>
-    <div class="container.col-md-4"></div>
-     -->
-    <!-- plot  -->
-    <div class="container-fluid">
+</div>
+
+<div class="container-fluid", style="width: 100%; height: 100%">
+    <div class="container-fluid", style="width: 100%; height: 100%">
+        <div class="row">
+            <div class="col-xs-10">
+                <h1 class="vertical-align-middle" style="color:#012E40; padding: 0 12px"> <strong>Dry Segments and Streamflow Dashboard</strong> </h1>
+                <a href="/static/data/heatmap.xlsx" style="color:#012E40; border: none; background-color: white; padding: 0 12px" class="btn btn-primary vertical-align-middle" title="Download Drying Data" download>
+                    <i class="fa fa-download"></i> 
+                </a>
+                <a href="{% url 'summary_usgs' %}" style="color:#012E40; border: none; background-color: white; padding: 0 12px" class="btn btn-info vertical-align-middle" title="View Tabular Stream Gage Data"> 
+                    <i class="fa fa-table"></i>
+                </a>
+                <button id="infoBtn" class="btn btn-info vertical-align-middle" style="color:#012E40;  border: none; background-color: white; padding: 0 12px" title="Documentation"><i class="fa fa-info-circle"></i></button>
+             </div>
+        </div>
+    </div>
+
+    {% include 'riogrande/includes/plotly_plot.html' %}
+    
+    <!-- <div class="container-fluid">
         {% include "riogrande/includes/plotly_dry_usgs_dash_2.html" %}
-    </div>
+    </div> -->
+
 
 </div>
 
+<script src="{% static 'overlay.js' %}"></script>
 
-{% endblock %} 
+{% endblock %}

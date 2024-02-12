@@ -9,27 +9,37 @@
 
 {% block content %}
 
+<div id="infoOverlay">
+    <span class="closeBtn"style="font-size: 24px; color: white;" title="Close"><i class="fas fa-times"></i></span>
+    <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%">  
+        <h1 class="text-center" > <strong>Dry Segments Heatmap</strong> </h1>
+        <p class="text-center">  In this visualization, dry segments are represented by lighter colored pixels. The horizontal axis represents the date, and the vertical axis represents river miles - which increase from downstream to upstream.  </p>
+        <p class="text-center"> <i> > Select year using the slider below </i></p>
+        <p class="text-center"> <i>> Click and drag to zoom on a date/river mile range. Double-click to reset zoom </i></p>
+        <p class="text-center"> <i>> Use the reach and subreach dropdown menus to focus the vertical axis on those river miles </i></p>
+        <p class="text-center"> <i>> Toggle visibility of feature and gage layers to the right of the plot</i></p>
+        <p class="text-center"> <i>> The 'Download Data" button generates an Excel file of the entire time series, where cell values of 1 represent dryness and each year is contained in a separate sheet. </i></p>
+    </div>
+</div>
+
 <div class="container-fluid", style="width: 100%; height: 100%">
-
-    <!-- <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%">  
-        <h1 class="text-center" style="color:#012E40"> <strong>Dry Segments Heatmap</strong> </h1>
-        <p class="text-center" style="color:#012E40">  In this visualization, dry segments are represented by lighter colored pixels. The horizontal axis represents the date, and the vertical axis represents river miles - which increase from downstream to upstream.  </p>
-        <p class="text-center" style="color:#012E40"> <i> > Select year using the slider below </i></p>
-        <p class="text-center" style="color:#012E40"> <i>> Click and drag to zoom on a date/river mile range. Double-click to reset zoom </i></p>
-        <p class="text-center" style="color:#012E40"> <i>> Use the reach and subreach dropdown menus to focus the vertical axis on those river miles </i></p>
-        <p class="text-center" style="color:#012E40"> <i>> Toggle visibility of feature and gage layers to the right of the plot</i></p>
-        <p class="text-center" style="color:#012E40"> <i>> The 'Download Data" button generates an Excel file of the entire time series, where cell values of 1 represent dryness and each year is contained in a separate sheet. </i></p>
-
-    </div> -->
+    <div class="container-fluid", style="width: 100%; height: 100%">
+        <div class="row">
+            <div class="col-xs-8">
+                <h1 class="vertical-align-middle" style="color:#012E40; padding: 0 12px"> <strong>Dry Segments Heatmap</strong> </h1>
+                <a href="/static/data/heatmap.xlsx" style="color:#012E40; border: none; background-color: white; padding: 0 12px" class="btn btn-primary vertical-align-middle" title="Download Data" download>
+                    <i class="fa fa-download"></i> 
+                </a>
+                <button id="infoBtn" class="btn btn-info vertical-align-middle" style="color:#012E40;  border: none; background-color: white; padding: 0 12px" title="Documentation"><i class="fa fa-info-circle"></i></button>
+             </div>
+        </div>
+    </div>
 
     {% include 'riogrande/includes/plotly_plot.html' %}
 
+
 </div>
 
-<div class="pull-right" style="position: relative; z-index:100;">
-    <a href="/static/data/heatmap.xlsx" class="btn btn-xs btn-default"> 
-        Download Data
-    </a>
-</div>
+<script src="{% static 'overlay.js' %}"></script>
 
 {% endblock %}

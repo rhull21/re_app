@@ -8,20 +8,37 @@
 {% block title %} River Eyes Monitoring Program - USGS Discharge Time Series {% endblock %}
 
 {% block content %}
-<div class="container-fluid", style="width: 100%; height: 100%">
-    <!-- <div class="container.col-md-4"></div>
+
+<div id="infoOverlay">
+    <span class="closeBtn"style="font-size: 24px; color: white;" title="Close"><i class="fas fa-times"></i></span>
     <div class="container.col-md-4" style="margin-top: 30px; margin-bottom: 15px; padding-left:30%; padding-right:30%"> 
-        <h1 class="text-center" style="color:#012E40"> <strong> USGS Streamflow Data </strong> </h1>
-        <p class="text-center" style="color:#012E40">  This figure displays a time series of measured streamflow at USGS gages along the Middle Rio Grande, with date on the horizontal axis and discharge (in cubic feet per second) on the vertical axis. </p>
-        <p class="text-center" style="color:#012E40"> <i>> Click on a gage name to add it to the figure. It is possible to view multiple gages at once</i></p>
-        <p class="text-center" style="color:#012E40"> <i> > Use the range slider underneath the main figure to adjust the date range, by adjusting the left and right endpoints</i></p>
-        
+
+        <h1 class="text-center"> <strong> USGS Streamflow Data </strong> </h1>
+        <p class="text-center" >  This figure displays a time series of measured streamflow at USGS gages along the Middle Rio Grande, with date on the horizontal axis and discharge (in cubic feet per second) on the vertical axis. </p>
+        <p class="text-center" > <i>> Click on a gage name to add it to the figure. It is possible to view multiple gages at once</i></p>
+        <p class="text-center" > <i> > Use the range slider underneath the main figure to adjust the date range, by adjusting the left and right endpoints</i></p>
+ 
     </div>
-    <div class="container.col-md-4"></div> -->
-   
+</div>
+
+<div class="container-fluid", style="width: 100%; height: 100%">
+    <div class="container-fluid", style="width: 100%; height: 100%">
+        <div class="row">
+            <div class="col-xs-10">
+                <h1 class="vertical-align-middle" style="color:#012E40; padding: 0 12px"> <strong>USGS Streamflow Data</strong> </h1>
+                <a href="{% url 'summary_usgs' %}" style="color:#012E40; border: none; background-color: white; padding: 0 12px" class="btn btn-info vertical-align-middle" title="View Tabular Stream Gage Data"> 
+                    <i class="fa fa-table"></i>
+                </a>
+                <button id="infoBtn" class="btn btn-info vertical-align-middle" style="color:#012E40;  border: none; background-color: white; padding: 0 12px" title="Documentation"><i class="fa fa-info-circle"></i></button>
+             </div>
+        </div>
+    </div>
+
     {% include 'riogrande/includes/plotly_plot.html' %}
 
-  
+
 </div>
+
+<script src="{% static 'overlay.js' %}"></script>
 
 {% endblock %}
