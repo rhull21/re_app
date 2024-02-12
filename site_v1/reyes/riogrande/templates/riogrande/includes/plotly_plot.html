@@ -4,16 +4,20 @@
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
 
-<div class="container-fluid", style="width: 100%; height: 85vh">
-    <div id="plotly-plot" class="container-fluid"> 
-        {{ target_plot|safe }}
+<div class="container-fluid", style="width: 100%; height: 80vh">
+    <div id="plotly-plot" class="container-fluid">
+        {% if short_plot %}
+            {% include target_plot_include %}
+        {% else %}
+            {{ target_plot|safe }}
+        {% endif %}
     </div>
     
     <script>
         function resizePlot() {
             var plotContainer = document.getElementById('plotly-plot');
             var plotDiv = plotContainer.getElementsByClassName('plotly-graph-div js-plotly-plot')[0];
-            var newHeight = window.innerHeight * 0.9; 
+            var newHeight = window.innerHeight * 0.80; 
             plotContainer.style.height = newHeight + 'px';
             Plotly.relayout(plotDiv, {
                 width: plotContainer.offsetWidth,
