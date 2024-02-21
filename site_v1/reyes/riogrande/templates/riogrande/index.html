@@ -24,6 +24,16 @@
         <h3><em><b>Welcome to the River Eyes Data Portal</b></em></h3>
             <p><em>This page contains data collected on river drying in the Middle Rio Grande since 2002. These data are presented in the following tables, interactive data visualizations and web maps. For background information and details of the monitoring program visit the <b><a href="{% url 'about' %}">About</a> </b> page.</em></p>
 
+        <h2><b>Web Maps</b></h2>
+            <p><b><a href="{% url 'heatmap' %}">Drying Heatmap</a> </b> Visualization of number of dry days along the Middle Rio Grande as a heat map. Layers are included for individual years, mean dry days and total dry days since 2002 </p>
+            <p><b><a href="{% url 'featuremap' %}">Features and Landmarks</a> </b> Interactive web map with locations of features and landmarks, river mile hundredths along the centerline, stream gages, conveyances and range lines. </p>
+
+        <h2><b>Figures and Dashboards</b></h2>
+            <p><b><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a> </b> Visualization of dry segments throughout each year, with date on the horizontal axis and river mile on the vertical axis. </p>
+            <p><b><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a> </b> Interactive graphs of mean daily discharge, for all USGS stream gages in the Middle Rio Grande </p>
+            <p><b><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a> </b> A combination of the above two figures, for comparing dryness with stream discharge </p>
+            <!-- <p><b><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a> </b> ??? </p> -->
+
         <h2><b>Tabular Data</b></h2>
             <p><b><a href="{% url 'delta_dryness' %}">Changes in Dry Length: </a> </b> Table displaying changes in dry length relative to the previous day/month/year </p>
             <p><b><a href="{% url 'dry_length_comparison' %}">Dry Length by Day: </a></b> Displays dry length by day in both river miles and percentage of the total reach </p>
@@ -33,16 +43,7 @@
             <p><b><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow: </a> </b> For each dry segment, displays dry length, upstream river mile, and mean daily discharge of USGS gages on that day </p>
             <p><b><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages: </a> </b> Displays mean discharge by day, for USGS stream gages along the Middle Rio Grande</p>
             <p><b><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks: </a> </b> For features and landmarks along the Middle Rio Grande such as USGS gages, diversion dams, outfalls, etc, displays river mile and lat/long coordinates </p>
-      
-        <h2><b>Figures and Dashboards</b></h2>
-            <p><b><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a> </b> Visualization of dry segments throughout each year, with date on the horizontal axis and river mile on the vertical axis. </p>
-            <p><b><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a> </b> Interactive graphs of mean daily discharge, for all USGS stream gages in the Middle Rio Grande </p>
-            <p><b><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a> </b> A combination of the above two figures, for comparing dryness with stream discharge </p>
-            <!-- <p><b><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a> </b> ??? </p> -->
 
-        <h2><b>Web Maps</b></h2>
-            <p><b><a href="{% url 'featuremap' %}">Features and Landmarks</a> </b> Interactive web map with locations of features and landmarks, river mile hundredths along the centerline, stream gages, conveyances and range lines. </p>
-            <p><b><a href="{% url 'heatmap' %}">Drying Heatmap</a> </b> Visualization of number of dry days along the Middle Rio Grande as a heat map. Layers are included for individual years, mean dry days and total dry days since 2002 </p>
     </div>
   </div> 
 

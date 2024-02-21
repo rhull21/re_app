@@ -19,8 +19,8 @@
         <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}
             {% bootstrap_button 'Filter' button_type='submit'%}
+            <a href="{{ request.path }}" class="btn btn-secondary">Clear Filters</a>
         </form>
-    
     </div>
     {% endif %}
 <div class="col-sm-10">

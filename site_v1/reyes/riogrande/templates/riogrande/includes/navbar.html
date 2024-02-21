@@ -4,64 +4,71 @@
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
 
-<header>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div style="width: 100%; height: 5vh">
+
+        <div class="navbar-header">
+            <a class="navbar-brand site-title" href="{% url 'index' %}" style="font-size:20px", title="River Eyes">River Eyes Middle Rio Grande Monitoring Program</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav nav-pills navbar-right" style="font-size: 18px">
+
+            <li class="navbar-header">
+                <a class="navbar-brand" href="{% url 'index' %}" style="padding: 12px 25px", title="River Eyes Home">
+                    <i class="fas fa-home"></i>
+                </a>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'heatmap' %}">Drying Heatmap</a></li>
+                    <li><a href="{% url 'featuremap' %}">Features and Landmarks</a></li>
+                    <!-- <li><a href="{% url 'dash_drylen_aggusgsdata_view1' %}">Discharge and Flow Dashboard</a></li>  -->
+                </ul>
+            </li>
+
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Figures <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
+                    <li><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a></li>
+                    <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a></li>
+                    <!-- <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li> -->
+                    
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tables <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'delta_dryness' %}">Changes in Dry Length</a></li>
+                    <li><a href="{% url 'dry_length_comparison' %}">Dry Length by Day</a></li>
+                    <li><a href="{% url 'filtered_dry_segments' %}">Dry Segment Details</a></li>
+                    <!-- <li><a href="{% url 'dry_comp' %}">Annual Drying Statistics</a></li> -->
+                    <li><a href="{% url 'dry_events' %}">Dry Events</a></li>
+                    <li><a href="{% url 'dry_days' %}">Annual and Monthly Drying Statistics</a></li>
+                    <li><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow</a></li> 
+                    <li><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages</a></li> 
+                    <li><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks</a></li> 
+                </ul>
+            
+            <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="https://www.linkedin.com/company/geosystems-analysis-inc-/" style="padding: 1px 25px">
+                <a class="navbar-brand" href="https://gsanalysis.com/" style="padding: 1px 2-px", title="GeoSystems Analysis">
                 <img alt="Brand" src="{% static 'images/GSA_alpha.png' %}" > 
                 </a>
-                <a class="navbar-brand" href="https://webapps.usgs.gov/MRGESCP/data/river-eyes#" style="padding: 1px 25px">
-                    <img alt="Brand" src="{% static 'images/usgs_alpha.png' %}" > 
-                    </a>
-                    <a class="navbar-brand site-title" href="{% url 'index' %}" style="font-size:20px">River Eyes Monitoring Program</a>
+                <a class="navbar-brand" href="https://webapps.usgs.gov/MRGESCP/data/river-eyes#" style="padding: 1px 25px", , title="USGS Middle Rio Grande Collaborative Program">
+                <img alt="Brand" src="{% static 'images/usgs_alpha.png' %}" > 
+                </a>
             </div>
-    
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav nav-pills navbar-right" style="font-size: 18px">
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tables <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="{% url 'delta_dryness' %}">Changes in Dry Length</a></li>
-                      <li><a href="{% url 'dry_length_comparison' %}">Dry Length by Day</a></li>
-                      <li><a href="{% url 'filtered_dry_segments' %}">Dry Segment Details</a></li>
-                      <!-- <li><a href="{% url 'dry_comp' %}">Annual Drying Statistics</a></li> -->
-                      <li><a href="{% url 'dry_events' %}">Dry Events</a></li>
-                      <li><a href="{% url 'dry_days' %}">Annual and Monthly Drying Statistics</a></li>
-                      <li><a href="{% url 'dashboard_dry_length_flow_table' %}">Dry Lengths in Relation to Streamflow</a></li> 
-                      <li><a href="{% url 'summary_usgs' %}"> Mean Daily Discharge of USGS Stream Gages</a></li> 
-                      <li><a href="{% url 'filtered_features' %}">Locations of MRG Features and Landmarks</a></li> 
-                    </ul>
-                    
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Figures <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'dry_segments' %}">Dry Segments Heatmap</a></li>
-                        <li><a href="{% url 'usgs_series' %}"> Time Series of USGS Streamflow Data</a></li>
-                        <li><a href="{% url 'dash_drylen_aggusgsdata_view2' %}">Dry Segments and Streamflow Dashboard</a></li>
-                        <!-- <li><a href="{% url 'dashboard_dry_events' %}">Drying Events Dashboard</a></li> -->
-                        
-                    </ul>
-                </li>
-                
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maps <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'featuremap' %}">Features and Landmarks</a></li>
-                        <li><a href="{% url 'heatmap' %}">Drying Heatmap</a></li>
-                        <!-- <li><a href="{% url 'dash_drylen_aggusgsdata_view1' %}">Discharge and Flow Dashboard</a></li>  -->
-                    </ul>
-                </li>
-                <li role="presentation" style="margin-right: 10px"><a class="dropdown-about" href="{% url 'about' %}">About</a></li>
-            </ul>
+        </ul>
+        
         </div>
-         </div>
-    </nav>
-</header>
+        
+        </div>
+</nav>
 
-<div class="container"> 
-    <h3> '' </h3>
-</div>

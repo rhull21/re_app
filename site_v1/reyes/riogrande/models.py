@@ -233,8 +233,8 @@ class DryCompAcacia(models.Model):
 class DryCompAgg(models.Model):
     reach = models.CharField(primary_key=True, max_length=10, db_collation='utf8mb4_0900_ai_ci', blank=True, null=False, verbose_name="Reach")
     year = models.IntegerField(blank=True, null=True, verbose_name="Year")
-    rm_down = models.DecimalField(db_column='min_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Minimum Downstream Dry Extent")
-    rm_up = models.DecimalField(db_column='max_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Maximum Upstream Dry Extent")
+    rm_up = models.DecimalField(db_column='max_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Maximum Upstream Dry River Mile")
+    rm_down = models.DecimalField(db_column='min_rm', max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Minimum Downstream Dry River Mile")
     max_dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name="Maximum Dry Length (River Miles)")
     first_dry_date = models.DateField(blank=True, null=True, verbose_name="First Day of Drying")
     last_dry_date = models.DateField(blank=True, null=True, verbose_name="Last Day of Drying")
@@ -306,12 +306,13 @@ class DryLength(models.Model):
 
 
 class DryLengthAgg(models.Model):
-    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream Dry Extent')
-    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream Dry Extent')
+    rm_up = models.DecimalField(primary_key=True, max_digits=5, decimal_places=2, blank=True, verbose_name='Upstream Dry River Mile')
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream Dry River Mile')
     dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (River Miles)')
     dat = models.DateField(blank=True, null=True, verbose_name='Date')
-    rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Downstream River Mile')
-    rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Upstream River Mile')
+    rm_up_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Upstream Dry River Mile')
+    rm_down_rd = models.DecimalField(max_digits=22, decimal_places=1, blank=True, null=True, verbose_name='Approximate Downstream Dry River Mile')
+
 
     class Meta:
         managed = False  # Created from a view. Don't remove.
@@ -322,8 +323,8 @@ class DryLengthAggUsgsData(models.Model):
     uoid = models.AutoField(primary_key=True, blank=True, null=False)
     dat = models.DateField(blank=True, null=False, verbose_name='Date', db_column='date')
     dry_length = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name='Dry Length (RMs)')
-    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream River Mile')
-    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Upstream River Mile')
+    rm_up = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Upstream Dry River Mile')
+    rm_down = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name='Downstream Dry River Mile')
     usgs_station_name = models.CharField(max_length=8, db_collation='utf8mb4_0900_ai_ci', verbose_name='USGS Station Name')
     usgs_feature_short_name = models.CharField(max_length=150, db_collation='utf8mb4_0900_ai_ci', blank=True, null=True, verbose_name='USGS Full Name')
     flow_cfs = models.FloatField(blank=True, null=True,  verbose_name='Discharge, Cubic Feet per Second')

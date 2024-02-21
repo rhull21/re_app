@@ -10,24 +10,15 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as io
 
-from dash import dcc 
-from dash import html
-from dash.dependencies import Input, Output
-from django_plotly_dash import DjangoDash
-
 from riogrande.plotly_dash_helpers import addscatter, addimshow, addgagescatters, frame_args
-
 
 
 def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, writefig, readfig, nm='plotly_drysegsimshow', dir="riogrande/static/figs/"):
 
     if writefig: 
         fig = px.imshow(data, animation_frame=2, 
-                        # aspect='equal', 
-                        #width=1500,  
-                        height=1000, # best way to set dimensions for website rendering?
                         labels={'animation_frame' : 'Year',
-                        #       'x' : 'Dates',
+                                'x' : 'Date',
                                 'y' : 'River Mile', 
                                 'color' : 'Dryness (1=True)'},
                         x=plot_dict['Dates'], 
@@ -71,6 +62,10 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
         fig.update_layout(
                         xaxis=dict(
                             tickformat='%b %e',
+                            title_font = dict(
+                                size = 20,
+                                color = '#012E40'
+                            ),
                             ticks="outside",
                             tickwidth=1.5,
                             ticklen=15,
@@ -83,7 +78,7 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                                 tick0 = "2002-06-15",
                                 dtick = "M1"
                                 ),
-                            side='top'
+                            side='bottom'
                             ),
                         yaxis = dict(
                             range = [min(plot_dict['River Miles']), max(plot_dict['River Miles'])],
@@ -105,22 +100,24 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                             steps=steps,
                             bgcolor = '#012E40',
                             activebgcolor = '#F2E3D5',
-                            borderwidth = 0,
                             currentvalue = dict(
                                 font = dict(
                                     size = 20,
                                     color = '#012E40'),
                                 offset = 15,
-                                prefix = 'Selected Year: ',
+                                prefix = 'Year: ',
                                 xanchor = 'center'
                                 ),
-                            x = 0.5,
-                            xanchor="center",
-                            y = 1.3,
-                            yanchor="top"
-                                )],
-                        margin = dict(
-                                l=0, r=0,t=0,b=0
+                            pad=dict(b = 10, t = 0),
+                            len=0.9,
+                            borderwidth=0,
+                            y=1,
+                            yanchor="bottom",
+                            x=0.5,
+                            xanchor='center',
+                         )],
+                        margin=dict(
+                                l=10, r=10,t=10,b=10
                         ),
                 )
         
@@ -159,12 +156,12 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                     ] 
                     ),
                     direction="down",
-                    pad={"r": 10, "t": 10},
+                    pad={"l": 10, "t": 0},
                     showactive=True,
-                    x=-0.001,
-                    xanchor="left",
-                    y=1.3,
-                    yanchor="top"
+                    x = 1,
+                    y = 1,
+                    xanchor ="left",
+                    yanchor = "top"
                 ),
             dict( # subreaches
                     buttons=list( [
@@ -185,20 +182,18 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                     
                     ),
                     direction="down",
-                    pad={"r": 10, "t": 10},
+                    pad={"l": 10, "t": 0},
                     showactive=True,
-                    x=1.001,
-                    xanchor="right",
-                    y=1.3,
-                    yanchor="top"
+                    x = 1,
+                    y = 0.9,
+                    xanchor ="left",
+                    yanchor = "top"
                 ),
             ]
         )
 
 
-        fig.update_coloraxes(showscale=False) # reversescale=True,
-
-
+        fig.update_coloraxes(showscale=False) 
 
         ### traces for features and gages ###
 
@@ -246,8 +241,17 @@ def plotly_drysegsimshow(data, plot_dict, df_rm_feat, df_reach, df_subreach, wri
                 )
                 )
 
+        fig.update_layout(autosize=True, 
+                          legend = dict(
+                            x=1.01,  # Places the legend outside the plotting area on the right side
+                            xanchor='left',  # Anchors the legend to the left of the specified x position
+                            y=0.8,
+                            yanchor='top',  # Automatically adjusts the vertical anchor based on the y position
+                          )
+                          )
+
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') 
+        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div', include_plotlyjs=False, config={'responsive': True})
         print('end figure converstion')
 
         with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
@@ -280,7 +284,6 @@ def plotly_seriesusgs(data, writefig, readfig, nm='plotly_seriesusgs', dir="riog
                         hover_name='usgs_feature_short_name',
                         x='date', 
                         y='flow_cfs',
-                        height=900,
                         render_mode = 'webg1')  # necessary for rangeslider to display >500 rows
                         #title=f'Rio Grande Dry Segments ')# by year : {[yr for yr in yrs]}')
 
@@ -331,9 +334,11 @@ def plotly_seriesusgs(data, writefig, readfig, nm='plotly_seriesusgs', dir="riog
                                     text = None
                                 )
                                 ))
-    
+
+        fig.update_layout(autosize=True)
+
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') 
+        plotly_plot_obj = plot({'data': fig }, config={'responsive': True}, auto_play=False, output_type='div', include_plotlyjs=False) 
         print('end figure converstion')
 
         with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
@@ -366,18 +371,16 @@ def plotly_dry_usgs_dash_1(data):
                                     'dry_length' : 'Dry Length \n (RMs)',
                                     },
                             color_discrete_sequence=[px.colors.qualitative.Bold[i] for i in range(len(labels))],
-                            height=1000
                             )
     
     fig.update_traces(diagonal_visible=False)
 
 
-    #Turn graph object into local plotly graph
-    plotly_plot_obj = plot({'data': fig }, output_type='div')
+    plotly_plot_obj = plot({'data': fig }, config={'responsive': True}, auto_play=False, output_type='div', include_plotlyjs=False) 
 
     return plotly_plot_obj
 
-def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_dash_2', dir="riogrande/static/figs/"):
+def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, template_dir):
     '''
     '''
     
@@ -390,13 +393,13 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
                         {
                             'plot' : 'imshow',
                             'x_label' : 'Date',
-                            'y_label' : 'Dry River Miles', 
+                            'y_label' : 'River Miles, <br> Dry', 
                         },
                     2 : 
                         {
                             'plot' : 'scatter',
                             'x_label' : 'Date',
-                            'y_label' : 'Streamflow, \n in cubic feet per second (cfs)', 
+                            'y_label' : 'Streamflow, <br> cubic feet per second (cfs)', 
                         }
                     }
         colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_feature_display_name']))]
@@ -440,10 +443,6 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
         fr_duration=50
         sliders = [
                     {
-                        "pad": {"b": 10, "t": 50},
-                        "len": 0.9,
-                        "x": 0.1,
-                        "y": 0,
                         "steps": [
                             {
                                 "args": [[f.name], frame_args(fr_duration)],
@@ -461,12 +460,15 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
                                 size = 20,
                                 color = '#012E40'),
                             offset = 15,
-                            prefix = 'Selected Year: ',
+                            prefix = 'Year: ',
                             xanchor = 'center'
                             ),
-                        "y" : 1.4,    
+                        "y" : 1,    
                         "x" : 0.5,
-                        'xanchor' : 'center'                
+                        'yanchor' : 'bottom',
+                        'xanchor' : 'center',
+                        "pad": {"b": 10, "t": 0},
+                        "len": 0.9,                  
                     }
                     ]
         
@@ -504,21 +506,25 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
 
         ### layout
         fig.update_layout(sliders=sliders, 
-                          xaxis1_showticklabels=True,
-                          xaxis2_showticklabels=False,
+                          xaxis1_showticklabels=False,
+                          xaxis2_showticklabels=True,
                           height=height*2,
-                          margin=dict(l=20, r=20, t=20, b=20),
+                          margin=dict(l=10, r=10, t=10, b=10),
                           legend=dict(
                             title=dict(
                                 text='USGS Stream Gages', 
                                 font=dict(
                                     size=14,
-                                    color = '#012E40')
+                                    color='#012E40')
                             )
                             )
                         )
 
         fig.update_xaxes(
+                        title_font = dict(
+                            size = 20,
+                            color = '#012E40'
+                            ),
                         tickformat='%b %e',
                         ticks="outside",
                         tickwidth=1.5,
@@ -532,12 +538,12 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
                             tick0 = "2002-06-15",
                             dtick = "M1"
                             ),
-                        side = 'top',
+                        side = 'bottom',
                         )
         fig.update_yaxes(
                         dict(
                             title_font = dict(
-                                size = 16,
+                                size = 20,
                                 color = '#012E40'
                             ),
                         ticks="outside",
@@ -546,30 +552,35 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm='plotly_dry_usgs_das
                         ),
                 )
     
-        for row in range(2):
-            fig.update_yaxes(title_text=plot_labels[row+1]['y_label'], 
-                            row=row+1, col=1, 
+        for i in range(2):
+            fig.update_yaxes(title_text=plot_labels[i+1]['y_label'], 
+                            row=i+1, col=1, 
                             side='left')
+            if i == 1:
+                fig.update_xaxes(title_text=plot_labels[i+1]['x_label'], 
+                                row=1, col=i+1, 
+                                side='bottom')
 
         fig.update_traces(
                             dict(showscale=False, 
                             coloraxis=None, 
                             colorscale=['#012E40','#F2E3D5']), selector={'type':'heatmap'})     
 
-        # fig.write_json(f"riogrande/static/figs/{nm}.json")
+        fig.update_layout(autosize=True)
 
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div') 
+        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div', include_plotlyjs=False, config={'responsive': True})
         print('end figure converstion')
 
-        with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: 
+        with open(os.path.join(plotly_dir,nm+'.pickle'), 'wb') as f: 
             pickle.dump(plotly_plot_obj, f)
         print('done figure write')
-        fig.write_html(os.path.join(dir,nm+".html"))
+
+        fig.write_html(os.path.join("riogrande/templates",template_dir,nm+".html")) # NOTE* May need to reevaluate path in production version
         
     if readfig:
         print('start figure read')
-        with open(os.path.join(dir,nm+'.pickle'), 'rb') as f:
+        with open(os.path.join(plotly_dir,nm+'.pickle'), 'rb') as f:
             plotly_plot_obj = pickle.load(f)
         print('end figure read')
 
