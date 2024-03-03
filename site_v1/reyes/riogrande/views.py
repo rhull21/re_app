@@ -353,7 +353,7 @@ def dashdrylenflow1(request):
                 )
 
 
-def dashdrylenflow2(request, yrs=(2002,2022), mos=(4,11), read=True, write=False, readfig=True, writefig=False,
+def dashdrylenflow2(request, yrs=(2002,2023), mos=(4,11), read=True, write=False, readfig=True, writefig=False,
                     short_plot=True, target_plot_include=None, 
                     nm='plotly_dry_usgs_dash_2', template_dir = "riogrande/includes/", plotly_dir="riogrande/static/figs/"):
     '''
