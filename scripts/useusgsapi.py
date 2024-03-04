@@ -4,6 +4,7 @@ import mysql.connector as cnctr
 import pandas as pd 
 from datetime import date
 from utils import helpers
+from utils.accessetc import read_db_info
 
 '''
 to do (01032022): 
@@ -13,44 +14,35 @@ to do (01032022):
     - chronologically update
     - Use the automated SQL rendering approach (helpers.insertMany)
 '''
-
-# globals
-config = {
-  'user': 'root',
-  'password': '300667',
-  'host': '127.0.0.1',
-  'raise_on_warnings' : True
-  }
-
-db_name = "rivereyes" 
-#  Define connection, prepare cursor, create database
+# define database connection, prepare cursor
+db_info_dir = '/home/quinn/re_app_dev/etc/db_info.json' # use absolute paths here
+config = read_db_info(db_info_dir)
 cnx = cnctr.connect(**config)
 crsr = cnx.cursor()
-cnx.database = db_name
 
-# %%
-# usgs_dict = {'08358400': {'data' : None, 'usgs_id' : 1},
-#                 '08331160' : {'data' : None, 'usgs_id' : 2},
-#                 '08331510' : {'data' : None, 'usgs_id' : 3},
-#                 '08332010' : {'data' : None, 'usgs_id' : 4},
-#                 '08354900' : {'data' : None, 'usgs_id' : 5},
-#                 '08355050' : {'data' : None, 'usgs_id' : 6},
-#                 '08355490' : {'data' : None, 'usgs_id' : 7}}
-usgs_dict =  {
+# globals (usgs sites)
+usgs_dict = {'08358400': {'data' : None, 'usgs_id' : 1},
+                '08331160' : {'data' : None, 'usgs_id' : 2},
+                '08331510' : {'data' : None, 'usgs_id' : 3},
+                '08332010' : {'data' : None, 'usgs_id' : 4},
+                '08354900' : {'data' : None, 'usgs_id' : 5},
+                '08355050' : {'data' : None, 'usgs_id' : 6},
+                '08355490' : {'data' : None, 'usgs_id' : 7},
                 '08330000': {'data' : None, 'usgs_id' : 8},
                 '08329928' : {'data' : None, 'usgs_id' : 9},
                 '08329918' : {'data' : None, 'usgs_id' : 10},
 }
 
+start = '2023-01-02'
+end = '2023-12-31'
+
 # get daily values (dv)
 for site, value in usgs_dict.items(): 
-    usgs_dict[site]['data'] = nwis.get_record(sites=site, service='dv', start='1999-12-31', end='2023-01-01')[['00060_Mean', '00060_Mean_cd']].rename(columns={'00060_Mean' : 'flow_cfs', '00060_Mean_cd' : 'prov_flag'})
+    usgs_dict[site]['data'] = nwis.get_record(sites=site, service='dv', start=start, end=end)[['00060_Mean', '00060_Mean_cd']].rename(columns={'00060_Mean' : 'flow_cfs', '00060_Mean_cd' : 'prov_flag'})
     usgs_dict[site]['data']['date'] = usgs_dict[site]['data'].index
     usgs_dict[site]['data']['usgs_id'] = usgs_dict[site]['usgs_id'] 
 
-
 # %% append to database (see more refined version below, too)
-
 for site, value in usgs_dict.items():
     try:  
         tbl_name = 'usgs_data'
@@ -64,7 +56,9 @@ for site, value in usgs_dict.items():
         cnx.commit()
     except cnctr.Error as e:
         print(site)
-        print(e) 
+        print(e)
+
+
 
 
 # %% testing a more streamlined version of doing the above
