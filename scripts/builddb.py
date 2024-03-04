@@ -3,26 +3,13 @@ import mysql.connector as cnctr
 from utils.helpers import *
 from utils.sqlreader import *
 import pandas as pd 
-import os
-import json
+from utils.accessetc import read_db_info
 
 # %% globals
 
-etc_dir = '../etc'
+db_info_dir = '/home/quinn/re_app_dev/etc/db_info.json' # use absolute paths here
+config = read_db_info(db_info_dir)
 
-with open(os.path.join(etc_dir,'db_info.json')) as f:
-    db_info = json.load(f)
-
-db_info = db_info['default']
-
-config = {
-  'user': db_info['USER'],
-  'password': db_info['PASSWORD'],
-  'host': db_info['HOST'],
-  'raise_on_warnings' : True
-  } 
-
-db_name = db_info['NAME'] 
 sql_path = '../../data/imports/2023_data/'
 fname = 'table_dryness.csv'
 
@@ -30,14 +17,14 @@ fname = 'table_dryness.csv'
 cnx = cnctr.connect(**config)
 crsr = cnx.cursor()
 # createDB(db_name, crsr)
-cnx.database = db_name
+# cnx.database = db_name
 
 # # %% 1. Create Tables
 # SQLfromfile(sql_path+'create.sql',crsr)
 
 # # %% 2. Insert Data
-SQLfromfile(sql_path+fname,crsr)
-cnx.commit()
+# SQLfromfile(sql_path+fname,crsr)
+# cnx.commit()
 
 # # # %% 3. Create functions
 # # SQLfromfile(sql_path+'functions.sql',crsr)
