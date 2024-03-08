@@ -380,7 +380,7 @@ def plotly_dry_usgs_dash_1(data):
 
     return plotly_plot_obj
 
-def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, template_dir):
+def plotly_dry_usgs_dash_2(plot_data, df_rm_feat, plot_dict, readfig, writefig, nm, plotly_dir, template_dir):
     '''
     '''
     
@@ -399,18 +399,18 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, templat
                         {
                             'plot' : 'scatter',
                             'x_label' : 'Date',
-                            'y_label' : 'Streamflow, <br> cubic feet per second (cfs)', 
+                            'y_label' : 'Daily Streamflow, <br> cubic feet per second', 
                         }
                     }
         colors = [px.colors.qualitative.Bold[i] for i in range(len(plot_data['usgs_feature_display_name']))]
-        height = 400
+        heights = [600, 200]
         round = 100
         
 
         ### plots
         fig = make_subplots(
                             rows=2,
-                            row_heights=[height, height],
+                            row_heights=heights,
                             cols = 1,
                             shared_xaxes=True,
                             vertical_spacing = 0.05
@@ -427,7 +427,7 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, templat
             
         for i, station in enumerate(plot_data['usgs_feature_display_name'],start=0):
             fig.add_trace( addgagescatters(plot_data, colors, i),                
-                            row=1, col=1
+                            row=1, col=1 
                         )  
 
         ### frames
@@ -503,16 +503,55 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, templat
                         row=1
                         )    
 
+        ### traces for features ###
+
+        # add the features as a scatterplot (note the inline ternary conditional operator syntax)
+        df = df_rm_feat[df_rm_feat['usgs_station_name'].isnull()]
+        key = 'Features'
+        color = 'black'
+
+        fig.add_trace( # A backhanded way of labeling things in groups without Lambda
+                go.Scatter(
+                    name=key,
+                    x=[plot_dict['Dates'][int(len(plot_dict['Dates'])/2)]],
+                    y=[plot_dict['River Miles'][int(len(plot_dict['River Miles'])/2)]],
+                    opacity=0.25,
+                    visible='legendonly',    # features not visible by default, but can be toggled on
+                    hoverinfo="skip",
+                    legendgroup=key,
+                    line=go.scatter.Line(color=color),
+                    showlegend=True,
+            ),
+            row=1, col=1
+            )
+
+        for i in df.index:
+
+            fig.add_trace(
+                go.Scatter(
+                    name=df['feature'].loc[i],
+                    x=plot_dict['Dates'],
+                    y=np.ones(len(plot_dict['Dates']))*float(df['rm'].loc[i]),
+                    opacity=0.25,
+                    visible='legendonly',    # features not visible by default, but can be toggled on
+                    hovertemplate=key, 
+                    legendgroup=key,
+                    line=go.scatter.Line(color=color),
+                    showlegend=False,
+            ),
+            row=1, col=1
+            )
+
 
         ### layout
         fig.update_layout(sliders=sliders, 
                           xaxis1_showticklabels=False,
                           xaxis2_showticklabels=True,
-                          height=height*2,
+                          height=sum(heights),
                           margin=dict(l=10, r=10, t=10, b=10),
                           legend=dict(
                             title=dict(
-                                text='USGS Stream Gages', 
+                                text='Stream Gages and Landmarks', 
                                 font=dict(
                                     size=14,
                                     color='#012E40')
@@ -568,15 +607,25 @@ def plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm, plotly_dir, templat
 
         fig.update_layout(autosize=True)
 
+        # write/export plot
+        auto_play = False
+        include_plotlyjs=False
+        config={'responsive': True}
+        output_type='div'
+
+        # write plot
         print('start figure conversion')
-        plotly_plot_obj = plot({'data': fig }, auto_play=False, output_type='div', include_plotlyjs=False, config={'responsive': True})
+        plotly_plot_obj = plot({'data': fig }, output_type=output_type, auto_play=auto_play, include_plotlyjs=include_plotlyjs, config=config)
         print('end figure converstion')
 
+        # export as pickle
         with open(os.path.join(plotly_dir,nm+'.pickle'), 'wb') as f: 
             pickle.dump(plotly_plot_obj, f)
-        print('done figure write')
 
-        fig.write_html(os.path.join("riogrande/templates",template_dir,nm+".html")) # NOTE* May need to reevaluate path in production version
+        # export as html 
+        # plot(fig, filename=os.path.join("riogrande/templates",template_dir,nm+".html"),output_type=output_type, auto_play=auto_play, include_plotlyjs=include_plotlyjs, config=config)
+        fig.write_html(file=os.path.join("riogrande/templates",template_dir,nm+".html"),auto_play=auto_play, include_plotlyjs=include_plotlyjs, config=config) 
+        print('done figure write')
         
     if readfig:
         print('start figure read')

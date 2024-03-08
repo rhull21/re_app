@@ -364,8 +364,32 @@ def dashdrylenflow2(request, yrs=(2002,2023), mos=(4,11), read=True, write=False
                     nm='plotly_dry_usgs_dash_2', template_dir = "riogrande/includes/", plotly_dir="riogrande/static/figs/"):
     '''
     This view is a dashboard for selecting characteristics of relationship between dryness and flow data in time series on subplots 
+        template_dir : the location within the Django templating framework (reyes/riogrande/templates/...) for raw html version `included` in `target_plot_include`
+        plotly_dir : the location within the django application (reyes/...) with pickled version. 
+        
+        short_plot : boolean decision of whether or not load directly from template_dir
+        target_plot_include : by default None, an alternative target plot if that of the name `nm` is not desired 
+        
+        In other dashboard / figure views, when `readfig` is called, `plotly_dir` is the default figure read; however, this approach yields unsuitable loading times
+            relative to directly passing the html from the `include`.  The logic of the code below is as follows: 
+        
+        if short_plot: # fastest
+            load from template_dir
+        else:
+            if writefig: # slowest
+                update the figure pythonically
+                save to plotly_dir
+                save to template_dir
+                load from plotly_dir
+            elif writefig: # slow
+                load from plotly_dir 
+
+        TO DO: 
+            Need to think through the logic of target_plot_include, as I think it makes things unnecessarily convoluted (even more so than usual)
+
     '''
-    target_plot_include = os.path.join(template_dir,nm+".html")
+    if target_plot_include is None:
+        target_plot_include = os.path.join(template_dir,nm+".html")
 
     # for casual rendering
     if short_plot:
@@ -389,12 +413,14 @@ def dashdrylenflow2(request, yrs=(2002,2023), mos=(4,11), read=True, write=False
                                                 )
         qry_reach = models.Reach.objects.all()
         qry_subreach = models.Subreach.objects.all()
+        qry_rm_feat = models.FeatureRm.objects.all()
 
         df_rm = pd.DataFrame.from_records(qry_rm.values())
         df_dry = pd.DataFrame.from_records(qry_dry.values())
         df_flow = pd.DataFrame.from_records(qry_flow.values())
         df_reach = pd.DataFrame.from_records(qry_reach.values())
         df_subreach = pd.DataFrame.from_records(qry_subreach.values())
+        df_rm_feat = pd.DataFrame.from_records(qry_rm_feat.values())
 
 
         del qry_rm, qry_dry, qry_flow
@@ -449,7 +475,7 @@ def dashdrylenflow2(request, yrs=(2002,2023), mos=(4,11), read=True, write=False
 
         ### Return Flow 
         # pass data to and return from plotly app
-        target_plot = plotly_app.plotly_dry_usgs_dash_2(plot_data, readfig, writefig, nm=nm, plotly_dir=plotly_dir, template_dir=template_dir)
+        target_plot = plotly_app.plotly_dry_usgs_dash_2(plot_data, df_rm_feat, plot_dict, readfig, writefig, nm=nm, plotly_dir=plotly_dir, template_dir=template_dir)
 
         print(f'done figure {datetime.now()-now}')
 
