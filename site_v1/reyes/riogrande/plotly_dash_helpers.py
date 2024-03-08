@@ -89,7 +89,7 @@ def addgagescatters(plot_data, colors, i, stylized=True):
                     hovertemplate="Gage: %{customdata} <extra> River Mile: %{y}</extra>",
                     hoverinfo='skip',
                     line=go.scatter.Line(color=colors[i]),
-                    opacity=0.4,
+                    opacity=0.9,
                     visible=visible
                 ) 
     else: 
