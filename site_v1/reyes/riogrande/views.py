@@ -121,6 +121,12 @@ class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
 def drysegments(request, mos=(4,11), ds=(1, 1), read=True, write=False, 
                 readfig=True, writefig=False,
                 ): 
+    '''
+    if read = False, write must be True; if read = True, write must be False
+        both cannot be set to True, otherwise too much memory is consumed by this script
+
+    Note that write=True also triggers writing the excel version of the file via io_heatmap, which can be kind of finnicky 
+    '''
 
     # read in data
     qry_rm = models.RoundedRm.objects.all()
