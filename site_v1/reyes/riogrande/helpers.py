@@ -5,8 +5,12 @@ import pandas as pd
 from copy import deepcopy
 import pickle
 import numpy as np
-from datetime import date 
+from datetime import date
 
+try: 
+    from riogrande import io_heatmap
+except Exception as e:
+    print(f'unable to write, {e}')
 
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
@@ -153,11 +157,16 @@ def make_HeatMap(df, plot_dict, read=True, write=False, dir='riogrande/static/da
         try: 
             with open(os.path.join(dir,nm+'.pickle'), 'wb') as f: # os.path.join(dir,nm)
                 if nm == 'heatmap':
-                    pickle.dump(_make_HeatMap(df_dry=df, plot_dict=plot_dict), f)
+                    arr_all = _make_HeatMap(df_dry=df, plot_dict=plot_dict)
+                    io_heatmap.main(arr_all=arr_all, plot_dict=plot_dict) # write heatmap as excel
                 elif nm == 'flowgrid':
-                    pickle.dump(_make_FlowGrid(df_flow=df, plot_dict=plot_dict), f)
+                    arr_all = _make_FlowGrid(df_flow=df, plot_dict=plot_dict)
+            
+                pickle.dump(arr_all, f) # write as csv
+            
             with open(os.path.join(dir,nm+'_meta.pickle'), 'wb') as f:
                 pickle.dump(plot_dict, f)
+
         except Exception as e:
             print(f'unable to write, {e}')
 
