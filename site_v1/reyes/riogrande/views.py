@@ -105,7 +105,7 @@ class FilteredDrySegs(ExportMixin, SingleTableMixin, FilterView):
     export_formats = ("xls", "csv")
 
     def get_queryset(self):
-        return super().get_queryset()
+        return super().get_queryset() 
 
 class FilteredFeatures(ExportMixin, SingleTableMixin, FilterView):
     table_class = tables.FeatureRmTable

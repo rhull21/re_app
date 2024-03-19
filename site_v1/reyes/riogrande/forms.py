@@ -35,8 +35,8 @@ class DrySelectForm(forms.Form):
                         ('San Acacia', 'San Acacia'),
                         ('Isleta', 'Isleta')]
 
-    group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))
-    reach_select = forms.CharField(label='Filter by reach', widget=forms.Select(choices=reach_choices))
+    group_by = forms.CharField(label='Group by', widget=forms.Select(choices=group_by_choices))
+    reach_select = forms.CharField(label='Filter by', widget=forms.Select(choices=reach_choices))
 
 class DryDaysForm(DrySelectForm):
     group_by_choices = [('YEAR', 'Year'),
@@ -48,8 +48,8 @@ class DryDaysForm(DrySelectForm):
                         ('San Acacia', 'San Acacia'),
                         ('Isleta', 'Isleta')]
 
-    group_by = forms.CharField(label='Group by time period', widget=forms.Select(choices=group_by_choices))
-    reach_select = forms.CharField(label='Filter by reach', widget=forms.Select(choices=reach_choices))
+    group_by = forms.CharField(label='Group by', widget=forms.Select(choices=group_by_choices))
+    reach_select = forms.CharField(label='Filter by', widget=forms.Select(choices=reach_choices))
 
 class DryEventsForm(forms.Form):
     year_choices = [(year, year) for year in range(2002,date.today().year)]

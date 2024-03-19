@@ -3,8 +3,10 @@
 {% load bootstrap3 %}
 {% load querystring from django_tables2 %}
 {% load render_table from django_tables2 %}
+{% load filter_tags %}
+
  
-<div class="col-sm-10">
+<div> 
     <div class="pull-right">
         {% if view.export_formats %}
             {% for format in view.export_formats %}
@@ -14,15 +16,42 @@
             {% endfor %}
         {% endif %}
     </div>
-    {% if filter %}
-    <div class="form-group col-sm-12"> 
-        <form action="" method="get" class="form form-inline">
-            {% bootstrap_form filter.form layout='inline' %}
-            {% bootstrap_button 'Filter' button_type='submit'%}
-            <a href="{{ request.path }}" class="btn btn-secondary">Clear Filters</a>
-        </form>
-    </div>
-    {% endif %}
+</div>
+
+{% if filter %}
+    <form method="get">
+        {% csrf_token %}
+        <div class="flex-wrapper">     
+            <div class="flex-container">
+                {% for group_name, filters in filter.grouped_filters.items %}
+                    <div class="flex-element">
+                        <fieldset>
+                            <legend style="font-size: 14px; font-weight: bold;">{{ group_name }}</legend>
+                            {% for filter_name, f in filters %}
+                                {% for field in filter.form %}
+                                    {% with match=field.name|match_field:filter_name %}
+                                        {% if match %}
+                                            <div class="form-group">
+                                                {{ field.errors }}
+                                                {{ field.label }} {{ field }}
+                                                {{ field.help_text }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endfor %}
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                {% endfor %}
+                <div class="flex-button-group">
+                    <button type="submit" class="btn btn-primary" style="height: 40px; width: 100px;">Filter</button>
+                    <a href="{{ request.path }}" class="btn btn-secondary" style="height: 40px; width: 100px;">Clear</a>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
 <div class="col-sm-10">
     {% render_table table %}
 </div>
