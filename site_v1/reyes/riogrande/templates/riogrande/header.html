@@ -84,6 +84,49 @@
                 color: #F2E3D5;
             }
         </style>
+        <style>
+            .filter-row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+            }
+            
+            .filter-group {
+                flex: 1;
+                min-width: 250px; /* Adjust based on desired width */
+                margin: 10px;
+            }
+        </style>
+        <style>
+            .flex-wrapper {
+                width: 100vw; /* Adjust to ensure it's not quite full width */
+                max-width: 100%; /* Ensure it does not overflow the screen width */
+                display: flex; /* Optional: if you want direct children to be flex items */
+                flex-direction: column;
+                justify-content: left; /* Center children horizontally */
+                align-items: left; /* Center children vertically */
+                overflow: auto; /* Add scrollbars if content overflows */
+                color: #012E40;
+              }
+        
+            .flex-container {
+              display: flex; /* Use flex layout */
+              justify-content: space-between; /* Space out the flex items */
+              flex-wrap: wrap; /* Allow the items to wrap */
+            }
+            
+            .flex-element {
+              flex: 1 1 200px; /* Grow to fill space, but not smaller than 200px */
+              max-width: 300px;
+              margin: 5px; /* Some space around the elements */
+              text-align: left; /* Center the text */
+              padding: 5px; /* Some padding around the text */
+            }
+            
+            .flex-button-group {
+                align-self: flex-end;
+            }
+          </style>
     </head>
 
     

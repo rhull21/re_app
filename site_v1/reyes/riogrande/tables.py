@@ -124,7 +124,7 @@ class DryLengthAggUsgsDataTable(tables2.Table):
     class Meta:
         model = models.DryLengthAggUsgsData
         template_name = "riogrande/tables/bootstrap.html"
-        fields = ("dat", "rm_up", "dry_length", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
+        fields = ("dat", "rm_up", "rm_down", "dry_length", "usgs_feature_short_name", "flow_cfs", 'prov_flag')
 
 class DryEventsTable(tables2.Table):
     
