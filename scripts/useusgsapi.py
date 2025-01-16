@@ -33,8 +33,8 @@ usgs_dict = {'08358400': {'data' : None, 'usgs_id' : 1},
                 '08329918' : {'data' : None, 'usgs_id' : 10},
 }
 
-start = '2023-01-02'
-end = '2023-12-31'
+start = '2024-01-01'
+end = '2024-12-31'
 
 # get daily values (dv)
 for site, value in usgs_dict.items(): 
