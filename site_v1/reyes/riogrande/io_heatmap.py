@@ -24,7 +24,7 @@ def main(arr_all=None, plot_dict=None, dir='riogrande/static/data', nm='heatmap'
             plot_dict = pickle.load(f)
 
     make_excel(arr_all, plot_dict, dir, nm, excel_form='3d')
-    make_excel(arr_all, plot_dict, dir, nm, excel_form='2d')
+    # make_excel(arr_all, plot_dict, dir, nm, excel_form='2d')
 
 
 def make_excel(arr_all, plot_dict, dir,nm, excel_form):
