@@ -60,12 +60,13 @@ def deltadry(request):
     20221229 : Download data from the filtered queryset
     '''
 
+    # make sticky
+    global grp_type, reach_select
+
     if request.method == 'POST' :
         # POST
         form = forms.DrySelectForm(request.POST)
         if form.is_valid():
-            # make sticky
-            global grp_type, reach_select
             grp_type = form.cleaned_data['group_by']
             reach_select = form.cleaned_data['reach_select']
 
