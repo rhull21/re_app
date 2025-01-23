@@ -60,23 +60,23 @@ def deltadry(request):
     20221229 : Download data from the filtered queryset
     '''
 
-    # make sticky
-    global grp_type, reach_select
-
-    if request.method == 'POST' :
-        # POST
+    if request.method == 'POST':
+        # Handle POST requests
         form = forms.DrySelectForm(request.POST)
         if form.is_valid():
-            grp_type = form.cleaned_data['group_by']
-            reach_select = form.cleaned_data['reach_select']
-
+            # Save parameters to the session
+            request.session['grp_type'] = form.cleaned_data['group_by']
+            request.session['reach_select'] = form.cleaned_data['reach_select']
     else:
-        # GET
-        form = forms.DrySelectForm(initial=
-                                    {'group_by' : grp_type,
-                                     "reach_select" : reach_select
-                                    }
-        )
+        # Handle GET requests
+        form = forms.DrySelectForm(initial={
+            'group_by': request.session.get('grp_type', 'default_grp_type'),  # Provide default values
+            'reach_select': request.session.get('reach_select', 'default_reach_select')
+        })
+
+    # Retrieve parameters from the session
+    grp_type = request.session.get('grp_type', 'default_grp_type')
+    reach_select = request.session.get('reach_select', 'default_reach_select')
 
     with connection.cursor() as cursor:
         cursor.execute("CALL proc_delta_dry(%s, %s)", params=[grp_type, reach_select])
